@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/de/compilerbau/dot/DOT.g4</name>
-			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/JavaLib/test/dot/DOT.g4</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
