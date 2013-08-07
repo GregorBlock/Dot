@@ -27,13 +27,12 @@ public class MyListener extends DOTBaseListener
    {
       // TODO Auto-generated method stub
       super.enterOnly(ctx);
-   }
-
+   } 
+ 
    @Override
    public void enterFile(FileContext ctx)
    {
       super.enterFile(ctx);
    }
-   
 
 }
