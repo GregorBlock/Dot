@@ -1,0 +1,9 @@
+uncover ( 2 - 3 - 6 ) {
+	Graph 2{
+		A -> B ;
+	}
+	
+	Graph 3{
+		A -> B ;
+	}
+}
