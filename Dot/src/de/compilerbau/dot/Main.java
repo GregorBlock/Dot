@@ -37,7 +37,7 @@ import att.grappa.Parser;
  * TODO Add comment here
  * 
  * @author $Author: $
- * @version $Revision: $, $Date: $ UTC
+ * @version $Revision: $, $Date: $ UTC 
  */
 public class Main implements GrappaConstants 
 {

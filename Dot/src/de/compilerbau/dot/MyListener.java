@@ -38,6 +38,7 @@ public class MyListener extends DOTBaseListener
    public void enterFile(FileContext ctx)
    {
       System.out.println(ctx.children.get(0).getText());
+      System.out.println(ctx.getText());
       super.enterFile(ctx);
    }
 
