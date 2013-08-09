@@ -19,6 +19,7 @@ public class MyListener extends DOTBaseListener
    @Override
    public void enterUncover(UncoverContext ctx)
    {
+//       System.out.println(ctx. == DOTParser.GRAPH ? "asd" : "asd");
       super.enterUncover(ctx);
    }
 
@@ -32,6 +33,7 @@ public class MyListener extends DOTBaseListener
    @Override
    public void enterFile(FileContext ctx)
    {
+       System.out.println(ctx.getText());
       super.enterFile(ctx);
    }
 

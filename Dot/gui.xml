@@ -1,0 +1,21 @@
+<project name="ANTLR" default="gui" basedir=".">
+	<property name="src" location="src" />
+	<property name="gen" location="gen" />
+	<property name="package" value="de/compilerbau/dot" />
+
+	<path id="classpath">
+		<pathelement location="lib/antlr-4.1-complete.jar" />
+		<pathelement location="bin" />
+	</path>
+
+
+	<target name="gui">
+		<java classname="org.antlr.v4.runtime.misc.TestRig" classpathref="classpath" fork="true">
+			<arg value="de.compilerbau.dot.DOT" />
+			<arg value="s" />
+			<arg value="-gui" />
+			<arg value="${src}/${package}/t.expr" />
+		</java>
+	</target>
+
+</project>
