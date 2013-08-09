@@ -9,12 +9,17 @@ import de.compilerbau.dot.DOTParser.UncoverContext;
 
 /**
  * TODO Add comment here
- *
- * @author $Author:  $
- * @version $Revision:  $, $Date:  $ UTC
+ * 
+ * @author $Author: $
+ * @version $Revision: $, $Date: $ UTC
  */
 public class MyListener extends DOTBaseListener
 {
+
+   public String returnValue(String value)
+   {
+      return value;
+   }
 
    @Override
    public void enterUncover(UncoverContext ctx)
@@ -27,11 +32,12 @@ public class MyListener extends DOTBaseListener
    {
       // TODO Auto-generated method stub
       super.enterOnly(ctx);
-   } 
- 
+   }
+
    @Override
    public void enterFile(FileContext ctx)
    {
+      System.out.println(ctx.children.get(0).getText());
       super.enterFile(ctx);
    }
 
