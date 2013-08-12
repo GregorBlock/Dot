@@ -1,4 +1,4 @@
-// Generated from C:\Users\Gregor Block\Studium\git\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
+// Generated from E:\eclipse\git_repo\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
     
 package de.compilerbau.dot;
 
@@ -1463,6 +1463,7 @@ public class DOTParser extends Parser {
 			case 21:
 			case 28:
 			case Identifier:
+			case NUMBER:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(232); expression(0);
@@ -1515,7 +1516,7 @@ public class DOTParser extends Parser {
 			setState(235); match(15);
 			setState(247);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 6) | (1L << 9) | (1L << 12) | (1L << 15) | (1L << 21) | (1L << 28) | (1L << Identifier))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 6) | (1L << 9) | (1L << 12) | (1L << 15) | (1L << 21) | (1L << 28) | (1L << Identifier) | (1L << NUMBER))) != 0)) {
 				{
 				setState(236); variableInitializer();
 				setState(241);
@@ -1592,7 +1593,7 @@ public class DOTParser extends Parser {
 			{
 			setState(252);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 6) | (1L << 9) | (1L << 11) | (1L << 12) | (1L << 16) | (1L << 18) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 25) | (1L << 28) | (1L << 31) | (1L << Identifier))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 6) | (1L << 9) | (1L << 11) | (1L << 12) | (1L << 16) | (1L << 18) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 25) | (1L << 28) | (1L << 31) | (1L << Identifier) | (1L << NUMBER))) != 0)) {
 				{
 				setState(251); forInit();
 				}
@@ -1601,7 +1602,7 @@ public class DOTParser extends Parser {
 			setState(254); match(32);
 			setState(256);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 6) | (1L << 9) | (1L << 12) | (1L << 21) | (1L << 28) | (1L << Identifier))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 6) | (1L << 9) | (1L << 12) | (1L << 21) | (1L << 28) | (1L << Identifier) | (1L << NUMBER))) != 0)) {
 				{
 				setState(255); expression(0);
 				}
@@ -1610,7 +1611,7 @@ public class DOTParser extends Parser {
 			setState(258); match(32);
 			setState(260);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 6) | (1L << 9) | (1L << 12) | (1L << 21) | (1L << 28) | (1L << Identifier))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 6) | (1L << 9) | (1L << 12) | (1L << 21) | (1L << 28) | (1L << Identifier) | (1L << NUMBER))) != 0)) {
 				{
 				setState(259); forUpdate();
 				}
@@ -1676,6 +1677,7 @@ public class DOTParser extends Parser {
 			case 21:
 			case 28:
 			case Identifier:
+			case NUMBER:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(263); expressionList();
@@ -2114,7 +2116,7 @@ public class DOTParser extends Parser {
 				_errHandler.recoverInline(this);
 				}
 				consume();
-				setState(322); expression(6);
+				setState(322); expression(7);
 				}
 				break;
 
@@ -2123,7 +2125,7 @@ public class DOTParser extends Parser {
 				setState(323); match(9);
 				setState(324); type();
 				setState(325); match(26);
-				setState(326); expression(5);
+				setState(326); expression(6);
 				}
 				break;
 
@@ -2134,7 +2136,7 @@ public class DOTParser extends Parser {
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(368);
+			setState(371);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,42,_ctx);
 			while ( _alt!=2 && _alt!=-1 ) {
@@ -2142,14 +2144,14 @@ public class DOTParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(366);
+					setState(369);
 					switch ( getInterpreter().adaptivePredict(_input,41,_ctx) ) {
 					case 1:
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState, _p);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(331);
-						if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
+						if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
 						setState(338);
 						switch ( getInterpreter().adaptivePredict(_input,39,_ctx) ) {
 						case 1:
@@ -2178,7 +2180,7 @@ public class DOTParser extends Parser {
 							}
 							break;
 						}
-						setState(340); expression(5);
+						setState(340); expression(6);
 						}
 						break;
 
@@ -2187,14 +2189,14 @@ public class DOTParser extends Parser {
 						_localctx = new ExpressionContext(_parentctx, _parentState, _p);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(341);
-						if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
+						if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
 						setState(342);
 						_la = _input.LA(1);
 						if ( !(_la==14 || _la==36) ) {
 						_errHandler.recoverInline(this);
 						}
 						consume();
-						setState(343); expression(4);
+						setState(343); expression(5);
 						}
 						break;
 
@@ -2203,9 +2205,9 @@ public class DOTParser extends Parser {
 						_localctx = new ExpressionContext(_parentctx, _parentState, _p);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(344);
-						if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "2 >= $_p");
+						if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
 						setState(345); match(33);
-						setState(346); expression(3);
+						setState(346); expression(4);
 						}
 						break;
 
@@ -2214,9 +2216,9 @@ public class DOTParser extends Parser {
 						_localctx = new ExpressionContext(_parentctx, _parentState, _p);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(347);
-						if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "1 >= $_p");
+						if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "2 >= $_p");
 						setState(348); match(34);
-						setState(349); expression(2);
+						setState(349); expression(3);
 						}
 						break;
 
@@ -2225,9 +2227,9 @@ public class DOTParser extends Parser {
 						_localctx = new ExpressionContext(_parentctx, _parentState, _p);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(350);
-						if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "10 >= $_p");
-						setState(351); match(27);
-						setState(352); match(Identifier);
+						if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "1 >= $_p");
+						setState(351); match(30);
+						setState(352); expression(1);
 						}
 						break;
 
@@ -2236,10 +2238,9 @@ public class DOTParser extends Parser {
 						_localctx = new ExpressionContext(_parentctx, _parentState, _p);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(353);
-						if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "9 >= $_p");
-						setState(354); match(7);
-						setState(355); expression(0);
-						setState(356); match(3);
+						if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "11 >= $_p");
+						setState(354); match(27);
+						setState(355); match(Identifier);
 						}
 						break;
 
@@ -2247,18 +2248,11 @@ public class DOTParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState, _p);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(358);
-						if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "8 >= $_p");
-						setState(359); match(9);
-						setState(361);
-						_la = _input.LA(1);
-						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 6) | (1L << 9) | (1L << 12) | (1L << 21) | (1L << 28) | (1L << Identifier))) != 0)) {
-							{
-							setState(360); expressionList();
-							}
-						}
-
-						setState(363); match(26);
+						setState(356);
+						if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "10 >= $_p");
+						setState(357); match(7);
+						setState(358); expression(0);
+						setState(359); match(3);
 						}
 						break;
 
@@ -2266,9 +2260,28 @@ public class DOTParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState, _p);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(361);
+						if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "9 >= $_p");
+						setState(362); match(9);
 						setState(364);
-						if (!(7 >= _localctx._p)) throw new FailedPredicateException(this, "7 >= $_p");
-						setState(365);
+						_la = _input.LA(1);
+						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 6) | (1L << 9) | (1L << 12) | (1L << 21) | (1L << 28) | (1L << Identifier) | (1L << NUMBER))) != 0)) {
+							{
+							setState(363); expressionList();
+							}
+						}
+
+						setState(366); match(26);
+						}
+						break;
+
+					case 9:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState, _p);
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(367);
+						if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "8 >= $_p");
+						setState(368);
 						_la = _input.LA(1);
 						if ( !(_la==12 || _la==21) ) {
 						_errHandler.recoverInline(this);
@@ -2279,7 +2292,7 @@ public class DOTParser extends Parser {
 					}
 					} 
 				}
-				setState(370);
+				setState(373);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,42,_ctx);
 			}
@@ -2301,6 +2314,7 @@ public class DOTParser extends Parser {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
+		public TerminalNode NUMBER() { return getToken(DOTParser.NUMBER, 0); }
 		public PrimaryContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2319,20 +2333,26 @@ public class DOTParser extends Parser {
 		PrimaryContext _localctx = new PrimaryContext(_ctx, getState());
 		enterRule(_localctx, 68, RULE_primary);
 		try {
-			setState(376);
+			setState(380);
 			switch (_input.LA(1)) {
 			case 9:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(371); match(9);
-				setState(372); expression(0);
-				setState(373); match(26);
+				setState(374); match(9);
+				setState(375); expression(0);
+				setState(376); match(26);
 				}
 				break;
 			case Identifier:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(375); match(Identifier);
+				setState(378); match(Identifier);
+				}
+				break;
+			case NUMBER:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(379); match(NUMBER);
 				}
 				break;
 			default:
@@ -2358,27 +2378,29 @@ public class DOTParser extends Parser {
 	}
 	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 0: return 4 >= _localctx._p;
+		case 0: return 5 >= _localctx._p;
 
-		case 1: return 3 >= _localctx._p;
+		case 1: return 4 >= _localctx._p;
 
-		case 2: return 2 >= _localctx._p;
+		case 2: return 3 >= _localctx._p;
 
-		case 3: return 1 >= _localctx._p;
+		case 3: return 2 >= _localctx._p;
 
-		case 4: return 10 >= _localctx._p;
+		case 4: return 1 >= _localctx._p;
 
-		case 5: return 9 >= _localctx._p;
+		case 5: return 11 >= _localctx._p;
 
-		case 6: return 8 >= _localctx._p;
+		case 6: return 10 >= _localctx._p;
 
-		case 7: return 7 >= _localctx._p;
+		case 7: return 9 >= _localctx._p;
+
+		case 8: return 8 >= _localctx._p;
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\67\u017d\4\2\t\2"+
+		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\67\u0181\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -2405,62 +2427,62 @@ public class DOTParser extends Parser {
 		"\3 \3 \7 \u0133\n \f \16 \u0136\13 \3!\3!\7!\u013a\n!\f!\16!\u013d\13"+
 		"!\3!\3!\3\"\3\"\3#\3#\3#\3#\3#\3#\3#\3#\3#\5#\u014c\n#\3#\3#\3#\3#\3#"+
 		"\3#\3#\5#\u0155\n#\3#\3#\3#\3#\3#\3#\3#\3#\3#\3#\3#\3#\3#\3#\3#\3#\3#"+
-		"\3#\3#\3#\3#\5#\u016c\n#\3#\3#\3#\7#\u0171\n#\f#\16#\u0174\13#\3$\3$\3"+
-		"$\3$\3$\5$\u017b\n$\3$\2%\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&"+
-		"(*,.\60\62\64\668:<>@BDF\2\n\3\2)*\4\2))+,\4\2\16\16\32\32\3\2\60\63\n"+
-		"\2\3\4\r\r\22\22\24\24\26\26\30\30\33\33!!\6\2\b\b\16\16\27\27\36\36\4"+
-		"\2\20\20&&\4\2\16\16\27\27\u0197\2H\3\2\2\2\4J\3\2\2\2\6T\3\2\2\2\bZ\3"+
-		"\2\2\2\nb\3\2\2\2\fk\3\2\2\2\16{\3\2\2\2\20\u0086\3\2\2\2\22\u0088\3\2"+
-		"\2\2\24\u0090\3\2\2\2\26\u009c\3\2\2\2\30\u00a2\3\2\2\2\32\u00ad\3\2\2"+
-		"\2\34\u00b1\3\2\2\2\36\u00b3\3\2\2\2 \u00b7\3\2\2\2\"\u00bb\3\2\2\2$\u00c5"+
-		"\3\2\2\2&\u00cb\3\2\2\2(\u00cf\3\2\2\2*\u00d1\3\2\2\2,\u00dc\3\2\2\2."+
-		"\u00e1\3\2\2\2\60\u00eb\3\2\2\2\62\u00ed\3\2\2\2\64\u00fe\3\2\2\2\66\u010a"+
-		"\3\2\2\28\u010c\3\2\2\2:\u0129\3\2\2\2<\u012b\3\2\2\2>\u012f\3\2\2\2@"+
-		"\u0137\3\2\2\2B\u0140\3\2\2\2D\u014b\3\2\2\2F\u017a\3\2\2\2HI\5:\36\2"+
-		"I\3\3\2\2\2JK\7.\2\2KL\5\b\5\2LN\7\21\2\2MO\5\f\7\2NM\3\2\2\2OP\3\2\2"+
-		"\2PN\3\2\2\2PQ\3\2\2\2QR\3\2\2\2RS\7\25\2\2S\5\3\2\2\2TU\7/\2\2UV\5\b"+
-		"\5\2VW\7\21\2\2WX\5\f\7\2XY\7\25\2\2Y\7\3\2\2\2Z\\\7\13\2\2[]\5\n\6\2"+
-		"\\[\3\2\2\2]^\3\2\2\2^\\\3\2\2\2^_\3\2\2\2_`\3\2\2\2`a\7\34\2\2a\t\3\2"+
-		"\2\2bg\7\60\2\2cd\7\b\2\2df\5\n\6\2ec\3\2\2\2fi\3\2\2\2ge\3\2\2\2gh\3"+
-		"\2\2\2h\13\3\2\2\2ig\3\2\2\2jl\7(\2\2kj\3\2\2\2kl\3\2\2\2lm\3\2\2\2mo"+
-		"\t\2\2\2np\5&\24\2on\3\2\2\2op\3\2\2\2pq\3\2\2\2qr\7\21\2\2rs\5\16\b\2"+
-		"st\7\25\2\2t\r\3\2\2\2uw\5\20\t\2vx\7\"\2\2wv\3\2\2\2wx\3\2\2\2xz\3\2"+
-		"\2\2yu\3\2\2\2z}\3\2\2\2{y\3\2\2\2{|\3\2\2\2|\17\3\2\2\2}{\3\2\2\2~\u0087"+
-		"\5\36\20\2\177\u0087\5\30\r\2\u0080\u0087\5\22\n\2\u0081\u0082\5&\24\2"+
-		"\u0082\u0083\7 \2\2\u0083\u0084\5&\24\2\u0084\u0087\3\2\2\2\u0085\u0087"+
-		"\5$\23\2\u0086~\3\2\2\2\u0086\177\3\2\2\2\u0086\u0080\3\2\2\2\u0086\u0081"+
-		"\3\2\2\2\u0086\u0085\3\2\2\2\u0087\21\3\2\2\2\u0088\u0089\t\3\2\2\u0089"+
-		"\u008a\5\24\13\2\u008a\23\3\2\2\2\u008b\u008d\7\t\2\2\u008c\u008e\5\26"+
-		"\f\2\u008d\u008c\3\2\2\2\u008d\u008e\3\2\2\2\u008e\u008f\3\2\2\2\u008f"+
-		"\u0091\7\5\2\2\u0090\u008b\3\2\2\2\u0091\u0092\3\2\2\2\u0092\u0090\3\2"+
-		"\2\2\u0092\u0093\3\2\2\2\u0093\25\3\2\2\2\u0094\u0097\5&\24\2\u0095\u0096"+
-		"\7 \2\2\u0096\u0098\5&\24\2\u0097\u0095\3\2\2\2\u0097\u0098\3\2\2\2\u0098"+
-		"\u009a\3\2\2\2\u0099\u009b\7\6\2\2\u009a\u0099\3\2\2\2\u009a\u009b\3\2"+
-		"\2\2\u009b\u009d\3\2\2\2\u009c\u0094\3\2\2\2\u009d\u009e\3\2\2\2\u009e"+
-		"\u009c\3\2\2\2\u009e\u009f\3\2\2\2\u009f\27\3\2\2\2\u00a0\u00a3\5 \21"+
-		"\2\u00a1\u00a3\5$\23\2\u00a2\u00a0\3\2\2\2\u00a2\u00a1\3\2\2\2\u00a3\u00a4"+
-		"\3\2\2\2\u00a4\u00a6\5\32\16\2\u00a5\u00a7\5\24\13\2\u00a6\u00a5\3\2\2"+
-		"\2\u00a6\u00a7\3\2\2\2\u00a7\31\3\2\2\2\u00a8\u00ab\5\34\17\2\u00a9\u00ac"+
-		"\5 \21\2\u00aa\u00ac\5$\23\2\u00ab\u00a9\3\2\2\2\u00ab\u00aa\3\2\2\2\u00ac"+
-		"\u00ae\3\2\2\2\u00ad\u00a8\3\2\2\2\u00ae\u00af\3\2\2\2\u00af\u00ad\3\2"+
-		"\2\2\u00af\u00b0\3\2\2\2\u00b0\33\3\2\2\2\u00b1\u00b2\t\4\2\2\u00b2\35"+
-		"\3\2\2\2\u00b3\u00b5\5 \21\2\u00b4\u00b6\5\24\13\2\u00b5\u00b4\3\2\2\2"+
-		"\u00b5\u00b6\3\2\2\2\u00b6\37\3\2\2\2\u00b7\u00b9\5&\24\2\u00b8\u00ba"+
-		"\5\"\22\2\u00b9\u00b8\3\2\2\2\u00b9\u00ba\3\2\2\2\u00ba!\3\2\2\2\u00bb"+
-		"\u00bc\7\n\2\2\u00bc\u00bf\5&\24\2\u00bd\u00be\7\n\2\2\u00be\u00c0\5&"+
-		"\24\2\u00bf\u00bd\3\2\2\2\u00bf\u00c0\3\2\2\2\u00c0#\3\2\2\2\u00c1\u00c3"+
-		"\7-\2\2\u00c2\u00c4\5&\24\2\u00c3\u00c2\3\2\2\2\u00c3\u00c4\3\2\2\2\u00c4"+
-		"\u00c6\3\2\2\2\u00c5\u00c1\3\2\2\2\u00c5\u00c6\3\2\2\2\u00c6\u00c7\3\2"+
-		"\2\2\u00c7\u00c8\7\21\2\2\u00c8\u00c9\5\16\b\2\u00c9\u00ca\7\25\2\2\u00ca"+
-		"%\3\2\2\2\u00cb\u00cc\t\5\2\2\u00cc\'\3\2\2\2\u00cd\u00d0\5*\26\2\u00ce"+
-		"\u00d0\5:\36\2\u00cf\u00cd\3\2\2\2\u00cf\u00ce\3\2\2\2\u00d0)\3\2\2\2"+
-		"\u00d1\u00d2\5B\"\2\u00d2\u00d7\5,\27\2\u00d3\u00d4\7\6\2\2\u00d4\u00d6"+
-		"\5,\27\2\u00d5\u00d3\3\2\2\2\u00d6\u00d9\3\2\2\2\u00d7\u00d5\3\2\2\2\u00d7"+
-		"\u00d8\3\2\2\2\u00d8\u00da\3\2\2\2\u00d9\u00d7\3\2\2\2\u00da\u00db\7\""+
-		"\2\2\u00db+\3\2\2\2\u00dc\u00df\5.\30\2\u00dd\u00de\7 \2\2\u00de\u00e0"+
-		"\5\60\31\2\u00df\u00dd\3\2\2\2\u00df\u00e0\3\2\2\2\u00e0-\3\2\2\2\u00e1"+
-		"\u00e6\7\'\2\2\u00e2\u00e3\7\t\2\2\u00e3\u00e5\7\5\2\2\u00e4\u00e2\3\2"+
-		"\2\2\u00e5\u00e8\3\2\2\2\u00e6\u00e4\3\2\2\2\u00e6\u00e7\3\2\2\2\u00e7"+
+		"\3#\3#\3#\3#\3#\3#\3#\5#\u016f\n#\3#\3#\3#\7#\u0174\n#\f#\16#\u0177\13"+
+		"#\3$\3$\3$\3$\3$\3$\5$\u017f\n$\3$\2%\2\4\6\b\n\f\16\20\22\24\26\30\32"+
+		"\34\36 \"$&(*,.\60\62\64\668:<>@BDF\2\n\3\2)*\4\2))+,\4\2\16\16\32\32"+
+		"\3\2\60\63\n\2\3\4\r\r\22\22\24\24\26\26\30\30\33\33!!\6\2\b\b\16\16\27"+
+		"\27\36\36\4\2\20\20&&\4\2\16\16\27\27\u019d\2H\3\2\2\2\4J\3\2\2\2\6T\3"+
+		"\2\2\2\bZ\3\2\2\2\nb\3\2\2\2\fk\3\2\2\2\16{\3\2\2\2\20\u0086\3\2\2\2\22"+
+		"\u0088\3\2\2\2\24\u0090\3\2\2\2\26\u009c\3\2\2\2\30\u00a2\3\2\2\2\32\u00ad"+
+		"\3\2\2\2\34\u00b1\3\2\2\2\36\u00b3\3\2\2\2 \u00b7\3\2\2\2\"\u00bb\3\2"+
+		"\2\2$\u00c5\3\2\2\2&\u00cb\3\2\2\2(\u00cf\3\2\2\2*\u00d1\3\2\2\2,\u00dc"+
+		"\3\2\2\2.\u00e1\3\2\2\2\60\u00eb\3\2\2\2\62\u00ed\3\2\2\2\64\u00fe\3\2"+
+		"\2\2\66\u010a\3\2\2\28\u010c\3\2\2\2:\u0129\3\2\2\2<\u012b\3\2\2\2>\u012f"+
+		"\3\2\2\2@\u0137\3\2\2\2B\u0140\3\2\2\2D\u014b\3\2\2\2F\u017e\3\2\2\2H"+
+		"I\5:\36\2I\3\3\2\2\2JK\7.\2\2KL\5\b\5\2LN\7\21\2\2MO\5\f\7\2NM\3\2\2\2"+
+		"OP\3\2\2\2PN\3\2\2\2PQ\3\2\2\2QR\3\2\2\2RS\7\25\2\2S\5\3\2\2\2TU\7/\2"+
+		"\2UV\5\b\5\2VW\7\21\2\2WX\5\f\7\2XY\7\25\2\2Y\7\3\2\2\2Z\\\7\13\2\2[]"+
+		"\5\n\6\2\\[\3\2\2\2]^\3\2\2\2^\\\3\2\2\2^_\3\2\2\2_`\3\2\2\2`a\7\34\2"+
+		"\2a\t\3\2\2\2bg\7\60\2\2cd\7\b\2\2df\5\n\6\2ec\3\2\2\2fi\3\2\2\2ge\3\2"+
+		"\2\2gh\3\2\2\2h\13\3\2\2\2ig\3\2\2\2jl\7(\2\2kj\3\2\2\2kl\3\2\2\2lm\3"+
+		"\2\2\2mo\t\2\2\2np\5&\24\2on\3\2\2\2op\3\2\2\2pq\3\2\2\2qr\7\21\2\2rs"+
+		"\5\16\b\2st\7\25\2\2t\r\3\2\2\2uw\5\20\t\2vx\7\"\2\2wv\3\2\2\2wx\3\2\2"+
+		"\2xz\3\2\2\2yu\3\2\2\2z}\3\2\2\2{y\3\2\2\2{|\3\2\2\2|\17\3\2\2\2}{\3\2"+
+		"\2\2~\u0087\5\36\20\2\177\u0087\5\30\r\2\u0080\u0087\5\22\n\2\u0081\u0082"+
+		"\5&\24\2\u0082\u0083\7 \2\2\u0083\u0084\5&\24\2\u0084\u0087\3\2\2\2\u0085"+
+		"\u0087\5$\23\2\u0086~\3\2\2\2\u0086\177\3\2\2\2\u0086\u0080\3\2\2\2\u0086"+
+		"\u0081\3\2\2\2\u0086\u0085\3\2\2\2\u0087\21\3\2\2\2\u0088\u0089\t\3\2"+
+		"\2\u0089\u008a\5\24\13\2\u008a\23\3\2\2\2\u008b\u008d\7\t\2\2\u008c\u008e"+
+		"\5\26\f\2\u008d\u008c\3\2\2\2\u008d\u008e\3\2\2\2\u008e\u008f\3\2\2\2"+
+		"\u008f\u0091\7\5\2\2\u0090\u008b\3\2\2\2\u0091\u0092\3\2\2\2\u0092\u0090"+
+		"\3\2\2\2\u0092\u0093\3\2\2\2\u0093\25\3\2\2\2\u0094\u0097\5&\24\2\u0095"+
+		"\u0096\7 \2\2\u0096\u0098\5&\24\2\u0097\u0095\3\2\2\2\u0097\u0098\3\2"+
+		"\2\2\u0098\u009a\3\2\2\2\u0099\u009b\7\6\2\2\u009a\u0099\3\2\2\2\u009a"+
+		"\u009b\3\2\2\2\u009b\u009d\3\2\2\2\u009c\u0094\3\2\2\2\u009d\u009e\3\2"+
+		"\2\2\u009e\u009c\3\2\2\2\u009e\u009f\3\2\2\2\u009f\27\3\2\2\2\u00a0\u00a3"+
+		"\5 \21\2\u00a1\u00a3\5$\23\2\u00a2\u00a0\3\2\2\2\u00a2\u00a1\3\2\2\2\u00a3"+
+		"\u00a4\3\2\2\2\u00a4\u00a6\5\32\16\2\u00a5\u00a7\5\24\13\2\u00a6\u00a5"+
+		"\3\2\2\2\u00a6\u00a7\3\2\2\2\u00a7\31\3\2\2\2\u00a8\u00ab\5\34\17\2\u00a9"+
+		"\u00ac\5 \21\2\u00aa\u00ac\5$\23\2\u00ab\u00a9\3\2\2\2\u00ab\u00aa\3\2"+
+		"\2\2\u00ac\u00ae\3\2\2\2\u00ad\u00a8\3\2\2\2\u00ae\u00af\3\2\2\2\u00af"+
+		"\u00ad\3\2\2\2\u00af\u00b0\3\2\2\2\u00b0\33\3\2\2\2\u00b1\u00b2\t\4\2"+
+		"\2\u00b2\35\3\2\2\2\u00b3\u00b5\5 \21\2\u00b4\u00b6\5\24\13\2\u00b5\u00b4"+
+		"\3\2\2\2\u00b5\u00b6\3\2\2\2\u00b6\37\3\2\2\2\u00b7\u00b9\5&\24\2\u00b8"+
+		"\u00ba\5\"\22\2\u00b9\u00b8\3\2\2\2\u00b9\u00ba\3\2\2\2\u00ba!\3\2\2\2"+
+		"\u00bb\u00bc\7\n\2\2\u00bc\u00bf\5&\24\2\u00bd\u00be\7\n\2\2\u00be\u00c0"+
+		"\5&\24\2\u00bf\u00bd\3\2\2\2\u00bf\u00c0\3\2\2\2\u00c0#\3\2\2\2\u00c1"+
+		"\u00c3\7-\2\2\u00c2\u00c4\5&\24\2\u00c3\u00c2\3\2\2\2\u00c3\u00c4\3\2"+
+		"\2\2\u00c4\u00c6\3\2\2\2\u00c5\u00c1\3\2\2\2\u00c5\u00c6\3\2\2\2\u00c6"+
+		"\u00c7\3\2\2\2\u00c7\u00c8\7\21\2\2\u00c8\u00c9\5\16\b\2\u00c9\u00ca\7"+
+		"\25\2\2\u00ca%\3\2\2\2\u00cb\u00cc\t\5\2\2\u00cc\'\3\2\2\2\u00cd\u00d0"+
+		"\5*\26\2\u00ce\u00d0\5:\36\2\u00cf\u00cd\3\2\2\2\u00cf\u00ce\3\2\2\2\u00d0"+
+		")\3\2\2\2\u00d1\u00d2\5B\"\2\u00d2\u00d7\5,\27\2\u00d3\u00d4\7\6\2\2\u00d4"+
+		"\u00d6\5,\27\2\u00d5\u00d3\3\2\2\2\u00d6\u00d9\3\2\2\2\u00d7\u00d5\3\2"+
+		"\2\2\u00d7\u00d8\3\2\2\2\u00d8\u00da\3\2\2\2\u00d9\u00d7\3\2\2\2\u00da"+
+		"\u00db\7\"\2\2\u00db+\3\2\2\2\u00dc\u00df\5.\30\2\u00dd\u00de\7 \2\2\u00de"+
+		"\u00e0\5\60\31\2\u00df\u00dd\3\2\2\2\u00df\u00e0\3\2\2\2\u00e0-\3\2\2"+
+		"\2\u00e1\u00e6\7\'\2\2\u00e2\u00e3\7\t\2\2\u00e3\u00e5\7\5\2\2\u00e4\u00e2"+
+		"\3\2\2\2\u00e5\u00e8\3\2\2\2\u00e6\u00e4\3\2\2\2\u00e6\u00e7\3\2\2\2\u00e7"+
 		"/\3\2\2\2\u00e8\u00e6\3\2\2\2\u00e9\u00ec\5\62\32\2\u00ea\u00ec\5D#\2"+
 		"\u00eb\u00e9\3\2\2\2\u00eb\u00ea\3\2\2\2\u00ec\61\3\2\2\2\u00ed\u00f9"+
 		"\7\21\2\2\u00ee\u00f3\5\60\31\2\u00ef\u00f0\7\6\2\2\u00f0\u00f2\5\60\31"+
@@ -2494,27 +2516,28 @@ public class DOTParser extends Parser {
 		"\u0143\b#\1\2\u0143\u0144\t\7\2\2\u0144\u014c\5D#\2\u0145\u0146\7\13\2"+
 		"\2\u0146\u0147\5B\"\2\u0147\u0148\7\34\2\2\u0148\u0149\5D#\2\u0149\u014c"+
 		"\3\2\2\2\u014a\u014c\5F$\2\u014b\u0142\3\2\2\2\u014b\u0145\3\2\2\2\u014b"+
-		"\u014a\3\2\2\2\u014c\u0172\3\2\2\2\u014d\u0154\6#\2\3\u014e\u014f\7\17"+
+		"\u014a\3\2\2\2\u014c\u0175\3\2\2\2\u014d\u0154\6#\2\3\u014e\u014f\7\17"+
 		"\2\2\u014f\u0155\7 \2\2\u0150\u0151\7%\2\2\u0151\u0155\7 \2\2\u0152\u0155"+
 		"\7%\2\2\u0153\u0155\7\17\2\2\u0154\u014e\3\2\2\2\u0154\u0150\3\2\2\2\u0154"+
-		"\u0152\3\2\2\2\u0154\u0153\3\2\2\2\u0155\u0156\3\2\2\2\u0156\u0171\5D"+
-		"#\2\u0157\u0158\6#\3\3\u0158\u0159\t\b\2\2\u0159\u0171\5D#\2\u015a\u015b"+
-		"\6#\4\3\u015b\u015c\7#\2\2\u015c\u0171\5D#\2\u015d\u015e\6#\5\3\u015e"+
-		"\u015f\7$\2\2\u015f\u0171\5D#\2\u0160\u0161\6#\6\3\u0161\u0162\7\35\2"+
-		"\2\u0162\u0171\7\'\2\2\u0163\u0164\6#\7\3\u0164\u0165\7\t\2\2\u0165\u0166"+
-		"\5D#\2\u0166\u0167\7\5\2\2\u0167\u0171\3\2\2\2\u0168\u0169\6#\b\3\u0169"+
-		"\u016b\7\13\2\2\u016a\u016c\5> \2\u016b\u016a\3\2\2\2\u016b\u016c\3\2"+
-		"\2\2\u016c\u016d\3\2\2\2\u016d\u0171\7\34\2\2\u016e\u016f\6#\t\3\u016f"+
-		"\u0171\t\t\2\2\u0170\u014d\3\2\2\2\u0170\u0157\3\2\2\2\u0170\u015a\3\2"+
-		"\2\2\u0170\u015d\3\2\2\2\u0170\u0160\3\2\2\2\u0170\u0163\3\2\2\2\u0170"+
-		"\u0168\3\2\2\2\u0170\u016e\3\2\2\2\u0171\u0174\3\2\2\2\u0172\u0170\3\2"+
-		"\2\2\u0172\u0173\3\2\2\2\u0173E\3\2\2\2\u0174\u0172\3\2\2\2\u0175\u0176"+
-		"\7\13\2\2\u0176\u0177\5D#\2\u0177\u0178\7\34\2\2\u0178\u017b\3\2\2\2\u0179"+
-		"\u017b\7\'\2\2\u017a\u0175\3\2\2\2\u017a\u0179\3\2\2\2\u017bG\3\2\2\2"+
-		".P^gkow{\u0086\u008d\u0092\u0097\u009a\u009e\u00a2\u00a6\u00ab\u00af\u00b5"+
-		"\u00b9\u00bf\u00c3\u00c5\u00cf\u00d7\u00df\u00e6\u00eb\u00f3\u00f7\u00f9"+
-		"\u00fe\u0102\u0106\u010a\u0114\u0129\u0134\u013b\u014b\u0154\u016b\u0170"+
-		"\u0172\u017a";
+		"\u0152\3\2\2\2\u0154\u0153\3\2\2\2\u0155\u0156\3\2\2\2\u0156\u0174\5D"+
+		"#\2\u0157\u0158\6#\3\3\u0158\u0159\t\b\2\2\u0159\u0174\5D#\2\u015a\u015b"+
+		"\6#\4\3\u015b\u015c\7#\2\2\u015c\u0174\5D#\2\u015d\u015e\6#\5\3\u015e"+
+		"\u015f\7$\2\2\u015f\u0174\5D#\2\u0160\u0161\6#\6\3\u0161\u0162\7 \2\2"+
+		"\u0162\u0174\5D#\2\u0163\u0164\6#\7\3\u0164\u0165\7\35\2\2\u0165\u0174"+
+		"\7\'\2\2\u0166\u0167\6#\b\3\u0167\u0168\7\t\2\2\u0168\u0169\5D#\2\u0169"+
+		"\u016a\7\5\2\2\u016a\u0174\3\2\2\2\u016b\u016c\6#\t\3\u016c\u016e\7\13"+
+		"\2\2\u016d\u016f\5> \2\u016e\u016d\3\2\2\2\u016e\u016f\3\2\2\2\u016f\u0170"+
+		"\3\2\2\2\u0170\u0174\7\34\2\2\u0171\u0172\6#\n\3\u0172\u0174\t\t\2\2\u0173"+
+		"\u014d\3\2\2\2\u0173\u0157\3\2\2\2\u0173\u015a\3\2\2\2\u0173\u015d\3\2"+
+		"\2\2\u0173\u0160\3\2\2\2\u0173\u0163\3\2\2\2\u0173\u0166\3\2\2\2\u0173"+
+		"\u016b\3\2\2\2\u0173\u0171\3\2\2\2\u0174\u0177\3\2\2\2\u0175\u0173\3\2"+
+		"\2\2\u0175\u0176\3\2\2\2\u0176E\3\2\2\2\u0177\u0175\3\2\2\2\u0178\u0179"+
+		"\7\13\2\2\u0179\u017a\5D#\2\u017a\u017b\7\34\2\2\u017b\u017f\3\2\2\2\u017c"+
+		"\u017f\7\'\2\2\u017d\u017f\7\60\2\2\u017e\u0178\3\2\2\2\u017e\u017c\3"+
+		"\2\2\2\u017e\u017d\3\2\2\2\u017fG\3\2\2\2.P^gkow{\u0086\u008d\u0092\u0097"+
+		"\u009a\u009e\u00a2\u00a6\u00ab\u00af\u00b5\u00b9\u00bf\u00c3\u00c5\u00cf"+
+		"\u00d7\u00df\u00e6\u00eb\u00f3\u00f7\u00f9\u00fe\u0102\u0106\u010a\u0114"+
+		"\u0129\u0134\u013b\u014b\u0154\u016e\u0173\u0175\u017e";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {

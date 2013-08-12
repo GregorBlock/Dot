@@ -129,11 +129,12 @@ expression
     |   expression ('==' | '!=') expression
     |   expression '&&' expression
     |   expression '||' expression
- 
+    |   expression '='<assoc=right> expression
     ;
 primary
     :   '(' expression ')'  	
     |   Identifier
+    |   NUMBER
     ;
 	
 // "The keywords node, edge, graph, digraph, subgraph, and strict are
