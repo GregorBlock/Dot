@@ -7,7 +7,7 @@ grammar DOT;
 package de.compilerbau.dot;
 }
 
-s			: 	uncover | only | graph ; 
+s			: 	statement ; 
 
 uncover		: 	UNCOVER file_list  '{' graph+ '}' ;
 only		: 	ONLY file_list  '{' graph '}' ;
@@ -37,7 +37,105 @@ id          :   ID
             |   HTML_STRING
             |   NUMBER
             ;
+			
 
+blockStatement
+    :   localVariableDeclaration
+    |   statement
+    ;
+	
+localVariableDeclaration
+    :   type variableDeclarator (',' variableDeclarator)* ';'
+    ;
+	
+variableDeclarator
+    :   variableDeclaratorId ('=' variableInitializer)?
+    ;
+
+variableDeclaratorId
+    :   Identifier ('[' ']')*
+    ;
+
+variableInitializer
+    :   arrayInitializer
+    |   expression
+    ;
+
+arrayInitializer
+    :   '{' (variableInitializer (',' variableInitializer)* (',')? )? '}'
+    ;
+	
+forControl
+    :  forInit? ';' expression? ';' forUpdate?
+    ;
+
+forInit
+    :   localVariableDeclaration
+    |   expressionList
+    ;
+
+forUpdate
+    :   expressionList
+    ;
+	
+statement
+    : 	block
+    |   'if' parExpression statement ('else' statement)?
+    |   'for' '(' forControl ')' statement
+    |   'while' parExpression statement
+    |   'do' statement 'while' parExpression ';'
+	|   uncover 
+	| 	only 
+	| 	graph
+    ;
+
+parExpression
+    :   '(' expression ')'
+    ;
+	
+expressionList
+    :   expression (',' expression)*
+    ;
+	
+block
+    :   '{' blockStatement* '}'
+    ;	
+		
+Identifier
+    :   LETTER (LETTER|DIGIT)*
+    ;
+
+type
+    :   'boolean'
+    |   'char'
+    |   'byte'
+    |   'short'
+    |   'int'
+    |   'long'
+    |   'float'
+    |   'double'
+	|   'String'
+    ;
+	
+expression
+    :   primary
+    |   expression '.' Identifier
+    |   expression '[' expression ']'
+    |   expression '(' expressionList? ')'
+    |   expression ('++' | '--')
+    |   ('+'|'-'|'++'|'--') expression
+    |   '(' type ')' expression
+    |   expression ('<' '=' | '>' '=' | '>' | '<') expression
+    |   expression ('==' | '!=') expression
+    |   expression '&&' expression
+    |   expression '||' expression
+ 
+    ;
+primary
+    :   '(' expression ')'  	
+    |   Identifier
+    ;
+	
 // "The keywords node, edge, graph, digraph, subgraph, and strict are
 // case-independent"
 STRICT      :   [Ss][Tt][Rr][Ii][Cc][Tt] ;
