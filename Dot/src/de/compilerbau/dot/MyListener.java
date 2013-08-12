@@ -15,8 +15,8 @@ import de.compilerbau.dot.DOTParser.UncoverContext;
  */
 public class MyListener extends DOTBaseListener
 {
-
-   public String returnValue(String value)
+   private String value;
+   public String returnValue() 
    {
       return value;
    }
@@ -24,6 +24,7 @@ public class MyListener extends DOTBaseListener
    @Override
    public void enterUncover(UncoverContext ctx)
    {
+      value = ctx.children.get(3).getText();
       super.enterUncover(ctx);
    }
 
@@ -37,8 +38,6 @@ public class MyListener extends DOTBaseListener
    @Override
    public void enterFile(FileContext ctx)
    {
-      System.out.println(ctx.children.get(0).getText());
-      System.out.println(ctx.getText());
       super.enterFile(ctx);
    }
 

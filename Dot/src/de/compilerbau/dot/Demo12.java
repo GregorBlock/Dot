@@ -4,22 +4,34 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+
 import javax.swing.*;
+
 import att.grappa.*;
 
 public class Demo12 implements GrappaConstants
 {
    public DemoFrame frame = null;
 
-   public final static String SCRIPT = "../formatDemo";
+   public final static String SCRIPT = "formatDemo.sh";
 
-   void doDemo(InputStream input)
+   void doDemo(String input)
    {
-      Parser program = new Parser(input, System.err);
+      Parser program = null;
       try
       {
+         File file = new File("bla");
+         FileOutputStream fileOutputStream = new FileOutputStream(file);
+         fileOutputStream.write(input.getBytes());
+         fileOutputStream.flush();
+         program = new Parser(new FileInputStream(file), System.err);
          // program.debug_parse(4);
          program.parse();
+      }
+      catch (FileNotFoundException e)
+      {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
       }
       catch (Exception ex)
       {
@@ -30,6 +42,7 @@ public class Demo12 implements GrappaConstants
       Graph graph = null;
 
       graph = program.getGraph();
+      graph.printGraph(System.out);
 
       System.err.println("The graph contains "
             + graph.countOfElements(Grappa.NODE | Grappa.EDGE
