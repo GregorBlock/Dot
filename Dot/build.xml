@@ -1,0 +1,32 @@
+<project name="ANTLR" default="generate" basedir=".">
+	<property name="src" location="src" />
+	<property name="gen" location="gen" />
+	<property name="package" value="de/compilerbau/dot" />
+
+	<path id="classpath">
+		<pathelement location="lib/antlr-4.1-complete.jar" />
+		<pathelement location="bin" />
+	</path>
+
+	<target name="generate" depends="clean">
+		<mkdir dir="${gen}/${package}" />
+		<java classname="org.antlr.v4.Tool" classpathref="classpath" fork="true">
+			<arg value="-o" />
+			<arg path="${gen}/${package}" />
+			<arg value="-lib" />
+			<arg path="${src}/${package}" />
+			<!--
+			<arg value="-visitor" />
+			<arg value="-no-listener" />
+			-->
+
+			<arg value="${src}/${package}/DOT.g4" />
+		</java>
+	</target>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${gen}" includes="**/*" />
+		</delete>
+	</target>
+</project>
