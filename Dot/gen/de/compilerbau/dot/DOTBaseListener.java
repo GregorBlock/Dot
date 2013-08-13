@@ -240,6 +240,19 @@ public class DOTBaseListener implements DOTListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterLocalVariableDeclarationStatement(@NotNull DOTParser.LocalVariableDeclarationStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitLocalVariableDeclarationStatement(@NotNull DOTParser.LocalVariableDeclarationStatementContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterA_list(@NotNull DOTParser.A_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -351,6 +364,19 @@ public class DOTBaseListener implements DOTListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitFile_list(@NotNull DOTParser.File_listContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterVariableDeclarators(@NotNull DOTParser.VariableDeclaratorsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitVariableDeclarators(@NotNull DOTParser.VariableDeclaratorsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

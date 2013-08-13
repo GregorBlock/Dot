@@ -198,6 +198,17 @@ public interface DOTListener extends ParseTreeListener {
 	void exitGraph(@NotNull DOTParser.GraphContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link DOTParser#localVariableDeclarationStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocalVariableDeclarationStatement(@NotNull DOTParser.LocalVariableDeclarationStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DOTParser#localVariableDeclarationStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocalVariableDeclarationStatement(@NotNull DOTParser.LocalVariableDeclarationStatementContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link DOTParser#a_list}.
 	 * @param ctx the parse tree
 	 */
@@ -295,6 +306,17 @@ public interface DOTListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFile_list(@NotNull DOTParser.File_listContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link DOTParser#variableDeclarators}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableDeclarators(@NotNull DOTParser.VariableDeclaratorsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DOTParser#variableDeclarators}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableDeclarators(@NotNull DOTParser.VariableDeclaratorsContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link DOTParser#statement}.

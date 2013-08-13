@@ -1,4 +1,12 @@
-for ( int i = 4 ; i < 5 ; i++ )
-{
-	graph g {A->B;}
+while (1==1){
+only(1-5) {
+strict graph "Test Graph" {
+graph [	size = "8.5,11",
+		ranksep = "0.3333",
+		center = true,
+		rankdir = LR,
+		orientation = landscape ];
+		A->B;
+}
+}
 } 

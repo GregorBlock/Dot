@@ -4,7 +4,6 @@
 package de.compilerbau.dot;
 
 import de.compilerbau.dot.DOTParser.FileContext;
-import de.compilerbau.dot.DOTParser.OnlyContext;
 import de.compilerbau.dot.DOTParser.UncoverContext;
 
 /**
@@ -25,13 +24,6 @@ public class MyListener extends DOTBaseListener
    public void enterUncover(UncoverContext ctx)
    {
       super.enterUncover(ctx);
-   }
-
-   @Override
-   public void enterOnly(OnlyContext ctx)
-   {
-      // TODO Auto-generated method stub
-      super.enterOnly(ctx);
    }
 
    @Override

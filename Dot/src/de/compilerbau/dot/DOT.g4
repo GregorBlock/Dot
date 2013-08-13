@@ -8,9 +8,8 @@ package de.compilerbau.dot;
 }
 
 s			: 	statement ; 
-
 uncover		: 	UNCOVER file_list  '{' graph+ '}' ;
-only		: 	ONLY file_list  '{' graph '}' ;
+only		:	ONLY file_list  '{' graph '}' ;
 file_list	: 	'(' file+ ')' ; 
 file		: 	NUMBER ('-' file)* ; 
 
@@ -37,23 +36,24 @@ id          :   ID
             |   HTML_STRING
             |   NUMBER
             ;
-			
 
-blockStatement
-    :   localVariableDeclaration
-    |   statement
+localVariableDeclarationStatement
+    :    localVariableDeclaration ';'
     ;
 	
 localVariableDeclaration
-    :   type variableDeclarator (',' variableDeclarator)* ';'
+    :	type variableDeclarators
     ;
 	
+variableDeclarators
+    :   variableDeclarator (',' variableDeclarator)*
+    ;	
 variableDeclarator
     :   variableDeclaratorId ('=' variableInitializer)?
     ;
 
 variableDeclaratorId
-    :   Identifier ('[' ']')*
+    :   ID ('[' ']')*
     ;
 
 variableInitializer
@@ -84,8 +84,8 @@ statement
     |   'for' '(' forControl ')' statement
     |   'while' parExpression statement
     |   'do' statement 'while' parExpression ';'
-	|   uncover 
-	| 	only 
+	|	uncover
+	|	only
 	| 	graph
     ;
 
@@ -100,11 +100,12 @@ expressionList
 block
     :   '{' blockStatement* '}'
     ;	
-		
-Identifier
-    :   LETTER (LETTER|DIGIT)*
-    ;
 
+blockStatement
+    :   localVariableDeclarationStatement
+    |   statement
+    ;
+		
 type
     :   'boolean'
     |   'char'
@@ -119,21 +120,18 @@ type
 	
 expression
     :   primary
-    |   expression '.' Identifier
     |   expression '[' expression ']'
-    |   expression '(' expressionList? ')'
     |   expression ('++' | '--')
-    |   ('+'|'-'|'++'|'--') expression
-    |   '(' type ')' expression
     |   expression ('<' '=' | '>' '=' | '>' | '<') expression
     |   expression ('==' | '!=') expression
     |   expression '&&' expression
     |   expression '||' expression
- 
+    |   expression '='<assoc=right> expression
     ;
 primary
     :   '(' expression ')'  	
-    |   Identifier
+    |   ID
+    |   NUMBER
     ;
 	
 // "The keywords node, edge, graph, digraph, subgraph, and strict are
