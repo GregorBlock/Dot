@@ -79,15 +79,27 @@ forUpdate
 	
 statement
     : 	block
-    |   'if' parExpression statement ('else' statement)?
-    |   'for' '(' forControl ')' statement
-    |   'while' parExpression statement
-    |   'do' statement 'while' parExpression ';'
+    |   ifStatement
+    |   forStatement
+    |   whileStatement
+    |   doStatement
 	|	uncover
 	|	only
 	| 	graph
     ;
-
+	
+ifStatement
+	:	'if' parExpression statement ('else' statement)? ;
+	
+forStatement
+	:	'for' '(' forControl ')' statement ;
+	
+whileStatement
+	:	'while' parExpression statement ;
+	
+doStatement
+	:	'do' statement 'while' parExpression ';' ;
+	
 parExpression
     :   '(' expression ')'
     ;
@@ -118,15 +130,20 @@ type
     ;
 	
 expression
-    :   primary
-    |   expression '[' expression ']'
-    |   expression ('++' | '--')
-    |   expression ('<' '=' | '>' '=' | '>' | '<') expression
-    |   expression ('==' | '!=') expression
-    |   expression '&&' expression
-    |   expression '||' expression
-    |   expression '='<assoc=right> expression
+    :   primary										#primaryExpr
+    |   expression '[' expression ']'				#arrayExpr
+    |   expression ('++' | '--')					#incDecExpr
+	|	expression '<' '=' expression				#ltEqExpr
+	|	expression '>' '=' expression				#gtEqExpr
+	|	expression '>' expression					#gtExpr
+	|	expression '<' expression					#ltExpr
+	|	expression '==' expression					#eqExpr
+	|	expression '!=' expression					#neqExpr
+    |   expression '&&' expression					#andExpr
+    |   expression '||' expression					#orExpr
+    |   expression '='<assoc=right> expression		#assignExpr
     ;
+	
 primary
     :   '(' expression ')'  	
     |   ID
