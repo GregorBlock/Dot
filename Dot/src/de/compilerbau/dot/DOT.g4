@@ -7,7 +7,7 @@ grammar DOT;
 package de.compilerbau.dot;
 }
 
-s			: 	statement ; 
+s			: 	statement* ; 
 uncover		: 	UNCOVER file_list  '{' graph+ '}' ;
 only		:	ONLY file_list  '{' graph '}' ;
 file_list	: 	'(' file+ ')' ; 
@@ -33,7 +33,6 @@ port        :   ':' id (':' id)? ;
 subgraph    :   (SUBGRAPH id?)? '{' stmt_list '}' ; 
 id          :   ID
             |   STRING
-            |   HTML_STRING
             |   NUMBER
             ;
 
@@ -133,7 +132,7 @@ primary
     |   ID
     |   NUMBER
     ;
-	
+
 // "The keywords node, edge, graph, digraph, subgraph, and strict are
 // case-independent"
 STRICT      :   [Ss][Tt][Rr][Ii][Cc][Tt] ;
@@ -160,12 +159,7 @@ ID          :   LETTER (LETTER|DIGIT)*;
 fragment
 LETTER      :   [a-zA-Z\u0080-\u00FF_] ;
 
-/** "HTML strings, angle brackets must occur in matched pairs, and
- *  unescaped newlines are allowed."
- */
-HTML_STRING :   '<' (TAG|~[<>])* '>' ;
-fragment
-TAG         :   '<' .*? '>' ;
+
 
 COMMENT     :   '/*' .*? '*/'       -> skip ;
 LINE_COMMENT:   '//' .*? '\r'? '\n' -> skip ;
