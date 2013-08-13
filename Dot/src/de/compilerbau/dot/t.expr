@@ -11,7 +11,6 @@ graph [	size = "8.5,11",
 }
 }
 } 
-for(i-> 1 to 5)
 for (int i = 5; i <= 10; i++){
 only(1-5) {
 strict graph "Test Graph" {

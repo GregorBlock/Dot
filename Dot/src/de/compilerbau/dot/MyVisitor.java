@@ -1,45 +1,30 @@
 package de.compilerbau.dot;
 
-import de.compilerbau.dot.DOTParser.ExpressionContext;
-import de.compilerbau.dot.DOTParser.ForControlContext;
-import de.compilerbau.dot.DOTParser.ForInitContext;
-import de.compilerbau.dot.DOTParser.ForUpdateContext;
+import java.util.HashMap;
+import java.util.Map;
+
+import de.compilerbau.dot.DOTParser.VariableDeclaratorContext;
+import de.compilerbau.dot.DOTParser.VariableInitializerContext;
 
 public class MyVisitor extends DOTBaseVisitor<Value>
 {
 
-   @Override
-   public Value visitForControl(ForControlContext ctx)
-   {
-      this.visit(ctx.forInit());
-      this.visit(ctx.expression());
-      this.visit(ctx.forUpdate());
-      return super.visitForControl(ctx);
-   }
+   private Map<String, Value> memory = new HashMap<String, Value>();
    
    @Override
-   public Value visitForInit(ForInitContext ctx)
+   public Value visitVariableDeclarator(VariableDeclaratorContext ctx)
    {
-      // TODO Auto-generated method stub
-      return super.visitForInit(ctx);
-   }
-   
-   @Override
-   public Value visitExpression(ExpressionContext ctx)
-   {
-      // TODO Auto-generated method stub
-      return super.visitExpression(ctx);
+      String id = ctx.variableDeclaratorId().getText();
+      memory.put(id, this.visit(ctx.variableInitializer()));
+      System.out.println(memory.get(id).asString());
+      return super.visitVariableDeclarator(ctx);
    }
 
    @Override
-   public Value visitForUpdate(ForUpdateContext ctx)
+   public Value visitVariableInitializer(VariableInitializerContext ctx)
    {
-      // TODO Auto-generated method stub
-      return super.visitForUpdate(ctx);
+      Value value = new Value(ctx.getText());
+      return value;
    }
-
-
-   
-   
    
 }
