@@ -15,10 +15,8 @@
 			<arg path="${gen}/${package}" />
 			<arg value="-lib" />
 			<arg path="${src}/${package}" />
-			<!--
 			<arg value="-visitor" />
 			<arg value="-no-listener" />
-			-->
 
 			<arg value="${src}/${package}/DOT.g4" />
 		</java>
