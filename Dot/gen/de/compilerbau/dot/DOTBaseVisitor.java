@@ -1,4 +1,4 @@
-// Generated from E:\eclipse\git_repo\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
+// Generated from C:\Users\Gregor Block\Studium\git\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
     
 package de.compilerbau.dot;
 
@@ -14,14 +14,6 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * operations with no return type.
  */
 public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DOTVisitor<T> {
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitVariableDeclarator(@NotNull DOTParser.VariableDeclaratorContext ctx) { return visitChildren(ctx); }
-
 	/**
 	 * {@inheritDoc}
 	 * <p/>
@@ -53,6 +45,14 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitExpressionList(@NotNull DOTParser.ExpressionListContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitIdExpr(@NotNull DOTParser.IdExprContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -93,6 +93,14 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitArrayExpr(@NotNull DOTParser.ArrayExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitNumberExpr(@NotNull DOTParser.NumberExprContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -156,6 +164,14 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitMulDivExpr(@NotNull DOTParser.MulDivExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitVariableDeclarators(@NotNull DOTParser.VariableDeclaratorsContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -189,6 +205,14 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitIncDecExpr(@NotNull DOTParser.IncDecExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitAddSubExpr(@NotNull DOTParser.AddSubExprContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -236,7 +260,7 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitVariableDeclaratorId(@NotNull DOTParser.VariableDeclaratorIdContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAndExpr(@NotNull DOTParser.AndExprContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -244,7 +268,7 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitAndExpr(@NotNull DOTParser.AndExprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVariableDeclaratorId(@NotNull DOTParser.VariableDeclaratorIdContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -277,14 +301,6 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitBlock(@NotNull DOTParser.BlockContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitBlockStatement(@NotNull DOTParser.BlockStatementContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -349,14 +365,6 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitEqExpr(@NotNull DOTParser.EqExprContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitParExpression(@NotNull DOTParser.ParExpressionContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

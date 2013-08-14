@@ -1,4 +1,4 @@
-// Generated from E:\eclipse\git_repo\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
+// Generated from C:\Users\Gregor Block\Studium\git\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
     
 package de.compilerbau.dot;
 
@@ -13,13 +13,6 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  * operations with no return type.
  */
 public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
-	/**
-	 * Visit a parse tree produced by {@link DOTParser#variableDeclarator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVariableDeclarator(@NotNull DOTParser.VariableDeclaratorContext ctx);
-
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#attr_stmt}.
 	 * @param ctx the parse tree
@@ -47,6 +40,13 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpressionList(@NotNull DOTParser.ExpressionListContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DOTParser#idExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdExpr(@NotNull DOTParser.IdExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#edgeRHS}.
@@ -82,6 +82,13 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitArrayExpr(@NotNull DOTParser.ArrayExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DOTParser#numberExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumberExpr(@NotNull DOTParser.NumberExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#file}.
@@ -133,6 +140,13 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	T visitEdgeop(@NotNull DOTParser.EdgeopContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link DOTParser#mulDivExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMulDivExpr(@NotNull DOTParser.MulDivExprContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link DOTParser#variableDeclarators}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -166,6 +180,13 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIncDecExpr(@NotNull DOTParser.IncDecExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DOTParser#addSubExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddSubExpr(@NotNull DOTParser.AddSubExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#attr_list}.
@@ -203,18 +224,18 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	T visitPort(@NotNull DOTParser.PortContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link DOTParser#variableDeclaratorId}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVariableDeclaratorId(@NotNull DOTParser.VariableDeclaratorIdContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link DOTParser#andExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAndExpr(@NotNull DOTParser.AndExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DOTParser#variableDeclaratorId}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariableDeclaratorId(@NotNull DOTParser.VariableDeclaratorIdContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#forStatement}.
@@ -243,13 +264,6 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBlock(@NotNull DOTParser.BlockContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link DOTParser#blockStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBlockStatement(@NotNull DOTParser.BlockStatementContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#node_id}.
@@ -306,13 +320,6 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitEqExpr(@NotNull DOTParser.EqExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link DOTParser#parExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParExpression(@NotNull DOTParser.ParExpressionContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#stmt}.

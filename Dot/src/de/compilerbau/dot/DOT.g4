@@ -7,7 +7,7 @@ grammar DOT;
 package de.compilerbau.dot;
 }
 
-s			: 	statement* ; 
+s			: 	statement+ ; 
 uncover		: 	UNCOVER file_list  '{' graph+ '}' ;
 only		:	ONLY file_list  '{' graph '}' ;
 file_list	: 	'(' file+ ')' ; 
@@ -19,7 +19,7 @@ stmt        :   node_stmt
             |   edge_stmt
             |   attr_stmt
             |   id '=' id
-            |   subgraph 
+            |   subgraph  
             ;
 attr_stmt   :   (GRAPH | NODE | EDGE) attr_list ;
 attr_list   :   ('[' a_list? ']')+ ;
@@ -48,11 +48,11 @@ variableDeclarators
     :   variableDeclarator (',' variableDeclarator)*
     ;	
 variableDeclarator
-    :   variableDeclaratorId ('=' variableInitializer)?
+    :   variableDeclaratorId ('=' variableInitializer)?		# assignExpr
     ;
 
 variableDeclaratorId
-    :   ID ('[' ']')*
+    :   id ('[' ']')*
     ;
 
 variableInitializer
@@ -79,6 +79,8 @@ forUpdate
 	
 statement
     : 	block
+	|	localVariableDeclarationStatement
+	| 	expression
     |   ifStatement
     |   forStatement
     |   whileStatement
@@ -89,33 +91,24 @@ statement
     ;
 	
 ifStatement
-	:	'if' parExpression statement ('else' statement)? ;
+	:	'if' '(' expression ')' statement ('else' statement)? ;
 	
 forStatement
 	:	'for' '(' forControl ')' statement ;
 	
 whileStatement
-	:	'while' parExpression statement ;
+	:	'while' '(' expression ')' statement ;
 	
 doStatement
-	:	'do' statement 'while' parExpression ';' ;
-	
-parExpression
-    :   '(' expression ')'
-    ;
-	
+	:	'do' statement 'while' '(' expression ')' ';' ;
+		
 expressionList
     :   expression (',' expression)*
     ;
 	
 block
-    :   '{' blockStatement* '}'
+    :   '{' statement* '}'
     ;	
-
-blockStatement
-    :   localVariableDeclarationStatement
-    |   statement
-    ;
 		
 type
     :   'boolean'
@@ -129,10 +122,14 @@ type
 	|   'String'
     ;
 	
-expression
+expression		
     :   primary										#primaryExpr
+	|	ID 			 								#idExpr
+	|   NUMBER										#numberExpr
     |   expression '[' expression ']'				#arrayExpr
-    |   expression ('++' | '--')					#incDecExpr
+	|	expression op=('*'|'/') expression      	#mulDivExpr
+    |   expression op=('+'|'-') expression      	#addSubExpr
+    |   expression op=('++'|'--')					#incDecExpr
 	|	expression '<' '=' expression				#ltEqExpr
 	|	expression '>' '=' expression				#gtEqExpr
 	|	expression '>' expression					#gtExpr
@@ -140,14 +137,11 @@ expression
 	|	expression '==' expression					#eqExpr
 	|	expression '!=' expression					#neqExpr
     |   expression '&&' expression					#andExpr
-    |   expression '||' expression					#orExpr
-    |   expression '='<assoc=right> expression		#assignExpr
+    |   expression '||' expression					#orExpr	
     ;
 	
 primary
-    :   '(' expression ')'  	
-    |   ID
-    |   NUMBER
+    :   '(' expression ')'  										
     ;
 
 // "The keywords node, edge, graph, digraph, subgraph, and strict are
@@ -176,14 +170,20 @@ ID          :   LETTER (LETTER|DIGIT)*;
 fragment
 LETTER      :   [a-zA-Z\u0080-\u00FF_] ;
 
-
-
 COMMENT     :   '/*' .*? '*/'       -> skip ;
 LINE_COMMENT:   '//' .*? '\r'? '\n' -> skip ;
+
+PP :   '++' ;
+MM :   '--' ;
+MUL :   '*' ; 
+DIV :   '/' ;
+ADD :   '+' ;
+SUB :   '-' ;
 
 /** "a '#' character is considered a line output from a C preprocessor (e.g.,
  *  # 34 to indicate line 34 ) and discarded"
  */
+ 
 PREPROC     :   '#' .*? '\n' -> skip ;
 
 WS          :   [ \t\n\r]+ -> skip ;
