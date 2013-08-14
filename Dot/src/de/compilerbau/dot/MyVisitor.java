@@ -1,153 +1,169 @@
 package de.compilerbau.dot;
 
 import java.util.HashMap;
-import java.util.Map; 
+import java.util.Map;
 
 import de.compilerbau.dot.DOTParser.AddSubExprContext;
-import de.compilerbau.dot.DOTParser.AssignExprContext;
+import de.compilerbau.dot.DOTParser.AndExprContext;
+import de.compilerbau.dot.DOTParser.DeclarationContext;
 import de.compilerbau.dot.DOTParser.EqExprContext;
 import de.compilerbau.dot.DOTParser.GtEqExprContext;
 import de.compilerbau.dot.DOTParser.GtExprContext;
-import de.compilerbau.dot.DOTParser.IdExprContext;
+import de.compilerbau.dot.DOTParser.IdAtomContext;
 import de.compilerbau.dot.DOTParser.IncDecExprContext;
 import de.compilerbau.dot.DOTParser.LtEqExprContext;
 import de.compilerbau.dot.DOTParser.LtExprContext;
 import de.compilerbau.dot.DOTParser.MulDivExprContext;
 import de.compilerbau.dot.DOTParser.NeqExprContext;
-import de.compilerbau.dot.DOTParser.NumberExprContext;
-import de.compilerbau.dot.DOTParser.WhileStatementContext;
+import de.compilerbau.dot.DOTParser.NumberAtomContext;
+import de.compilerbau.dot.DOTParser.ParStatContext;
+import de.compilerbau.dot.DOTParser.StringAtomContext;
+import de.compilerbau.dot.DOTParser.WhileStatContext;
 
-public class MyVisitor extends DOTBaseVisitor<Integer>
+public class MyVisitor extends DOTBaseVisitor<Value>
 {
-   private Map<String, Integer> memory = new HashMap<String, Integer>();
-   
+   private Map<String, Value> memory = new HashMap<String, Value>();
+
    @Override
-   public Integer visitNumberExpr(NumberExprContext ctx)
+   public Value visitStringAtom(StringAtomContext ctx)
    {
-      return Integer.valueOf(ctx.NUMBER().getText());
+      String str = ctx.getText();
+      str = str.substring(1, str.length() - 1).replace("\"\"", "\"");
+      return new Value(str);
    }
 
    @Override
-   public Integer visitAssignExpr(AssignExprContext ctx)
+   public Value visitNumberAtom(NumberAtomContext ctx)
    {
-      String id = ctx.variableDeclaratorId().getText();
-      int value = this.visit(ctx.variableInitializer());
-      memory.put(id,value);
-      return super.visitAssignExpr(ctx);
+      return new Value(Double.valueOf(ctx.getText()));
    }
 
    @Override
-   public Integer visitIdExpr(IdExprContext ctx)
+   public Value visitDeclaration(DeclarationContext ctx)
    {
-      String id = ctx.ID().getText();
-      if ( memory.containsKey(id) ) return memory.get(id);
-      return 0;
+      String id = ctx.IDENTIFIER().getText();
+      Value value = this.visit(ctx.expression());
+      return memory.put(id, value); 
    }
 
    @Override
-   public Integer visitWhileStatement(WhileStatementContext ctx)
-   {  
-      Integer v = visit(ctx.expression());
-      
-      while (v==1)
+   public Value visitIdAtom(IdAtomContext ctx)
+   {
+      String id = ctx.IDENTIFIER().getText();
+      Value value = memory.get(id);
+      if (value == null)
+      {
+         throw new RuntimeException("no such variable: " + id);
+      }
+      return value;
+   }
+
+   @Override
+   public Value visitWhileStat(WhileStatContext ctx)
+   {
+      Value v = visit(ctx.parStat());
+      while (v.asBoolean())
       {
          visit(ctx.statement());
 
-         v = visit(ctx.expression());
+         v = visit(ctx.parStat());
       }
-      return null;
+      return Value.VOID;
    }
 
-   
    @Override
-   public Integer visitGtExpr(GtExprContext ctx)
+   public Value visitParStat(ParStatContext ctx)
    {
-      int l = visit(ctx.expression(0));
-      int r = visit(ctx.expression(1));
-      return (l > r) ? 1 : 0;
+      return visit(ctx.expression());
    }
 
    @Override
-   public Integer visitLtExpr(LtExprContext ctx)
+   public Value visitGtExpr(GtExprContext ctx)
    {
-      int l = visit(ctx.expression(0));
-      int r = visit(ctx.expression(1));
-      System.out.println("l: "+l + " r: "+r);
-      return (l < r) ? 1 : 0;
+      Value l = visit(ctx.expression(0));
+      Value r = visit(ctx.expression(1));
+      return new Value(l.asDouble() > r.asDouble());
    }
 
    @Override
-   public Integer visitLtEqExpr(LtEqExprContext ctx)
+   public Value visitLtExpr(LtExprContext ctx)
    {
-      int l = this.visit(ctx.expression(0));
-      int r = this.visit(ctx.expression(1));
-      return (l <= r) ? 1 : 0;
+      Value l = visit(ctx.expression(0));
+      Value r = visit(ctx.expression(1));
+      Value asd = new Value(l.asDouble() < r.asDouble()); 
+      return asd;
    }
 
-//   @Override
-//   public Integer visitAndExpr(AndExprContext ctx)
-//   {
-//      Integer l = this.visit(ctx.expression(0));
-//      Integer r = this.visit(ctx.expression(1));
-//      return (l && r) ? 1 : 0;
-//   }
-
    @Override
-   public Integer visitGtEqExpr(GtEqExprContext ctx)
+   public Value visitLtEqExpr(LtEqExprContext ctx)
    {
-      int l = this.visit(ctx.expression(0));
-      int r = this.visit(ctx.expression(1));
-      return (l >= r) ? 1 : 0;
+      Value l = this.visit(ctx.expression(0));
+      Value r = this.visit(ctx.expression(1));
+      return new Value(l.asDouble() <= r.asDouble());
    }
 
    @Override
-   public Integer visitIncDecExpr(IncDecExprContext ctx)
+   public Value visitAndExpr(AndExprContext ctx)
+   {
+      Value l = this.visit(ctx.expression(0));
+      Value r = this.visit(ctx.expression(1));
+      return new Value(l.asBoolean() && r.asBoolean());
+   }
+
+   @Override
+   public Value visitGtEqExpr(GtEqExprContext ctx)
+   {
+      Value l = this.visit(ctx.expression(0));
+      Value r = this.visit(ctx.expression(1));
+      return new Value(l.asDouble() >= r.asDouble());
+   }
+
+   @Override
+   public Value visitIncDecExpr(IncDecExprContext ctx)
    {
       // muss noch in der map akt. werden
-      
-      int l = this.visit(ctx.expression());
-      
-      if ( ctx.op.getType() == DOTParser.PP ) 
-         l += 1;
+
+      Value l = this.visit(ctx.expression());
+
+      if (ctx.op.getType() == DOTParser.INC)
+         return new Value(l.asDouble()+1);
       else
-         l -= 1;
-      return l;  
+         return new Value(l.asDouble()-1);
    }
 
    @Override
-   public Integer visitNeqExpr(NeqExprContext ctx)
+   public Value visitNeqExpr(NeqExprContext ctx)
    {
-      int l = this.visit(ctx.expression(0));
-      int r = this.visit(ctx.expression(1));
-      return (l != r) ? 1 : 0;   
-   }
-      
-   @Override
-   public Integer visitEqExpr(EqExprContext ctx)
-   {
-      int l = this.visit(ctx.expression(0));
-      int r = this.visit(ctx.expression(1));
-      return (l == r) ? 1 : 0;
-   }
-   
-   
-   @Override
-   public Integer visitMulDivExpr(MulDivExprContext ctx)
-   {
-      int left = visit(ctx.expression(0));  
-      int right = visit(ctx.expression(1)); 
-      if ( ctx.op.getType() == DOTParser.MUL ) return left * right;
-      return left / right; 
+      Value l = this.visit(ctx.expression(0));
+      Value r = this.visit(ctx.expression(1));
+      return new Value(l.asBoolean() != r.asBoolean());
    }
 
    @Override
-   public Integer visitAddSubExpr(AddSubExprContext ctx)
+   public Value visitEqExpr(EqExprContext ctx)
    {
-      int left = visit(ctx.expression(0));  
-      int right = visit(ctx.expression(1)); 
-      if ( ctx.op.getType() == DOTParser.ADD ) return left + right;
-      return left - right; 
+      Value l = this.visit(ctx.expression(0));
+      Value r = this.visit(ctx.expression(1));
+      return new Value(l.asBoolean() == r.asBoolean());
    }
-   
-   
+
+   @Override
+   public Value visitMulDivExpr(MulDivExprContext ctx)
+   {
+      Value l = visit(ctx.expression(0));
+      Value r = visit(ctx.expression(1));
+      if (ctx.op.getType() == DOTParser.MULT)
+         return new Value(l.asDouble() * r.asDouble());
+      return new Value(l.asDouble() / r.asDouble());
+   }
+
+   @Override
+   public Value visitAddSubExpr(AddSubExprContext ctx)
+   {
+      Value l = visit(ctx.expression(0));
+      Value r = visit(ctx.expression(1));
+      if (ctx.op.getType() == DOTParser.PLUS)
+         return new Value(l.asDouble() + r.asDouble());
+      return new Value(l.asDouble() - r.asDouble());
+   }
 }

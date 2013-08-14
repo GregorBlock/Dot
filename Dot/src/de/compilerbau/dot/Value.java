@@ -1,14 +1,5 @@
-/**
- * 
- */
 package de.compilerbau.dot;
 
-/**
- * TODO Add comment here
- *
- * @author $Author:  $
- * @version $Revision:  $, $Date:  $ UTC
- */ 
 public class Value {
 
     public static Value VOID = new Value(new Object());
@@ -20,11 +11,11 @@ public class Value {
     }
 
     public Boolean asBoolean() {
-        return (String.valueOf(value) == "true");
+        return (Boolean)value;
     }
 
     public Double asDouble() {
-        return Double.valueOf((String)value);
+        return (Double)value;
     }
 
     public String asString() {
