@@ -21,9 +21,9 @@ public class Demo12 implements GrappaConstants
       try
       {
          File file = new File("bla");
-         FileOutputStream fileOutputStream = new FileOutputStream(file);
-         fileOutputStream.write(input.getBytes());
-         fileOutputStream.flush();
+//         FileOutputStream fileOutputStream = new FileOutputStream(file);
+//         fileOutputStream.write(input.getBytes());
+//         fileOutputStream.flush();
          program = new Parser(new FileInputStream(file), System.err);
          // program.debug_parse(4);
          program.parse();
@@ -168,7 +168,8 @@ public class Demo12 implements GrappaConstants
                Object connector = null;
                try
                {
-                  connector = Runtime.getRuntime().exec(Demo12.SCRIPT);
+        	   String [] processArgs = {"E:\\Downloads\\unsorted\\graphviz-2.30.1\\release\\bin\\dot.exe"}; // You can use "neato" or whatever formatter you want
+                  connector = Runtime.getRuntime().exec(processArgs, null, null);
                }
                catch (Exception ex)
                {

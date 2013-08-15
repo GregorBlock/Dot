@@ -1,6 +1,5 @@
-int i = 1;
 
-while(i<6)
-{
-	int i = i + 1;
-}
+	digraph Gi
+	{
+		A--B;
+	}
