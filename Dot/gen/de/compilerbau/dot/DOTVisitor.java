@@ -1,4 +1,4 @@
-// Generated from C:\Users\Gregor Block\Studium\git\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
+// Generated from E:\eclipse\git_repo\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
     
 package de.compilerbau.dot;
 
@@ -208,13 +208,6 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitEqExpr(@NotNull DOTParser.EqExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link DOTParser#doStat}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDoStat(@NotNull DOTParser.DoStatContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#declaration}.

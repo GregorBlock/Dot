@@ -16,20 +16,18 @@ statement	:	block
 			|	assignment
 			|	declaration
 			|	whileStat
-			|	doStat
 			|	forStat
 			|	ifElseStat
+			| 	expression ';'
 			;
 			
 block		:	OBRACE statement* CBRACE ;
 
-declaration	:	type IDENTIFIER ( ASSIGN expression)? SCOL ;
+declaration	:	type IDENTIFIER ( ASSIGN expression )? SCOL ;
 
 assignment	:	IDENTIFIER ASSIGN expression SCOL ;
 
 whileStat	:	WHILE parStat statement ;
-
-doStat		:	DO OBRACE statement CBRACE WHILE parStat SCOL ;
 
 forStat		:	FOR OPAR forControl CPAR statement ;
 
@@ -44,7 +42,7 @@ expression	:   primary										#primaryExpr
 			|	expression LTEQ expression					#ltEqExpr
 			|	expression op=(MULT|DIV) expression      	#mulDivExpr
 			|   expression op=(PLUS|MINUS) expression      	#addSubExpr
-			|   expression op=(INC | DEC)					#incDecExpr
+			|   IDENTIFIER op=(INC | DEC)					#incDecExpr
 			|	expression GTEQ expression					#gtEqExpr
 			|	expression GT expression					#gtExpr
 			|	expression LT expression					#ltExpr
@@ -134,8 +132,8 @@ FALSE 		: 	'false' ;
 IF 			: 	'if' ;
 ELSE 		: 	'else' ;
 WHILE 		: 	'while' ;
-DO			:	'do' ;
 FOR			:	'for' ;
+
 INTTYPE		:	'int' ;
 FlOATTYPE	:	'float' ;
 STRINGTYPE	:	'String' ;
@@ -172,10 +170,11 @@ LETTER      :   [a-zA-Z\u0080-\u00FF_] ;
 
 /** "HTML strings, angle brackets must occur in matched pairs, and
  *  unescaped newlines are allowed."
- */
-HTML_STRING :   LT (TAG|~[<>])* GT ;
+ HTML_STRING :   LT (TAG|~[<>])* GT ;
 fragment
 TAG         :   LT .*? GT ;
+ */
+
 
 
 COMMENT     :   '/*' .*? '*/'       -> channel(HIDDEN) ;

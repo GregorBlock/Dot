@@ -1,4 +1,4 @@
-// Generated from C:\Users\Gregor Block\Studium\git\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
+// Generated from E:\eclipse\git_repo\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
     
 package de.compilerbau.dot;
 
@@ -237,14 +237,6 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitEqExpr(@NotNull DOTParser.EqExprContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitDoStat(@NotNull DOTParser.DoStatContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
