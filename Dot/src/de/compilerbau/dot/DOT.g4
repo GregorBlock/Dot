@@ -15,6 +15,7 @@ statement	:	block
 			|	only
 			|	assignment
 			|	declaration
+			| 	arraydecl
 			|	whileStat
 			|	forStat
 			|	ifElseStat
@@ -24,6 +25,11 @@ statement	:	block
 block		:	OBRACE statement* CBRACE ;
 
 declaration	:	type IDENTIFIER ( ASSIGN expression )? SCOL ;
+
+arraydecl	:	type '[]' IDENTIFIER '=' value_list ';'	;
+
+value_list  :   ('{' ((INT | FLOAT | STRING) ','?)+ '}')+ 	#arrayList
+			;
 
 assignment	:	IDENTIFIER ASSIGN expression SCOL ;
 
@@ -177,6 +183,6 @@ TAG         :   LT .*? GT ;
 
 
 
-COMMENT     :   '/*' .*? '*/'       -> channel(HIDDEN) ;
+COMMENT     :   '/*' .*? '*/'       -> channel(HIDDEN) ; 
 LINE_COMMENT:   '//' .*? '\r'? '\n' -> channel(HIDDEN) ;
-WS			:   [ \t\n\r]+ -> channel(HIDDEN) ;
+WS			:   [ \t\n\r]+ -> skip ;

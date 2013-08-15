@@ -21,9 +21,9 @@ public class Demo12 implements GrappaConstants
       try
       {
          File file = new File("bla");
-//         FileOutputStream fileOutputStream = new FileOutputStream(file);
-//         fileOutputStream.write(input.getBytes());
-//         fileOutputStream.flush();
+         FileOutputStream fileOutputStream = new FileOutputStream(file);
+         fileOutputStream.write(input.getBytes());
+         fileOutputStream.flush();
          program = new Parser(new FileInputStream(file), System.err);
          // program.debug_parse(4);
          program.parse();

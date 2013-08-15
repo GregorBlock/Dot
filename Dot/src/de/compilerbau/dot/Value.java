@@ -1,5 +1,7 @@
 package de.compilerbau.dot;
 
+import java.util.ArrayList;
+
 public class Value {
 
     public static Value VOID = new Value(new Object());
@@ -8,6 +10,10 @@ public class Value {
     
     public Value(Object value) {
         this.value = value;
+    }
+    
+    public ArrayList<Integer> asIntArray() {
+      return (ArrayList<Integer>)value;
     }
 
     public Boolean asBoolean() {
