@@ -217,6 +217,13 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAndExpr(@NotNull DOTParser.AndExprContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link DOTParser#intAtom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntAtom(@NotNull DOTParser.IntAtomContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link DOTParser#gtEqExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -236,13 +243,6 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIfElseStat(@NotNull DOTParser.IfElseStatContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link DOTParser#numberAtom}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumberAtom(@NotNull DOTParser.NumberAtomContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#node_id}.
@@ -315,18 +315,18 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	T visitFile_list(@NotNull DOTParser.File_listContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link DOTParser#whileStat}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitWhileStat(@NotNull DOTParser.WhileStatContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link DOTParser#subgraph}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSubgraph(@NotNull DOTParser.SubgraphContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DOTParser#whileStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhileStat(@NotNull DOTParser.WhileStatContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#assignment}.
@@ -341,6 +341,13 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitS(@NotNull DOTParser.SContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DOTParser#doubleAtom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoubleAtom(@NotNull DOTParser.DoubleAtomContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#node_stmt}.

@@ -26,7 +26,7 @@ block		:	OBRACE statement* CBRACE ;
 
 declaration	:	type IDENTIFIER ( ASSIGN expression )? SCOL ;
 
-arraydecl	:	type '[]' IDENTIFIER '=' value_list ';'	;
+arraydecl	:	type '[]' IDENTIFIER ASSIGN value_list SCOL	;
 
 value_list  :   ('{' ((INT | FLOAT | STRING | IDENTIFIER) ','?)+ '}')+ 	#arrayList
 			;
@@ -61,12 +61,13 @@ expression	:   primary										#primaryExpr
 	
 primary		:	parStat										#parExpr
 			|	IDENTIFIER									#idAtom
-			|	(INT | FLOAT)								#numberAtom
+			|	INT 										#intAtom
+			| 	DOUBLE										#doubleAtom
 			|	STRING										#stringAtom
 			;
 			
 type		:	INTTYPE	
-			|	FLOATTYPE		
+			|	DOUBLETYPE		
 			|	STRINGTYPE
 			;
 	
@@ -141,7 +142,7 @@ WHILE 		: 	'while' ;
 FOR			:	'for' ;
 
 INTTYPE		:	'int' ;
-FlOATTYPE	:	'float' ;
+DOUBLETYPE	:	'double' ;
 STRINGTYPE	:	'String' ;
   
 STRICT      :   [Ss][Tt][Rr][Ii][Cc][Tt] ;
@@ -155,7 +156,7 @@ ONLY		:	[Oo][Nn][Ll][Yy] ;
 
 IDENTIFIER	: 	[a-zA-Z_] [a-zA-Z_0-9]* ;
 INT			: 	MINUS? DIGIT+ ;
-FLOAT		:	MINUS? DIGIT+ '.' DIGIT* 
+DOUBLE		:	MINUS? DIGIT+ '.' DIGIT* 
 			| 	MINUS? '.' DIGIT+
 			;
 			

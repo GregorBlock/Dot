@@ -9,9 +9,9 @@ import de.compilerbau.dot.DOTParser.AndExprContext;
 import de.compilerbau.dot.DOTParser.ArrayExprContext;
 import de.compilerbau.dot.DOTParser.ArrayListContext;
 import de.compilerbau.dot.DOTParser.ArraydeclContext;
-import de.compilerbau.dot.DOTParser.AssignExprContext;
 import de.compilerbau.dot.DOTParser.AssignmentContext;
 import de.compilerbau.dot.DOTParser.DeclarationContext;
+import de.compilerbau.dot.DOTParser.DoubleAtomContext;
 import de.compilerbau.dot.DOTParser.EqExprContext;
 import de.compilerbau.dot.DOTParser.ForControlContext;
 import de.compilerbau.dot.DOTParser.ForStatContext;
@@ -21,13 +21,12 @@ import de.compilerbau.dot.DOTParser.GtExprContext;
 import de.compilerbau.dot.DOTParser.IdAtomContext;
 import de.compilerbau.dot.DOTParser.IfElseStatContext;
 import de.compilerbau.dot.DOTParser.IncDecExprContext;
+import de.compilerbau.dot.DOTParser.IntAtomContext;
 import de.compilerbau.dot.DOTParser.LtEqExprContext;
 import de.compilerbau.dot.DOTParser.LtExprContext;
 import de.compilerbau.dot.DOTParser.MulDivExprContext;
 import de.compilerbau.dot.DOTParser.NeqExprContext;
-import de.compilerbau.dot.DOTParser.NumberAtomContext;
 import de.compilerbau.dot.DOTParser.ParStatContext;
-import de.compilerbau.dot.DOTParser.PrimaryExprContext;
 import de.compilerbau.dot.DOTParser.StringAtomContext;
 import de.compilerbau.dot.DOTParser.WhileStatContext;
 
@@ -40,33 +39,57 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       String str = ctx.getText();
       str = str.substring(1, str.length() - 1).replace("\"\"", "\"");
-      return new Value(str);
+      return new Value(Value.Type.STRING, str);
    }
 
    @Override
-   public Value visitNumberAtom(NumberAtomContext ctx)
+   public Value visitDoubleAtom(DoubleAtomContext ctx)
    {
-      return new Value(Double.valueOf(ctx.getText()));
+      return new Value(Value.Type.DOUBLE, Double.valueOf(ctx.getText()));
    }
 
    @Override
    public Value visitDeclaration(DeclarationContext ctx)
    {
       String id = ctx.IDENTIFIER().getText();
+      if (!checkType(ctx.start.getType(), ctx.expression().start.getType()))
+         throw new RuntimeException("Type mismatch");
+
       Value value;
-      if(!(ctx.expression() == null))
+      if (!(ctx.expression() == null))
          value = this.visit(ctx.expression());
       else
-         value = new Value(0);
+         value = new Value(Value.Type.INT, 0);
       return memory.put(id, value);
    }
-   
+
    @Override
    public Value visitArraydecl(ArraydeclContext ctx)
    {
       String id = ctx.IDENTIFIER().getText();
       Value value = this.visit(ctx.value_list());
       return memory.put(id, value);
+   }
+
+   @Override
+   public Value visitIntAtom(IntAtomContext ctx)
+   {
+      return new Value(Value.Type.INT, Integer.valueOf(ctx.getText()));
+   }
+
+   private boolean checkType(int type, int value)
+   {
+      switch (type)
+      {
+         case DOTParser.INTTYPE:
+            return value == DOTParser.INT;
+         case DOTParser.DOUBLETYPE:
+            return value == DOTParser.DOUBLE;
+         case DOTParser.STRINGTYPE:
+            return value == DOTParser.STRING;
+         default:
+            return false;
+      }
    }
 
    @Override
@@ -78,17 +101,17 @@ public class MyVisitor extends DOTBaseVisitor<Value>
          arrayList.add(Integer.valueOf(ctx.INT(i).getText()));
       }
 
-      return new Value(arrayList);
+      return new Value(Value.Type.INT, arrayList);
    }
-   
+
    @Override
    public Value visitArrayExpr(ArrayExprContext ctx)
    {
       Value l = visit(ctx.expression(0));
       Value r = visit(ctx.expression(1));
 
-      l.asIntArray().get(r.asDouble().intValue());
-      System.out.println(l.asIntArray().get(r.asDouble().intValue()));
+      l.asIntArray().get((int) r.asDouble());
+      System.out.println(l.asIntArray().get((int) r.asDouble()));
       return super.visitArrayExpr(ctx);
    }
 
@@ -101,9 +124,9 @@ public class MyVisitor extends DOTBaseVisitor<Value>
       {
          throw new RuntimeException("Id " + id + " unbekannt");
       }
-      value = memory.put(id, visit(ctx.expression()));
-      System.out.println(value);
-      return value;
+
+      return memory.put(id, visit(ctx.expression()));
+
    }
 
    @Override
@@ -142,7 +165,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       Value l = visit(ctx.expression(0));
       Value r = visit(ctx.expression(1));
-      return new Value(l.asDouble() > r.asDouble());
+      return new Value(Value.Type.BOOLEAN, l.asDouble() > r.asDouble());
    }
 
    @Override
@@ -150,7 +173,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       Value l = visit(ctx.expression(0));
       Value r = visit(ctx.expression(1));
-      Value asd = new Value(l.asDouble() < r.asDouble());
+      Value asd = new Value(Value.Type.BOOLEAN, l.asDouble() < r.asDouble());
       return asd;
    }
 
@@ -159,7 +182,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       Value l = this.visit(ctx.expression(0));
       Value r = this.visit(ctx.expression(1));
-      return new Value(l.asDouble() <= r.asDouble());
+      return new Value(Value.Type.BOOLEAN, l.asDouble() <= r.asDouble());
    }
 
    @Override
@@ -167,7 +190,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       Value l = this.visit(ctx.expression(0));
       Value r = this.visit(ctx.expression(1));
-      return new Value(l.asBoolean() && r.asBoolean());
+      return new Value(Value.Type.BOOLEAN, l.asBoolean() && r.asBoolean());
    }
 
    @Override
@@ -175,7 +198,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       Value l = this.visit(ctx.expression(0));
       Value r = this.visit(ctx.expression(1));
-      return new Value(l.asDouble() >= r.asDouble());
+      return new Value(Value.Type.BOOLEAN, l.asDouble() >= r.asDouble());
    }
 
    @Override
@@ -191,9 +214,11 @@ public class MyVisitor extends DOTBaseVisitor<Value>
       }
 
       if (ctx.op.getType() == DOTParser.INC)
-         return memory.put(id, new Value(value.asDouble() + 1));
+         return memory.put(id, new Value(value.getType(),
+               value.asDouble() + 1));
       else
-         return memory.put(id, new Value(value.asDouble() - 1));
+         return memory.put(id, new Value(value.getType(),
+               value.asDouble() - 1));
    }
 
    @Override
@@ -201,7 +226,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       Value l = this.visit(ctx.expression(0));
       Value r = this.visit(ctx.expression(1));
-      return new Value(l.asBoolean() != r.asBoolean());
+      return new Value(Value.Type.BOOLEAN, l.asBoolean() != r.asBoolean());
    }
 
    @Override
@@ -209,7 +234,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       Value l = this.visit(ctx.expression(0));
       Value r = this.visit(ctx.expression(1));
-      return new Value(l.asBoolean() == r.asBoolean());
+      return new Value(Value.Type.BOOLEAN, l.asBoolean() == r.asBoolean());
    }
 
    @Override
@@ -218,8 +243,8 @@ public class MyVisitor extends DOTBaseVisitor<Value>
       Value l = visit(ctx.expression(0));
       Value r = visit(ctx.expression(1));
       if (ctx.op.getType() == DOTParser.MULT)
-         return new Value(l.asDouble() * r.asDouble());
-      return new Value(l.asDouble() / r.asDouble());
+         return new Value(Value.Type.DOUBLE, l.asDouble() * r.asDouble());
+      return new Value(Value.Type.DOUBLE, l.asDouble() / r.asDouble());
    }
 
    @Override
@@ -228,8 +253,8 @@ public class MyVisitor extends DOTBaseVisitor<Value>
       Value l = visit(ctx.expression(0));
       Value r = visit(ctx.expression(1));
       if (ctx.op.getType() == DOTParser.PLUS)
-         return new Value(l.asDouble() + r.asDouble());
-      return new Value(l.asDouble() - r.asDouble());
+         return new Value(Value.Type.DOUBLE, l.asDouble() + r.asDouble());
+      return new Value(Value.Type.DOUBLE, l.asDouble() - r.asDouble());
    }
 
    @Override
@@ -242,6 +267,9 @@ public class MyVisitor extends DOTBaseVisitor<Value>
          visit(ctx.statement());
          v = visit(ctx.forControl());
       }
+
+      printMem("for");
+
       return Value.VOID;
    }
 
@@ -251,16 +279,19 @@ public class MyVisitor extends DOTBaseVisitor<Value>
       boolean condition = true;
       String id = ctx.IDENTIFIER().getText();
       if (!memory.containsKey(id))
-         memory.put(id, new Value(Double.valueOf(ctx.INT(0).getText())));
+         memory.put(
+               id,
+               new Value(Value.Type.INT, Integer
+                     .valueOf(ctx.INT(0).getText())));
       else
       {
          Value n = memory.get(id);
          Integer r = Integer.valueOf(ctx.INT(1).getText());
          condition = n.asDouble() < r;
          if (condition)
-            memory.put(id, new Value(n.asDouble() + 1));
+            memory.put(id, new Value(Value.Type.INT, (int) n.asDouble() + 1));
       }
-      return new Value(condition);
+      return new Value(Value.Type.BOOLEAN, condition);
    }
 
    @Override
