@@ -20,7 +20,23 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitPort(@NotNull DOTParser.PortContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitAttr_stmt(@NotNull DOTParser.Attr_stmtContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitIntAtom(@NotNull DOTParser.IntAtomContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -36,15 +52,7 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitArrayList(@NotNull DOTParser.ArrayListContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitUncover(@NotNull DOTParser.UncoverContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAndExpr(@NotNull DOTParser.AndExprContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -60,7 +68,39 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitUncover(@NotNull DOTParser.UncoverContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitMerge(@NotNull DOTParser.MergeContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitEdgeRHS(@NotNull DOTParser.EdgeRHSContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitGtEqExpr(@NotNull DOTParser.GtEqExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitBlock(@NotNull DOTParser.BlockContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -76,6 +116,14 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitType(@NotNull DOTParser.TypeContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitStringAtom(@NotNull DOTParser.StringAtomContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -84,7 +132,7 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitType(@NotNull DOTParser.TypeContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIfElseStat(@NotNull DOTParser.IfElseStatContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -100,6 +148,22 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitNode_id(@NotNull DOTParser.Node_idContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitId(@NotNull DOTParser.IdContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitParExpr(@NotNull DOTParser.ParExprContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -108,7 +172,7 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitGtExpr(@NotNull DOTParser.GtExprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGraph(@NotNull DOTParser.GraphContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -116,7 +180,7 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitFile(@NotNull DOTParser.FileContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIdAtom(@NotNull DOTParser.IdAtomContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -132,7 +196,23 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitOnly(@NotNull DOTParser.OnlyContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGtExpr(@NotNull DOTParser.GtExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitEdge_stmt(@NotNull DOTParser.Edge_stmtContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitNeqExpr(@NotNull DOTParser.NeqExprContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -141,6 +221,22 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitPrimaryExpr(@NotNull DOTParser.PrimaryExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitEqExpr(@NotNull DOTParser.EqExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitArraydecl(@NotNull DOTParser.ArraydeclContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -164,6 +260,14 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitStmt(@NotNull DOTParser.StmtContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitMulDivExpr(@NotNull DOTParser.MulDivExprContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -173,6 +277,14 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitLtExpr(@NotNull DOTParser.LtExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitPrint(@NotNull DOTParser.PrintContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -196,6 +308,22 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitSubgraph(@NotNull DOTParser.SubgraphContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitWhileStat(@NotNull DOTParser.WhileStatContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitIncDecExpr(@NotNull DOTParser.IncDecExprContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -204,7 +332,23 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitAssignment(@NotNull DOTParser.AssignmentContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitAddSubExpr(@NotNull DOTParser.AddSubExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitS(@NotNull DOTParser.SContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -236,159 +380,7 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitPort(@NotNull DOTParser.PortContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitAndExpr(@NotNull DOTParser.AndExprContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitIntAtom(@NotNull DOTParser.IntAtomContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitGtEqExpr(@NotNull DOTParser.GtEqExprContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitBlock(@NotNull DOTParser.BlockContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitIfElseStat(@NotNull DOTParser.IfElseStatContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitNode_id(@NotNull DOTParser.Node_idContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitId(@NotNull DOTParser.IdContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitGraph(@NotNull DOTParser.GraphContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitIdAtom(@NotNull DOTParser.IdAtomContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitNeqExpr(@NotNull DOTParser.NeqExprContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitEdge_stmt(@NotNull DOTParser.Edge_stmtContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitEqExpr(@NotNull DOTParser.EqExprContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitArraydecl(@NotNull DOTParser.ArraydeclContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitStmt(@NotNull DOTParser.StmtContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitFile_list(@NotNull DOTParser.File_listContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitSubgraph(@NotNull DOTParser.SubgraphContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitWhileStat(@NotNull DOTParser.WhileStatContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitAssignment(@NotNull DOTParser.AssignmentContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitS(@NotNull DOTParser.SContext ctx) { return visitChildren(ctx); }
+	@Override public T visitNode_stmt(@NotNull DOTParser.Node_stmtContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -397,14 +389,6 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitDoubleAtom(@NotNull DOTParser.DoubleAtomContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitNode_stmt(@NotNull DOTParser.Node_stmtContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

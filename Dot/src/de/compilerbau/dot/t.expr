@@ -1,9 +1,10 @@
-int b;
-
-b = 4;
-int i = 1;
-
-for(a -> 1 to 3)
-{
-	i++;
+graph g1 {
+A->B;
 }
+
+graph g2 {
+A->C;
+}
+
+merge graph g(g1, g2); 
+uncover(g);

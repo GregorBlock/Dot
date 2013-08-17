@@ -1,13 +1,30 @@
 package de.compilerbau.dot;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
-import att.grappa.*;
+import att.grappa.Graph;
+import att.grappa.GrappaAdapter;
+import att.grappa.GrappaConstants;
+import att.grappa.GrappaPanel;
+import att.grappa.GrappaSupport;
+import att.grappa.Parser;
+
 
 public class Demo12 implements GrappaConstants
 {
@@ -24,6 +41,7 @@ public class Demo12 implements GrappaConstants
          FileOutputStream fileOutputStream = new FileOutputStream(file);
          fileOutputStream.write(input.getBytes());
          fileOutputStream.flush();
+         fileOutputStream.close();
          program = new Parser(new FileInputStream(file), System.err);
          // program.debug_parse(4);
          program.parse();
@@ -39,22 +57,20 @@ public class Demo12 implements GrappaConstants
          ex.printStackTrace(System.err);
          System.exit(1);
       }
-      Graph graph = null;
+      Graph graph = program.getGraph();
+//      graph.printGraph(System.out);
 
-      graph = program.getGraph();
-      graph.printGraph(System.out);
-
-      System.err.println("The graph contains "
-            + graph.countOfElements(Grappa.NODE | Grappa.EDGE
-                  | Grappa.SUBGRAPH) + " elements.");
+      // System.err.println("The graph contains "
+      // + graph.countOfElements(Grappa.NODE | Grappa.EDGE
+      // | Grappa.SUBGRAPH) + " elements.\n");
 
       graph.setEditable(true);
       // graph.setMenuable(true);
       graph.setErrorWriter(new PrintWriter(System.err, true));
-      // graph.printGraph(new PrintWriter(System.out));
-
-      System.err.println("bbox="
-            + graph.getBoundingBox().getBounds().toString());
+       graph.printGraph(new PrintWriter(System.out));
+      //
+      // System.err.println("bbox="
+      // + graph.getBoundingBox().getBounds().toString());
 
       frame = new DemoFrame(graph);
 
@@ -82,7 +98,7 @@ public class Demo12 implements GrappaConstants
 
       public DemoFrame(Graph graph)
       {
-         super("DemoFrame");
+         super("Graph");
          this.graph = graph;
 
          setSize(600, 400);
@@ -104,7 +120,7 @@ public class Demo12 implements GrappaConstants
 
          gp = new GrappaPanel(graph);
          gp.addGrappaListener(new GrappaAdapter());
-         gp.setScaleToFit(false);
+         gp.setScaleToFit(true);
 
          java.awt.Rectangle bbox = graph.getBoundingBox().getBounds();
 
@@ -165,11 +181,42 @@ public class Demo12 implements GrappaConstants
             }
             else if (tgt == layout)
             {
-               Object connector = null;
+//               // Use an external program to produce layout information.
+//               // For directed graphs use "dot", for undirected graphs use
+//               // "neato".
+//
+//               ProcessBuilder pb;
+//
+//               if (graph.isDirected())
+//               {
+//                  pb = new ProcessBuilder("dot", "-Tdot");
+//               }
+//               else
+//               {
+//                  pb = new ProcessBuilder("neato", "-Goverlap=false",
+//                        "-Gsplines=true", "-Gsep=.1", "-Tdot");
+//               }
+//
+//               Process dotProcess;
+//               try
+//               {
+//                  dotProcess = pb.start();
+//                  GrappaSupport.filterGraph(graph, dotProcess);
+//
+//                  graph.repaint();
+//                  dotProcess.destroy();
+//               }
+//               catch (IOException e)
+//               {
+//                  e.printStackTrace();
+//               }
+               
+               Process connector = null;
                try
                {
-        	   String [] processArgs = {"E:\\Downloads\\unsorted\\graphviz-2.30.1\\release\\bin\\dot.exe"}; // You can use "neato" or whatever formatter you want
-                  connector = Runtime.getRuntime().exec(processArgs, null, null);
+                  String[] processArgs = { "dot" }; 
+                  connector = Runtime.getRuntime().exec(processArgs, null,
+                        null);
                }
                catch (Exception ex)
                {
@@ -177,40 +224,16 @@ public class Demo12 implements GrappaConstants
                         + ex.getMessage() + "\nTrying URLConnection...");
                   connector = null;
                }
-               if (connector == null)
-               {
-                  try
-                  {
-                     connector = (new URL(
-                           "http://www.research.att.com/~john/cgi-bin/format-graph"))
-                           .openConnection();
-                     URLConnection urlConn = (URLConnection) connector;
-                     urlConn.setDoInput(true);
-                     urlConn.setDoOutput(true);
-                     urlConn.setUseCaches(false);
-                     urlConn.setRequestProperty("Content-Type",
-                           "application/x-www-form-urlencoded");
-                  }
-                  catch (Exception ex)
-                  {
-                     System.err
-                           .println("Exception while setting up URLConnection: "
-                                 + ex.getMessage()
-                                 + "\nLayout not performed.");
-                     connector = null;
-                  }
-               }
+               
                if (connector != null)
                {
                   if (!GrappaSupport.filterGraph(graph, connector))
                   {
                      System.err.println("ERROR: somewhere in filterGraph");
                   }
-                  if (connector instanceof Process)
-                  {
                      try
                      {
-                        int code = ((Process) connector).waitFor();
+                        int code = connector.waitFor();
                         if (code != 0)
                         {
                            System.err.println("WARNING: proc exit code is: "
@@ -226,7 +249,6 @@ public class Demo12 implements GrappaConstants
                      }
                   }
                   connector = null;
-               }
                graph.repaint();
             }
          }

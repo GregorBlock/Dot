@@ -12,13 +12,14 @@ s			:	statement* ;
 statement	:	block
 			|	graph
 			|	uncover
-			|	only
+			|	merge
 			|	assignment
 			|	declaration
 			| 	arraydecl
 			|	whileStat
 			|	forStat
 			|	ifElseStat
+			|	print
 			| 	expression ';'
 			;
 			
@@ -26,11 +27,10 @@ block		:	OBRACE statement* CBRACE ;
 
 declaration	:	type IDENTIFIER ( ASSIGN expression )? SCOL ;
 
-arraydecl	:	type '[]' IDENTIFIER ASSIGN value_list SCOL	;
+arraydecl	:	type '[]' IDENTIFIER ASSIGN ('{' ((INT | DOUBLE | STRING | IDENTIFIER) ','?)+ '}')+ SCOL	;
 
-value_list  :   ('{' ((INT | FLOAT | STRING | IDENTIFIER) ','?)+ '}')+ 	#arrayList
-			;
-
+print		:	PRINT OPAR IDENTIFIER CPAR SCOL	;
+			
 assignment	:	IDENTIFIER ASSIGN expression SCOL ;
 
 whileStat	:	WHILE parStat statement ;
@@ -75,10 +75,8 @@ type		:	INTTYPE
  * DOT with extensions
  ******************************************************************/ 
 	
-uncover		: 	UNCOVER file_list  OBRACE graph+ CBRACE ;
-only		:	ONLY file_list  OBRACE graph CBRACE ;
-file_list	: 	OPAR file+ CPAR ; 
-file		: 	NUMBER (MINUS file)* ; 
+uncover		: 	UNCOVER OPAR (IDENTIFIER ','?)+ CPAR SCOL ;
+merge		:	MERGE GRAPH id OPAR (IDENTIFIER ','?)+ CPAR SCOL ; 
 
 graph       :   STRICT? (GRAPH | DIGRAPH) id? OBRACE stmt_list CBRACE ;
 stmt_list   :   ( stmt SCOL? )* ; 
@@ -128,6 +126,7 @@ POW 		: 	'^' ;
 NOT 		: 	'!' ;
 
 SCOL 		: 	';' ;
+KOMMA		:	',' ;
 ASSIGN 		: 	'=' ;
 OPAR 		: 	'(' ;
 CPAR 		: 	')' ;
@@ -141,6 +140,7 @@ ELSE 		: 	'else' ;
 WHILE 		: 	'while' ;
 FOR			:	'for' ;
 
+
 INTTYPE		:	'int' ;
 DOUBLETYPE	:	'double' ;
 STRINGTYPE	:	'String' ;
@@ -152,7 +152,8 @@ NODE        :   [Nn][Oo][Dd][Ee] ;
 EDGE        :   [Ee][Dd][Gg][Ee] ;
 SUBGRAPH    :   [Ss][Uu][Bb][Gg][Rr][Aa][Pp][Hh] ;
 UNCOVER		:	[Uu][Nn][Cc][Oo][Vv][Ee][Rr] ;
-ONLY		:	[Oo][Nn][Ll][Yy] ; 
+MERGE		:	[Mm][Ee][Rr][Gg][Ee] ;	
+PRINT		:	[Pp][Rr][Ii][Nn][Tt] ;
 
 IDENTIFIER	: 	[a-zA-Z_] [a-zA-Z_0-9]* ;
 INT			: 	MINUS? DIGIT+ ;
