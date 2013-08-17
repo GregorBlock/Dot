@@ -9,6 +9,7 @@ import de.compilerbau.dot.DOTParser.AndExprContext;
 import de.compilerbau.dot.DOTParser.ArrayExprContext;
 import de.compilerbau.dot.DOTParser.ArrayListContext;
 import de.compilerbau.dot.DOTParser.ArraydeclContext;
+import de.compilerbau.dot.DOTParser.AssignExprContext;
 import de.compilerbau.dot.DOTParser.AssignmentContext;
 import de.compilerbau.dot.DOTParser.DeclarationContext;
 import de.compilerbau.dot.DOTParser.EqExprContext;
@@ -26,6 +27,7 @@ import de.compilerbau.dot.DOTParser.MulDivExprContext;
 import de.compilerbau.dot.DOTParser.NeqExprContext;
 import de.compilerbau.dot.DOTParser.NumberAtomContext;
 import de.compilerbau.dot.DOTParser.ParStatContext;
+import de.compilerbau.dot.DOTParser.PrimaryExprContext;
 import de.compilerbau.dot.DOTParser.StringAtomContext;
 import de.compilerbau.dot.DOTParser.WhileStatContext;
 
@@ -51,14 +53,18 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    public Value visitDeclaration(DeclarationContext ctx)
    {
       String id = ctx.IDENTIFIER().getText();
-      Value value = this.visit(ctx.expression());
+      Value value;
+      if(!(ctx.expression() == null))
+         value = this.visit(ctx.expression());
+      else
+         value = new Value(0);
       return memory.put(id, value);
    }
-
+   
    @Override
    public Value visitArraydecl(ArraydeclContext ctx)
    {
-      String id = ctx.IDENTIFIER().getText(); 
+      String id = ctx.IDENTIFIER().getText();
       Value value = this.visit(ctx.value_list());
       return memory.put(id, value);
    }
@@ -95,9 +101,9 @@ public class MyVisitor extends DOTBaseVisitor<Value>
       {
          throw new RuntimeException("Id " + id + " unbekannt");
       }
-
-      return memory.put(id, visit(ctx.expression()));
-
+      value = memory.put(id, visit(ctx.expression()));
+      System.out.println(value);
+      return value;
    }
 
    @Override

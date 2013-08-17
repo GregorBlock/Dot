@@ -28,7 +28,7 @@ declaration	:	type IDENTIFIER ( ASSIGN expression )? SCOL ;
 
 arraydecl	:	type '[]' IDENTIFIER '=' value_list ';'	;
 
-value_list  :   ('{' ((INT | FLOAT | STRING) ','?)+ '}')+ 	#arrayList
+value_list  :   ('{' ((INT | FLOAT | STRING | IDENTIFIER) ','?)+ '}')+ 	#arrayList
 			;
 
 assignment	:	IDENTIFIER ASSIGN expression SCOL ;
