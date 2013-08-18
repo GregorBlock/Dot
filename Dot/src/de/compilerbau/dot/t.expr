@@ -1,10 +1,6 @@
-graph g1 {
-A->B;
+
+strict digraph g {
+	A->B;
 }
 
-graph g2 {
-A->C;
-}
-
-merge graph g(g1, g2); 
 uncover(g);

@@ -379,8 +379,16 @@ public class MyVisitor extends DOTBaseVisitor<Value>
          String id = ctx.id().getText();
 
          StringBuilder buf = new StringBuilder();
-         buf.append("digraph " + id + " {");
-
+         if(ctx.strict != null)
+         {
+             buf.append(ctx.strict.getText());
+             buf.append(" ");
+         }
+         buf.append(ctx.g.getText());
+         buf.append(" ");
+         buf.append(id);
+         buf.append(" {");
+         System.out.println();
          buf.append(ctx.stmt_list().getText());
          buf.append("}");
 
