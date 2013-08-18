@@ -1,10 +1,5 @@
-graph g1 {
-A->B;
-}
 
-graph g2 {
-A->C;
+digraph g {
+	A->B;
 }
-
-merge graph g(g1, g2); 
-uncover(g);
+uncover(g, g, g);

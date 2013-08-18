@@ -75,7 +75,7 @@ type		:	INTTYPE
  * DOT with extensions
  ******************************************************************/ 
 	
-uncover		: 	UNCOVER OPAR (IDENTIFIER ','?)+ CPAR SCOL ;
+uncover		: 	UNCOVER OPAR IDENTIFIER (',' IDENTIFIER)* CPAR SCOL ;
 merge		:	MERGE GRAPH id OPAR (IDENTIFIER ','?)+ CPAR SCOL ; 
 
 graph       :   STRICT? (GRAPH | DIGRAPH) id? OBRACE stmt_list CBRACE ;
