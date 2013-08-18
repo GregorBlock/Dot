@@ -269,7 +269,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
       Value value = memory.get(id);
       if (value == null)
       {
-         throw new RuntimeException("bla");
+         throw new RuntimeException("no such variable: " + id);
       }
 
       if (ctx.op.getType() == DOTParser.INC)
