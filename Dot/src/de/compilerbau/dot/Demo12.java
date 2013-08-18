@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.JButton;
@@ -181,75 +182,76 @@ public class Demo12 implements GrappaConstants
             }
             else if (tgt == layout)
             {
-//               // Use an external program to produce layout information.
-//               // For directed graphs use "dot", for undirected graphs use
-//               // "neato".
-//
-//               ProcessBuilder pb;
-//
-//               if (graph.isDirected())
-//               {
-//                  pb = new ProcessBuilder("dot", "-Tdot");
-//               }
-//               else
-//               {
-//                  pb = new ProcessBuilder("neato", "-Goverlap=false",
-//                        "-Gsplines=true", "-Gsep=.1", "-Tdot");
-//               }
-//
-//               Process dotProcess;
-//               try
-//               {
-//                  dotProcess = pb.start();
-//                  GrappaSupport.filterGraph(graph, dotProcess);
-//
-//                  graph.repaint();
-//                  dotProcess.destroy();
-//               }
-//               catch (IOException e)
-//               {
-//                  e.printStackTrace();
-//               }
-               
-               Process connector = null;
+               // Use an external program to produce layout information.
+               // For directed graphs use "dot", for undirected graphs use
+               // "neato".
+
+               ProcessBuilder pb;
+
+               if (graph.isDirected())
+               {
+                  pb = new ProcessBuilder("dot", "-Tdot");
+               }
+               else
+               {
+                  pb = new ProcessBuilder("neato", "-Goverlap=false",
+                        "-Gsplines=true", "-Gsep=.1", "-Tdot");
+               }
+
+               Process dotProcess;
                try
                {
-                  String[] processArgs = { "dot" }; 
-                  connector = Runtime.getRuntime().exec(processArgs, null,
-                        null);
+                  dotProcess = pb.start();
+                  GrappaSupport.filterGraph(graph, dotProcess);
+
+                  graph.repaint();
+                  dotProcess.destroy();
                }
-               catch (Exception ex)
+               catch (IOException e)
                {
-                  System.err.println("Exception while setting up Process: "
-                        + ex.getMessage() + "\nTrying URLConnection...");
-                  connector = null;
+                  e.printStackTrace();
                }
                
-               if (connector != null)
-               {
-                  if (!GrappaSupport.filterGraph(graph, connector))
-                  {
-                     System.err.println("ERROR: somewhere in filterGraph");
-                  }
-                     try
-                     {
-                        int code = connector.waitFor();
-                        if (code != 0)
-                        {
-                           System.err.println("WARNING: proc exit code is: "
-                                 + code);
-                        }
-                     }
-                     catch (InterruptedException ex)
-                     {
-                        System.err
-                              .println("Exception while closing down proc: "
-                                    + ex.getMessage());
-                        ex.printStackTrace(System.err);
-                     }
-                  }
-                  connector = null;
-               graph.repaint();
+//               Process connector = null;
+//               try
+//               {
+//                  String[] processArgs = { "dot" }; 
+//                  connector = Runtime.getRuntime().exec(processArgs, null,
+//                        null);
+//               }
+//               catch (Exception ex)
+//               {
+//                  System.err.println("Exception while setting up Process: "
+//                        + ex.getMessage() + "\nTrying URLConnection...");
+//                  connector = null;
+//               }
+//               
+//               if (connector != null)
+//               {
+//                  if (!GrappaSupport.filterGraph(graph, connector))
+//                  {
+//                     System.err.println("ERROR: somewhere in filterGraph");
+//                  }
+//                  graph.printGraph(System.out);
+//                     try
+//                     {
+//                        int code = connector.waitFor();
+//                        if (code != 0)
+//                        {
+//                           System.err.println("WARNING: proc exit code is: "
+//                                 + code);
+//                        }
+//                     }
+//                     catch (InterruptedException ex)
+//                     {
+//                        System.err
+//                              .println("Exception while closing down proc: "
+//                                    + ex.getMessage());
+//                        ex.printStackTrace(System.err);
+//                     }
+//                  }
+//                  connector = null;
+//               graph.repaint();
             }
          }
       }

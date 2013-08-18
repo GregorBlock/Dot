@@ -66,10 +66,13 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       String id = ctx.IDENTIFIER().getText();
 
+      if (memory.containsKey(id))
+         throw new RuntimeException("Duplicate local variable " + id);
+
       Value value;
       if (!(ctx.expression() == null))
       {
-         if (!checkType(ctx.start.getType(), ctx.expression().start.getType()))
+         if (!checkType(ctx.start.getType(), visit(ctx.expression()).getType()))
             throw new RuntimeException("Type mismatch");
          value = this.visit(ctx.expression());
       }
@@ -83,57 +86,38 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    @Override
    public Value visitArraydecl(ArraydeclContext ctx)
    {
-      Value value = null;
-      String id = ctx.IDENTIFIER(0).getText();
+      String id = ctx.IDENTIFIER().getText();
 
-      // TODO: kp wie man das besser machen kann hehe
-      // TODO: int [] b = {1.2,2.2,3.2}; zeigt kein fehler!
-      switch (ctx.type().getText())
+      ArrayList<Value> arrayList = new ArrayList<Value>();
+      for (int i = 0; i < ctx.values().size(); i++)
       {
-         case "int":
-            ArrayList<Integer> intArrayList = new ArrayList<Integer>();
-            for (int i = 0; i < ctx.INT().size(); i++)
-            {
-               intArrayList.add(Integer.valueOf(ctx.INT(i).getText()));
-            }
-            value = new Value(setType(ctx.start.getType()), intArrayList);
-            break;
-         case "double":
-            ArrayList<Double> doubleArrayList = new ArrayList<Double>();
-            for (int i = 0; i < ctx.DOUBLE().size(); i++)
-            {
-               doubleArrayList.add(Double.valueOf(ctx.DOUBLE(i).getText()));
-            }
-            value = new Value(setType(ctx.start.getType()), doubleArrayList);
-            break;
-         case "String":
-            ArrayList<String> stringArrayList = new ArrayList<String>();
-            for (int i = 0; i < ctx.STRING().size(); i++)
-            {
-               String str = ctx.STRING(i).getText();
-               str = str.substring(1, str.length() - 1).replace("\"\"", "\"");
-               stringArrayList.add(str);
-            }
-            value = new Value(setType(ctx.start.getType()), stringArrayList);
-            break;
-
-         default:
-            break;
+         Value v = visit(ctx.values(i));
+         if (!checkType(ctx.start.getType(), v.getType()))
+         {
+            throw new RuntimeException("Array type mismatch"); // TODO:
+                                                               // genauere
+                                                               // meldung
+                                                               // getLine
+                                                               // etc..
+         }
+         arrayList.add(v);
       }
-
-      return memory.put(id, value);
+      return memory.put(id,
+            new Value(setType(ctx.start.getType()), arrayList));
    }
 
-   private boolean checkType(int type, int value)
+   private boolean checkType(int type, Value.Type value)
    {
       switch (type)
       {
          case DOTParser.INTTYPE:
-            return value == DOTParser.INT;
+            return value == Value.Type.INT;
          case DOTParser.DOUBLETYPE:
-            return value == DOTParser.DOUBLE;
+            if (value == Value.Type.INT)
+               return true;
+            return value == Value.Type.DOUBLE;
          case DOTParser.STRINGTYPE:
-            return value == DOTParser.STRING;
+            return value == Value.Type.STRING;
          default:
             return false;
       }
@@ -159,20 +143,26 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    {
       Value l = visit(ctx.expression(0));
       Value r = visit(ctx.expression(1));
-      switch (l.getType())
-      {
-         case INT:
-            System.out.println(l.asIntArray().get(r.asInt()));
-            break;
-         case DOUBLE:
-            System.out.println(l.asDoubleArray().get(r.asInt()));
-            break;
-         case STRING:
-            System.out.println(l.asStringArray().get(r.asInt()));
-            break;
-         default:
-            break;
-      }
+
+      if (l == null)
+         throw new RuntimeException("no such variable " + ctx.start.getText());
+
+      if (r == null)
+         throw new RuntimeException("no such variable "
+               + ctx.expression(1).getText());
+
+      int index = r.asInt();
+
+      if (index < 0)
+         throw new RuntimeException(
+               "ArrayIndexOutOfBoundsException: The index is negative.");
+
+      if (index > l.asArray().size())
+         throw new RuntimeException(
+               "ArrayIndexOutOfBoundsException: Index Out of Bound Exception");
+
+      System.out.println(l.asArray().get(index));
+
       return Value.VOID;
    }
 
@@ -374,28 +364,27 @@ public class MyVisitor extends DOTBaseVisitor<Value>
    @Override
    public Value visitGraph(GraphContext ctx)
    {
-      if (!(ctx.id() == null))
+      StringBuilder buf = new StringBuilder();
+      if (ctx.strict != null)
       {
-         String id = ctx.id().getText();
-
-         StringBuilder buf = new StringBuilder();
-         if(ctx.strict != null)
-         {
-             buf.append(ctx.strict.getText());
-             buf.append(" ");
-         }
-         buf.append(ctx.g.getText());
+         buf.append(ctx.strict.getText());
          buf.append(" ");
-         buf.append(id);
-         buf.append(" {");
-         System.out.println();
-         buf.append(ctx.stmt_list().getText());
-         buf.append("}");
-
-         memory.put(id, new Value(Value.Type.GRAPH, buf.toString()));
-
-         // new Demo12().doDemo(buf.toString());
       }
+      buf.append(ctx.g.getText());
+      buf.append(" ");
+      if (ctx.id() != null)
+      {
+         buf.append(ctx.id().getText());
+         buf.append(" ");
+      }
+      buf.append("{");
+      System.out.println();
+      buf.append(ctx.stmt_list().getText());
+      buf.append("}");
+      
+      if (ctx.id() != null)
+         memory.put(ctx.id().getText(), new Value(Value.Type.GRAPH, buf.toString()));
+      
       return Value.VOID;
    }
 
@@ -411,7 +400,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
          {
             throw new RuntimeException("Graph " + id + " unbekannt");
          }
-
+         new Demo12().doDemo(v.asGraph());
          try
          {
             File file = new File(id + ".dot");
@@ -444,12 +433,11 @@ public class MyVisitor extends DOTBaseVisitor<Value>
       for (int i = 0; i < ctx.IDENTIFIER().size(); i++)
       {
          Value v = memory.get(ctx.IDENTIFIER(i).getText());
-         System.out.println(v.asGraph());
-         //TODO: alles auserhalb der {} ausschneiden
-         buf.append(v.asGraph());
+         buf.append(v.asGraph().substring(v.asGraph().indexOf("{") + 1,
+               v.asGraph().indexOf("}")));
       }
       buf.append("}");
-      memory.put(id, new Value(Value.Type.GRAPH, buf.toString() ));
+      memory.put(id, new Value(Value.Type.GRAPH, buf.toString()));
       return Value.VOID;
    }
 

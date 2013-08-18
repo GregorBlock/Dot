@@ -27,7 +27,7 @@ block		:	OBRACE statement* CBRACE ;
 
 declaration	:	type IDENTIFIER ( ASSIGN expression )? SCOL ;
 
-arraydecl	:	type '[]' IDENTIFIER ASSIGN ('{' ((INT | DOUBLE | STRING | IDENTIFIER) ','?)+ '}')+ SCOL	;
+arraydecl	:	type '[]' IDENTIFIER ASSIGN OBRACE values (',' values)+ CBRACE SCOL	;
 
 print		:	PRINT OPAR IDENTIFIER CPAR SCOL	;
 			
@@ -44,7 +44,7 @@ ifElseStat	:	IF parStat statement (ELSE statement)? ;
 parStat		:	OPAR expression CPAR ;
 			
 expression	:   primary										#primaryExpr
-			|   expression '[' expression ']'				#arrayExpr
+			|	expression '[' expression ']'				#arrayExpr
 			|	expression LTEQ expression					#ltEqExpr
 			|	expression op=(MULT|DIV) expression      	#mulDivExpr
 			|   expression op=(PLUS|MINUS) expression      	#addSubExpr
@@ -59,8 +59,11 @@ expression	:   primary										#primaryExpr
 			|   expression ASSIGN<assoc=right> expression	#assignExpr
 			;
 	
-primary		:	parStat										#parExpr
-			|	IDENTIFIER									#idAtom
+primary		:	parStat										
+			|	values	
+			;
+			
+values		:	IDENTIFIER									#idAtom
 			|	INT 										#intAtom
 			| 	DOUBLE										#doubleAtom
 			|	STRING										#stringAtom
@@ -76,7 +79,7 @@ type		:	INTTYPE
  ******************************************************************/ 
 	
 uncover		: 	UNCOVER OPAR IDENTIFIER (',' IDENTIFIER)* CPAR SCOL ;
-merge		:	MERGE GRAPH id OPAR (IDENTIFIER ','?)+ CPAR SCOL ; 
+merge		:	MERGE id OPAR IDENTIFIER (',' IDENTIFIER)* CPAR SCOL ;  
 
 graph       :   strict=STRICT? g=(GRAPH | DIGRAPH) id? OBRACE stmt_list CBRACE ;
 stmt_list   :   ( stmt SCOL? )* ; 
@@ -99,7 +102,7 @@ port        :   ':' id (':' id)? ;
 subgraph    :   (SUBGRAPH id?)? OBRACE stmt_list CBRACE ; 
 id          :   IDENTIFIER
             |   STRING
-            |   NUMBER
+            |   DOUBLE
             ;
 			
 /*******************************************************************
@@ -144,6 +147,7 @@ FOR			:	'for' ;
 INTTYPE		:	'int' ;
 DOUBLETYPE	:	'double' ;
 STRINGTYPE	:	'String' ;
+GRAPHTYPE	:	'Graph';
   
 STRICT      :   [Ss][Tt][Rr][Ii][Cc][Tt] ;
 GRAPH       :   [Gg][Rr][Aa][Pp][Hh] ;
@@ -156,13 +160,13 @@ MERGE		:	[Mm][Ee][Rr][Gg][Ee] ;
 PRINT		:	[Pp][Rr][Ii][Nn][Tt] ;
 
 IDENTIFIER	: 	[a-zA-Z_] [a-zA-Z_0-9]* ;
+DOUBLE		:	MINUS? DIGIT+ ('.' DIGIT*)? 
+			| 	MINUS? '.' DIGIT+ ;
 INT			: 	MINUS? DIGIT+ ;
-DOUBLE		:	MINUS? DIGIT+ '.' DIGIT* 
-			| 	MINUS? '.' DIGIT+
-			;
 			
- /** "a numeral [-]?(.[0-9]+ | [0-9]+(.[0-9]*)? )" */
+ /** "a numeral [-]?(.[0-9]+ | [0-9]+(.[0-9]*)? )" 
 NUMBER      :   '-'? ('.' DIGIT+ | DIGIT+ ('.' DIGIT*)? ) ;
+*/
 fragment
 DIGIT       :   [0-9] ;
 

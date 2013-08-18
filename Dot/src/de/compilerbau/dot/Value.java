@@ -6,7 +6,7 @@ import java.util.Map;
 public class Value
 {
    public enum Type {
-      VOID, INT, DOUBLE, STRING, BOOLEAN, GRAPH, ARRAY
+      VOID, INT, DOUBLE, STRING, BOOLEAN, GRAPH
    }
 
    public static Integer DEFAULT_INT_VALUE = 0;
@@ -56,20 +56,11 @@ public class Value
       this.value = value;
    }
 
-   public ArrayList<Integer> asIntArray()
+   public ArrayList<Value> asArray()
    {
-      return (ArrayList<Integer>) value;
-   }
-   
-   public ArrayList<Double> asDoubleArray()
-   {
-      return (ArrayList<Double>) value;
+      return (ArrayList<Value>) value;
    }
 
-   public ArrayList<String> asStringArray()
-   {
-      return (ArrayList<String>) value;
-   }
 
    public Boolean asBoolean()
    {
