@@ -1501,6 +1501,8 @@ public class DOTParser extends Parser {
 	}
 
 	public static class GraphContext extends ParserRuleContext {
+		public Token strict;
+		public Token g;
 		public TerminalNode DIGRAPH() { return getToken(DOTParser.DIGRAPH, 0); }
 		public TerminalNode GRAPH() { return getToken(DOTParser.GRAPH, 0); }
 		public IdContext id() {
@@ -1534,14 +1536,15 @@ public class DOTParser extends Parser {
 			_la = _input.LA(1);
 			if (_la==STRICT) {
 				{
-				setState(245); match(STRICT);
+				setState(245); ((GraphContext)_localctx).strict = match(STRICT);
 				}
 			}
 
 			setState(248);
+			((GraphContext)_localctx).g = _input.LT(1);
 			_la = _input.LA(1);
 			if ( !(_la==GRAPH || _la==DIGRAPH) ) {
-			_errHandler.recoverInline(this);
+				((GraphContext)_localctx).g = (Token)_errHandler.recoverInline(this);
 			}
 			consume();
 			setState(250);

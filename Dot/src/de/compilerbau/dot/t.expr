@@ -1,5 +1,6 @@
 
-digraph g {
+strict digraph g {
 	A->B;
 }
-uncover(g, g, g);
+
+uncover(g);
