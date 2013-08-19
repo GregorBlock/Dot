@@ -1,6 +1,8 @@
+
 for(i -> 1 to 5)
 {
 	graph a {
-		A->B;
+		A--wB;
 	}
+
 }
