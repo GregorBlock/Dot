@@ -1,8 +1,6 @@
-for(i -> 1 to 3)
+for(i -> 1 to 5)
 {
-	digraph gasd {
-		A->B[label = i];
+	graph a {
+		A->B;
 	}
-	
-	uncover(gasd);
 }
