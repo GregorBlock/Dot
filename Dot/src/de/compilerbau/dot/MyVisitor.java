@@ -1,4 +1,4 @@
-package de.compilerbau.dot.grammar;
+package de.compilerbau.dot;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import de.compilerbau.dot.DOTParser.PrintContext;
 import de.compilerbau.dot.DOTParser.StringAtomContext;
 import de.compilerbau.dot.DOTParser.UncoverContext;
 import de.compilerbau.dot.DOTParser.WhileStatContext;
-import de.compilerbau.dot.grammar.Value.Type;
+import de.compilerbau.dot.Value.Type;
 import de.compilerbau.dot.util.IOManager;
 
 public class MyVisitor extends DOTBaseVisitor<Value>

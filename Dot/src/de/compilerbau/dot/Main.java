@@ -6,7 +6,6 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import de.compilerbau.dot.grammar.MyVisitor;
 import de.compilerbau.dot.gui.Gui;
 import de.compilerbau.dot.gui.JFrameShower;
 
