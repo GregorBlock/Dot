@@ -400,26 +400,17 @@ public class MyVisitor extends DOTBaseVisitor<Value>
          {
             throw new RuntimeException("Graph " + id + " unbekannt");
          }
-         new Demo12().doDemo(v.asGraph());
-         try
-         {
-            File file = new File(id + ".dot");
-            FileOutputStream fileOutputStream;
-            fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(v.asGraph().getBytes());
-            fileOutputStream.flush();
-            fileOutputStream.close();
-         }
-         catch (FileNotFoundException e1)
-         {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-         }
-         catch (IOException e)
-         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-         }
+//         new Demo12().doDemo(v.asGraph());
+            try
+            {
+               IOManager.saveGraph(v.asGraph(), id);
+               IOManager.createImages();
+            }
+            catch (IOException e)
+            {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+            }
       }
       return Value.VOID;
    }
