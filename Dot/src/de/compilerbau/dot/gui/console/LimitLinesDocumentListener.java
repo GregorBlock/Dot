@@ -1,4 +1,4 @@
-package de.compilerbau.dot.console;
+package de.compilerbau.dot.gui.console;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;

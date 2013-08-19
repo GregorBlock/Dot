@@ -1,4 +1,4 @@
-package de.compilerbau.dot.grammar;
+package de.compilerbau.dot;
 
 import java.util.ArrayList;
 

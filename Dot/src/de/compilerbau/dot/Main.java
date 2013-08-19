@@ -6,7 +6,6 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import de.compilerbau.dot.grammar.MyVisitor;
 import de.compilerbau.dot.gui.Gui;
 import de.compilerbau.dot.gui.JFrameShower;
 
@@ -47,6 +46,8 @@ public class Main implements GrappaConstants
 //         DOTLexer lexer = new DOTLexer(new ANTLRFileStream(
 //               "src\\de\\compilerbau\\dot\\t.expr"));
          DOTParser parser = new DOTParser(new CommonTokenStream(lexer));
+         parser.removeErrorListeners();
+         parser.addErrorListener(new DOTErrorListener());
          ParseTree tree = parser.s();
          System.out.println(tree.toStringTree(parser));
          MyVisitor visitor = new MyVisitor();
