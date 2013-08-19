@@ -400,10 +400,7 @@ public class MyVisitor extends DOTBaseVisitor<Value>
          {
             throw new RuntimeException("Graph " + id + " unbekannt");
          }
-         
-//         new Demo12().doDemo(v.asGraph());
-         new JFrameShower(new Gui());
-         
+         new Demo12().doDemo(v.asGraph());
          try
          {
             File file = new File(id + ".dot");
