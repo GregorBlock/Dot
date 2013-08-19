@@ -33,7 +33,6 @@ import de.compilerbau.dot.DOTLexer;
 import de.compilerbau.dot.DOTParser;
 import de.compilerbau.dot.MyVisitor;
 import de.compilerbau.dot.gui.console.MessageConsole;
-
 import de.compilerbau.dot.util.IOManager;
 
 /**
