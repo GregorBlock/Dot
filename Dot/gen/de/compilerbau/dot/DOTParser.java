@@ -1,4 +1,4 @@
-// Generated from C:\Users\Gregor Block\Studium\git\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
+// Generated from E:\eclipse\git_repo\Dot\Dot\src/de/compilerbau/dot/DOT.g4 by ANTLR 4.1
     
 package de.compilerbau.dot;
 
@@ -23,7 +23,7 @@ public class DOTParser extends Parser {
 		CPAR=28, OBRACE=29, CBRACE=30, TRUE=31, FALSE=32, IF=33, ELSE=34, WHILE=35, 
 		FOR=36, INTTYPE=37, DOUBLETYPE=38, STRINGTYPE=39, GRAPHTYPE=40, STRICT=41, 
 		GRAPH=42, DIGRAPH=43, NODE=44, EDGE=45, SUBGRAPH=46, UNCOVER=47, MERGE=48, 
-		PRINT=49, IDENTIFIER=50, DOUBLE=51, INT=52, STRING=53, COMMENT=54, LINE_COMMENT=55, 
+		PRINT=49, IDENTIFIER=50, INT=51, DOUBLE=52, STRING=53, COMMENT=54, LINE_COMMENT=55, 
 		WS=56;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'[]'", "'->'", "']'", "'to'", "'['", "':'", "INC", "'--'", 
@@ -32,7 +32,7 @@ public class DOTParser extends Parser {
 		"'{'", "'}'", "'true'", "'false'", "'if'", "'else'", "'while'", "'for'", 
 		"'int'", "'double'", "'String'", "'Graph'", "STRICT", "GRAPH", "DIGRAPH", 
 		"NODE", "EDGE", "SUBGRAPH", "UNCOVER", "MERGE", "PRINT", "IDENTIFIER", 
-		"DOUBLE", "INT", "STRING", "COMMENT", "LINE_COMMENT", "WS"
+		"INT", "DOUBLE", "STRING", "COMMENT", "LINE_COMMENT", "WS"
 	};
 	public static final int
 		RULE_s = 0, RULE_statement = 1, RULE_block = 2, RULE_declaration = 3, 
@@ -95,7 +95,7 @@ public class DOTParser extends Parser {
 			setState(67);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OPAR) | (1L << OBRACE) | (1L << IF) | (1L << WHILE) | (1L << FOR) | (1L << INTTYPE) | (1L << DOUBLETYPE) | (1L << STRINGTYPE) | (1L << STRICT) | (1L << GRAPH) | (1L << DIGRAPH) | (1L << UNCOVER) | (1L << MERGE) | (1L << PRINT) | (1L << IDENTIFIER) | (1L << DOUBLE) | (1L << INT) | (1L << STRING))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OPAR) | (1L << OBRACE) | (1L << IF) | (1L << WHILE) | (1L << FOR) | (1L << INTTYPE) | (1L << DOUBLETYPE) | (1L << STRINGTYPE) | (1L << STRICT) | (1L << GRAPH) | (1L << DIGRAPH) | (1L << UNCOVER) | (1L << MERGE) | (1L << PRINT) | (1L << IDENTIFIER) | (1L << INT) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
 				{
 				{
 				setState(64); statement();
@@ -300,7 +300,7 @@ public class DOTParser extends Parser {
 			setState(90);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OPAR) | (1L << OBRACE) | (1L << IF) | (1L << WHILE) | (1L << FOR) | (1L << INTTYPE) | (1L << DOUBLETYPE) | (1L << STRINGTYPE) | (1L << STRICT) | (1L << GRAPH) | (1L << DIGRAPH) | (1L << UNCOVER) | (1L << MERGE) | (1L << PRINT) | (1L << IDENTIFIER) | (1L << DOUBLE) | (1L << INT) | (1L << STRING))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OPAR) | (1L << OBRACE) | (1L << IF) | (1L << WHILE) | (1L << FOR) | (1L << INTTYPE) | (1L << DOUBLETYPE) | (1L << STRINGTYPE) | (1L << STRICT) | (1L << GRAPH) | (1L << DIGRAPH) | (1L << UNCOVER) | (1L << MERGE) | (1L << PRINT) | (1L << IDENTIFIER) | (1L << INT) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
 				{
 				{
 				setState(87); statement();
@@ -1215,8 +1215,8 @@ public class DOTParser extends Parser {
 				}
 				break;
 			case IDENTIFIER:
-			case DOUBLE:
 			case INT:
+			case DOUBLE:
 			case STRING:
 				enterOuterAlt(_localctx, 2);
 				{
@@ -1547,7 +1547,7 @@ public class DOTParser extends Parser {
 			consume();
 			setState(249);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << INT) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
 				{
 				setState(248); id();
 				}
@@ -1601,7 +1601,7 @@ public class DOTParser extends Parser {
 			setState(261);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OBRACE) | (1L << GRAPH) | (1L << NODE) | (1L << EDGE) | (1L << SUBGRAPH) | (1L << IDENTIFIER) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OBRACE) | (1L << GRAPH) | (1L << NODE) | (1L << EDGE) | (1L << SUBGRAPH) | (1L << IDENTIFIER) | (1L << INT) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
 				{
 				{
 				setState(255); stmt();
@@ -1797,7 +1797,7 @@ public class DOTParser extends Parser {
 				setState(277); match(5);
 				setState(279);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << INT) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
 					{
 					setState(278); a_list();
 					}
@@ -1877,7 +1877,7 @@ public class DOTParser extends Parser {
 				setState(296); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << DOUBLE) | (1L << STRING))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << INT) | (1L << DOUBLE) | (1L << STRING))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -1925,6 +1925,7 @@ public class DOTParser extends Parser {
 			setState(300);
 			switch (_input.LA(1)) {
 			case IDENTIFIER:
+			case INT:
 			case DOUBLE:
 			case STRING:
 				{
@@ -2009,6 +2010,7 @@ public class DOTParser extends Parser {
 				setState(309);
 				switch (_input.LA(1)) {
 				case IDENTIFIER:
+				case INT:
 				case DOUBLE:
 				case STRING:
 					{
@@ -2260,7 +2262,7 @@ public class DOTParser extends Parser {
 				setState(331); match(SUBGRAPH);
 				setState(333);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << INT) | (1L << DOUBLE) | (1L << STRING))) != 0)) {
 					{
 					setState(332); id();
 					}
@@ -2286,6 +2288,7 @@ public class DOTParser extends Parser {
 	}
 
 	public static class IdContext extends ParserRuleContext {
+		public TerminalNode INT() { return getToken(DOTParser.INT, 0); }
 		public TerminalNode IDENTIFIER() { return getToken(DOTParser.IDENTIFIER, 0); }
 		public TerminalNode DOUBLE() { return getToken(DOTParser.DOUBLE, 0); }
 		public TerminalNode STRING() { return getToken(DOTParser.STRING, 0); }
@@ -2309,7 +2312,7 @@ public class DOTParser extends Parser {
 			{
 			setState(341);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << DOUBLE) | (1L << STRING))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IDENTIFIER) | (1L << INT) | (1L << DOUBLE) | (1L << STRING))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -2390,11 +2393,11 @@ public class DOTParser extends Parser {
 		"\3\36\3\36\5\36\u0146\n\36\3\37\3\37\3\37\3\37\5\37\u014c\n\37\3 \3 \5"+
 		" \u0150\n \5 \u0152\n \3 \3 \3 \3 \3!\3!\3!\2\"\2\4\6\b\n\f\16\20\22\24"+
 		"\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@\2\n\3\2\t\n\3\2\25\26\3\2\23"+
-		"\24\3\2\')\3\2,-\4\2,,./\4\2\4\4\n\n\4\2\64\65\67\67\u0172\2E\3\2\2\2"+
-		"\4V\3\2\2\2\6X\3\2\2\2\ba\3\2\2\2\ni\3\2\2\2\fx\3\2\2\2\16~\3\2\2\2\20"+
-		"\u0083\3\2\2\2\22\u0087\3\2\2\2\24\u008d\3\2\2\2\26\u0093\3\2\2\2\30\u009a"+
-		"\3\2\2\2\32\u00a2\3\2\2\2\34\u00d1\3\2\2\2\36\u00d7\3\2\2\2 \u00d9\3\2"+
-		"\2\2\"\u00db\3\2\2\2$\u00e8\3\2\2\2&\u00f7\3\2\2\2(\u0107\3\2\2\2*\u0112"+
+		"\24\3\2\')\3\2,-\4\2,,./\4\2\4\4\n\n\3\2\64\67\u0172\2E\3\2\2\2\4V\3\2"+
+		"\2\2\6X\3\2\2\2\ba\3\2\2\2\ni\3\2\2\2\fx\3\2\2\2\16~\3\2\2\2\20\u0083"+
+		"\3\2\2\2\22\u0087\3\2\2\2\24\u008d\3\2\2\2\26\u0093\3\2\2\2\30\u009a\3"+
+		"\2\2\2\32\u00a2\3\2\2\2\34\u00d1\3\2\2\2\36\u00d7\3\2\2\2 \u00d9\3\2\2"+
+		"\2\"\u00db\3\2\2\2$\u00e8\3\2\2\2&\u00f7\3\2\2\2(\u0107\3\2\2\2*\u0112"+
 		"\3\2\2\2,\u0114\3\2\2\2.\u011c\3\2\2\2\60\u0128\3\2\2\2\62\u012e\3\2\2"+
 		"\2\64\u0139\3\2\2\2\66\u013d\3\2\2\28\u013f\3\2\2\2:\u0143\3\2\2\2<\u0147"+
 		"\3\2\2\2>\u0151\3\2\2\2@\u0157\3\2\2\2BD\5\4\3\2CB\3\2\2\2DG\3\2\2\2E"+
@@ -2413,8 +2416,8 @@ public class DOTParser extends Parser {
 		"\u0082\17\3\2\2\2\u0083\u0084\7%\2\2\u0084\u0085\5\30\r\2\u0085\u0086"+
 		"\5\4\3\2\u0086\21\3\2\2\2\u0087\u0088\7&\2\2\u0088\u0089\7\35\2\2\u0089"+
 		"\u008a\5\24\13\2\u008a\u008b\7\36\2\2\u008b\u008c\5\4\3\2\u008c\23\3\2"+
-		"\2\2\u008d\u008e\7\64\2\2\u008e\u008f\7\4\2\2\u008f\u0090\7\66\2\2\u0090"+
-		"\u0091\7\6\2\2\u0091\u0092\7\66\2\2\u0092\25\3\2\2\2\u0093\u0094\7#\2"+
+		"\2\2\u008d\u008e\7\64\2\2\u008e\u008f\7\4\2\2\u008f\u0090\7\65\2\2\u0090"+
+		"\u0091\7\6\2\2\u0091\u0092\7\65\2\2\u0092\25\3\2\2\2\u0093\u0094\7#\2"+
 		"\2\u0094\u0095\5\30\r\2\u0095\u0098\5\4\3\2\u0096\u0097\7$\2\2\u0097\u0099"+
 		"\5\4\3\2\u0098\u0096\3\2\2\2\u0098\u0099\3\2\2\2\u0099\27\3\2\2\2\u009a"+
 		"\u009b\7\35\2\2\u009b\u009c\5\32\16\2\u009c\u009d\7\36\2\2\u009d\31\3"+
@@ -2438,7 +2441,7 @@ public class DOTParser extends Parser {
 		"\u00ce\3\2\2\2\u00cc\u00ca\3\2\2\2\u00cc\u00cd\3\2\2\2\u00cd\33\3\2\2"+
 		"\2\u00ce\u00cc\3\2\2\2\u00cf\u00d2\5\30\r\2\u00d0\u00d2\5\36\20\2\u00d1"+
 		"\u00cf\3\2\2\2\u00d1\u00d0\3\2\2\2\u00d2\35\3\2\2\2\u00d3\u00d8\7\64\2"+
-		"\2\u00d4\u00d8\7\66\2\2\u00d5\u00d8\7\65\2\2\u00d6\u00d8\7\67\2\2\u00d7"+
+		"\2\u00d4\u00d8\7\65\2\2\u00d5\u00d8\7\66\2\2\u00d6\u00d8\7\67\2\2\u00d7"+
 		"\u00d3\3\2\2\2\u00d7\u00d4\3\2\2\2\u00d7\u00d5\3\2\2\2\u00d7\u00d6\3\2"+
 		"\2\2\u00d8\37\3\2\2\2\u00d9\u00da\t\5\2\2\u00da!\3\2\2\2\u00db\u00dc\7"+
 		"\61\2\2\u00dc\u00dd\7\35\2\2\u00dd\u00e2\7\64\2\2\u00de\u00df\7\33\2\2"+

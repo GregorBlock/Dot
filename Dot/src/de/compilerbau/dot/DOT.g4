@@ -103,6 +103,7 @@ subgraph    :   (SUBGRAPH id?)? OBRACE stmt_list CBRACE ;
 id          :   IDENTIFIER
             |   STRING
             |   DOUBLE
+			|	INT
             ;
 			
 /*******************************************************************
@@ -160,9 +161,9 @@ MERGE		:	[Mm][Ee][Rr][Gg][Ee] ;
 PRINT		:	[Pp][Rr][Ii][Nn][Tt] ;
 
 IDENTIFIER	: 	[a-zA-Z_] [a-zA-Z_0-9]* ;
+INT			: 	MINUS? DIGIT+ ;
 DOUBLE		:	MINUS? DIGIT+ ('.' DIGIT*)? 
 			| 	MINUS? '.' DIGIT+ ;
-INT			: 	MINUS? DIGIT+ ;
 			
  /** "a numeral [-]?(.[0-9]+ | [0-9]+(.[0-9]*)? )" 
 NUMBER      :   '-'? ('.' DIGIT+ | DIGIT+ ('.' DIGIT*)? ) ;
