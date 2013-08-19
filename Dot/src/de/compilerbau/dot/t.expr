@@ -1,8 +1,1 @@
-
-for(i -> 1 to 5)
-{
-	graph a {
-		A--wB;
-	}
-
-}
+int i = 1;

@@ -1,4 +1,4 @@
-package de.compilerbau.dot;
+package de.compilerbau.dot.gui;
 
 
 

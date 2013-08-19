@@ -1,14 +1,13 @@
 /**
  * 
  */
-package de.compilerbau.dot;
+package de.compilerbau.dot.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -25,12 +24,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
-import javax.swing.text.PlainDocument;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.tree.ParseTree;
+
+import de.compilerbau.dot.DOTLexer;
+import de.compilerbau.dot.DOTParser;
+import de.compilerbau.dot.console.MessageConsole;
+import de.compilerbau.dot.grammar.MyVisitor;
+import de.compilerbau.dot.util.IOManager;
 
 /**
  * TODO Add comment here
@@ -61,11 +64,11 @@ public class Gui extends JFrame
       editor = new JTextPane();
       editor.setText("digraph g { A->B; } uncover(g);");
       console = new JTextPane();
-//      console.setEditable(false);
+      console.setEditable(false);
       
-//      MessageConsole mc = new MessageConsole(console);
-//      mc.redirectOut();
-//      mc.redirectErr();
+      MessageConsole mc = new MessageConsole(console);
+      mc.redirectOut();
+      mc.redirectErr();
       
       tabbedPane = new JTabbedPane();
       btnCompile = new JButton("Compile");

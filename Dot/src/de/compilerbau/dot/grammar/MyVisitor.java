@@ -1,13 +1,13 @@
-package de.compilerbau.dot;
+package de.compilerbau.dot.grammar;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.compilerbau.dot.DOTBaseVisitor;
+import de.compilerbau.dot.DOTParser;
 import de.compilerbau.dot.DOTParser.AddSubExprContext;
 import de.compilerbau.dot.DOTParser.AndExprContext;
 import de.compilerbau.dot.DOTParser.ArrayExprContext;
@@ -35,7 +35,8 @@ import de.compilerbau.dot.DOTParser.PrintContext;
 import de.compilerbau.dot.DOTParser.StringAtomContext;
 import de.compilerbau.dot.DOTParser.UncoverContext;
 import de.compilerbau.dot.DOTParser.WhileStatContext;
-import de.compilerbau.dot.Value.Type;
+import de.compilerbau.dot.grammar.Value.Type;
+import de.compilerbau.dot.util.IOManager;
 
 public class MyVisitor extends DOTBaseVisitor<Value>
 {

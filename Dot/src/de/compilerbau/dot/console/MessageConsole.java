@@ -1,4 +1,4 @@
-package de.compilerbau.dot;
+package de.compilerbau.dot.console;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;

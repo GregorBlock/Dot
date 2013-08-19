@@ -1,7 +1,6 @@
-package de.compilerbau.dot;
+package de.compilerbau.dot.grammar;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Value
 {
