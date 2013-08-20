@@ -24,7 +24,7 @@ public class IOManager
     */
    public static final String DOT_PATH = "gen_graph/";
 
-   public static final String IMAGE_PATH = "gen_images\\";
+   public static final String IMAGE_PATH = "gen_images/";
 
    /**
     * Checks and creates the directory if it not exists.
@@ -56,6 +56,7 @@ public class IOManager
       createPath(DOT_PATH);
 
       String fileName = graphName;
+      String newFileName;
       File file = new File(DOT_PATH + fileName + DOT_FILE_EXTENSION);
 
       // if file already exists, change the filename ("filename_#", # =
@@ -70,7 +71,7 @@ public class IOManager
             // if file contains a "_" there is alreay a number - increment
             if (fileName.contains("_"))
             {
-               String newFileName = fileName.substring(0,
+               newFileName = fileName.substring(0,
                      fileName.indexOf("_"))
                      + "_"
                      + (Integer.parseInt(fileName.substring(fileName
@@ -80,7 +81,7 @@ public class IOManager
             }
             else
             {
-               String newFileName = fileName + "_2";
+               newFileName = fileName + "_2";
                file = new File(DOT_PATH + newFileName + DOT_FILE_EXTENSION);
             }
          }
@@ -89,6 +90,7 @@ public class IOManager
       FileOutputStream fileOut = new FileOutputStream(file);
       fileOut.write(graph.getBytes());
       fileOut.close();
+      createImages();
    }
 
    public static ArrayList<File> load(String path)
@@ -108,20 +110,46 @@ public class IOManager
    public static void createImages() throws IOException
    {
       createPath(IMAGE_PATH);
-
+ 
       ArrayList<File> files = load(DOT_PATH);
 
       ProcessBuilder pb;
       for (int i = 0; i < files.size(); i++)
       {
          String path = files.get(i).getPath();
-         System.out.println(path);
-         pb = new ProcessBuilder("dot/bin/dot.exe", "-Tpng", "gen_graph/g.dot",
-               "-o","gen_images/g.png");
-         pb.start();
-         System.out.println(IMAGE_PATH + files.get(i).getName() + IMAGE_FILE_EXTENSION);
+         int index = files.get(i).getName().indexOf(".");
+         String imgPath = IMAGE_PATH + files.get(i).getName().substring(0, index) + IMAGE_FILE_EXTENSION;
+         pb = new ProcessBuilder("dot/bin/dot.exe", "-Tpng", path,
+               "-o", imgPath);
+         try
+         {
+            int code = pb.start().waitFor();
+            if(code != 0) {
+                System.err.println("WARNING: proc exit code is: " + code);
+            }
+         }
+         catch (InterruptedException e)
+         {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+         }
+      }
+   }
+
+   public static void deleteFiles()
+   {
+      ArrayList<File> files = load(DOT_PATH);
+
+      for (int i = 0; i < files.size(); i++)
+      {
+         files.get(i).delete();
+      }
+      
+      files = load(IMAGE_PATH);
+      
+      for (int i = 0; i < files.size(); i++)
+      {
+         files.get(i).delete();
       }
    }
 }
-
-//dot/bin/dot.exe -Tpng gen_graph/g.dot > gen_images/g.png
