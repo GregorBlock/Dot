@@ -7,7 +7,7 @@ grammar DOT;
 package de.compilerbau.dot;
 }
 
-s			:	statement* ;
+s 			:	statement* ;
 
 statement	:	block
 			|	graph
@@ -27,7 +27,7 @@ block		:	OBRACE statement* CBRACE ;
 
 declaration	:	type IDENTIFIER ( ASSIGN expression )? SCOL ;
 
-arraydecl	:	type '[]' IDENTIFIER ASSIGN OBRACE values (',' values)+ CBRACE SCOL	;
+arraydecl	:	type '[]' IDENTIFIER ASSIGN OBRACE values (COMMA values)+ CBRACE SCOL	;
 
 print		:	PRINT OPAR IDENTIFIER CPAR SCOL	;
 			
@@ -37,7 +37,7 @@ whileStat	:	WHILE parStat statement ;
 
 forStat		:	FOR OPAR forControl CPAR statement ;
 
-forControl	:	IDENTIFIER '->' INT 'to' INT ;
+forControl	:	IDENTIFIER ARROW INT 'to' INT ;
 
 ifElseStat	:	IF parStat statement (ELSE statement)? ;
 
@@ -78,32 +78,32 @@ type		:	INTTYPE
  * DOT with extensions
  ******************************************************************/ 
 	
-uncover		: 	UNCOVER OPAR IDENTIFIER (',' IDENTIFIER)* CPAR SCOL ;
-merge		:	MERGE id OPAR IDENTIFIER (',' IDENTIFIER)* CPAR SCOL ;  
+uncover		: 	UNCOVER OPAR IDENTIFIER (COMMA IDENTIFIER)* CPAR SCOL ;
+merge		:	MERGE id OPAR IDENTIFIER (COMMA IDENTIFIER)* CPAR SCOL ;  
 
 graph       :   strict=STRICT? g=(GRAPH | DIGRAPH) id? OBRACE stmt_list CBRACE ;
 stmt_list   :   ( stmt SCOL? )* ; 
 stmt        :   node_stmt
             |   edge_stmt
             |   attr_stmt
-            |   id ASSIGN values
-            |   subgraph 
+            |   id ASSIGN id
+            |   subgraph
             ;
 			
-attr_stmt   :   (GRAPH | NODE | EDGE) attr_list ;
-attr_list   :   ('[' a_list? ']')+ ;
-a_list      :   (id ('=' values)? ','?)+ ;
+attr_stmt   :   t = (GRAPH | NODE | EDGE) attr_list ;
+attr_list   :   OBRACKET a_list CBRACKET ;
+a_list      :   id ASSIGN id (COMMA a_list)* ;
 edge_stmt   :   (node_id | subgraph) edgeRHS attr_list? ;
-edgeRHS     :   ( edgeop (node_id | subgraph) )+ ;
-edgeop      :   '->' | DEC ;
+edgeRHS     :   edgeop (node_id | subgraph) (edgeRHS)* ;
+edgeop      :   op = ARROW | DEC ;
 node_stmt   :   node_id attr_list? ;
 node_id     :   id port? ;
-port        :   ':' id (':' id)? ;
+port        :   COLON id (COLON id)? ;
 subgraph    :   (SUBGRAPH id?)? OBRACE stmt_list CBRACE ; 
-id          :   IDENTIFIER
+id          :   i = ( IDENTIFIER
             |   STRING
             |   DOUBLE
-			|	INT
+			|	INT )
             ;
 			
 /*******************************************************************
@@ -112,6 +112,8 @@ id          :   IDENTIFIER
  
 INC			:	'++' ;
 DEC			:	'--' ; 
+
+ARROW		: 	'->' ;
  
 OR 			: 	'||' ;
 AND 		: 	'&&' ;
@@ -130,12 +132,15 @@ POW 		: 	'^' ;
 NOT 		: 	'!' ;
 
 SCOL 		: 	';' ;
-KOMMA		:	',' ;
+COLON		:	':' ;
+COMMA		:	',' ;
 ASSIGN 		: 	'=' ;
 OPAR 		: 	'(' ;
 CPAR 		: 	')' ;
 OBRACE 		: 	'{' ;
 CBRACE 		: 	'}' ;
+OBRACKET	:	'[' ;
+CBRACKET	:	']' ;
 
 TRUE 		: 	'true' ;
 FALSE 		: 	'false' ;

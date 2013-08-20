@@ -122,20 +122,16 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	    buf.append(ctx.id().getText());
 	    buf.append(" ");
 	}
-	buf.append("{");
-	// TODO ausgabe?
-	System.out.println(visit(ctx.stmt_list()).getValue());
-	buf.append(ctx.stmt_list().getText());
-	buf.append("}");
+	buf.append("{\n");
+	buf.append(((GraphValue) visit(ctx.stmt_list())).getValue());
+	buf.append("\n}");
 
 	if (ctx.id() != null)
-	    memory.put(ctx.id().getText(),
-		    new GraphValue(buf.toString()));
+	    memory.put(ctx.id().getText(), new GraphValue(buf.toString()));
 
+	System.out.println(buf.toString());
 	return new VoidValue();
     }
-    
-    
 
     @Override
     public BaseTypedValue<?> visitUncover(UncoverContext ctx)
@@ -149,10 +145,10 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	    {
 		parser.notifyErrorListeners("Graph '" + id + "' unbekannt!");
 	    }
-	    // new Demo12().doDemo(v.asGraph());
 	    try
 	    {
 		IOManager.saveGraph(v.getValue(), id);
+
 	    }
 	    catch (FileNotFoundException e1)
 	    {
@@ -222,14 +218,14 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	BaseTypedValue<?> value;
 	if (ctx.expression() != null)
 	{
-	    System.out.println(ctx.start.getText());
 	    if (!checkType(ctx.start.getType(), visit(ctx.expression())
 		    .getType()))
 	    {
-		parser.notifyErrorListeners(ctx.start, "Deklaration: Typ stimmt nicht überein! Erwartet: "
-			+ setType(ctx.start.getType())
-			+ " - Erhalten: "
-			+ visit(ctx.expression()).getType(), null);
+		parser.notifyErrorListeners(ctx.start,
+			"Deklaration: Typ stimmt nicht überein! Erwartet: "
+				+ setType(ctx.start.getType())
+				+ " - Erhalten: "
+				+ visit(ctx.expression()).getType(), null);
 	    }
 	    value = visit(ctx.expression());
 	}
@@ -324,14 +320,14 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitPrint(PrintContext ctx)
     {
-//	String id = ctx.IDENTIFIER().getText();
-//	BaseTypedValue<?> value = memory.get(id);
-//	if (value == null)
-//	{
-//	    parser.notifyErrorListeners("Variable '" + id + "' unbekannt!");
-//	}
+	// String id = ctx.IDENTIFIER().getText();
+	// BaseTypedValue<?> value = memory.get(id);
+	// if (value == null)
+	// {
+	// parser.notifyErrorListeners("Variable '" + id + "' unbekannt!");
+	// }
 
-//	System.out.println(value.getValue());
+	// System.out.println(value.getValue());
 	printMem("asd");
 
 	// switch (value.getType())
@@ -386,7 +382,7 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	// TODO ausgabe entfernen?
 	System.out.println(l.getValue().get(index));
 
-	return new VoidValue();
+	return createNewWithValue(l.getType(), l.getValue().get(index));
     }
 
     @Override
@@ -402,10 +398,12 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 		    + l.getType() + " und " + r.getType() + ")");
 
 	if (ctx.op.getType() == DOTParser.PLUS)
-	    return createNewWithValue(visit(ctx.expression(0)).getType(),
-		    ((Number) l.getValue()).doubleValue() + ((Number) r.getValue()).doubleValue());
+	    return createNewWithValue(
+		    visit(ctx.expression(0)).getType(),
+		    ((Number) l.getValue()).doubleValue()
+			    + ((Number) r.getValue()).doubleValue());
 	return createNewWithValue(visit(ctx.expression(0)).getType(),
-		    (Double) l.getValue() - (Double) r.getValue());
+		(Double) l.getValue() - (Double) r.getValue());
     }
 
     @Override
@@ -419,7 +417,7 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	    return createNewWithValue(ctx.expression(0).start.getType(),
 		    (Double) l.getValue() * (Double) r.getValue());
 	return createNewWithValue(ctx.expression(0).start.getType(),
-		    (Double) l.getValue() / (Double) r.getValue());
+		(Double) l.getValue() / (Double) r.getValue());
     }
 
     @Override
@@ -446,7 +444,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
-	return new BooleanValue(((Number) l.getValue()).doubleValue() > ((Number) r.getValue()).doubleValue());
+	return new BooleanValue(
+		((Number) l.getValue()).doubleValue() > ((Number) r.getValue())
+			.doubleValue());
     }
 
     @Override
@@ -455,7 +455,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
-	return new BooleanValue(((Number) l.getValue()).doubleValue() >= ((Number) r.getValue()).doubleValue());
+	return new BooleanValue(
+		((Number) l.getValue()).doubleValue() >= ((Number) r.getValue())
+			.doubleValue());
     }
 
     @Override
@@ -464,7 +466,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
-	return new BooleanValue(((Number) l.getValue()).doubleValue() != ((Number) r.getValue()).doubleValue());
+	return new BooleanValue(
+		((Number) l.getValue()).doubleValue() != ((Number) r.getValue())
+			.doubleValue());
     }
 
     @Override
@@ -473,7 +477,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
-	return new BooleanValue(((Number) l.getValue()).doubleValue() < ((Number) r.getValue()).doubleValue());
+	return new BooleanValue(
+		((Number) l.getValue()).doubleValue() < ((Number) r.getValue())
+			.doubleValue());
     }
 
     @Override
@@ -482,7 +488,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
-	return new BooleanValue(((Number) l.getValue()).doubleValue() <= ((Number) r.getValue()).doubleValue());
+	return new BooleanValue(
+		((Number) l.getValue()).doubleValue() <= ((Number) r.getValue())
+			.doubleValue());
     }
 
     @Override
@@ -490,7 +498,7 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     {
 	String id = ctx.IDENTIFIER().getText();
 	BaseTypedValue<?> value = memory.get(id);
-	
+
 	if (value == null)
 	{
 	    parser.notifyErrorListeners(ctx.IDENTIFIER().getSymbol(),
@@ -498,28 +506,38 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	}
 
 	if (ctx.op.getType() == DOTParser.INC)
-	    return memory.put(id, createNewWithValue(value.getType(), ((Number) value.getValue()).doubleValue() + 1));
+	    return memory.put(
+		    id,
+		    createNewWithValue(value.getType(),
+			    ((Number) value.getValue()).doubleValue() + 1));
 	else
-	    return memory.put(id, createNewWithValue(value.getType(), ((Number) value.getValue()).doubleValue() - 1));
+	    return memory.put(
+		    id,
+		    createNewWithValue(value.getType(),
+			    ((Number) value.getValue()).doubleValue() - 1));
     }
-    
 
     @Override
     public BaseTypedValue<?> visitStmt_list(Stmt_listContext ctx)
     {
-//	for(int i = 0; i < ctx.stmt().size(); i++)
-//	{
-//	    BaseTypedValue<?> v = visit(ctx.stmt(i));
-//	    System.out.println(v);
-//	}
-	return new VoidValue();
+	StringBuilder sb = new StringBuilder();
+	for (int i = 0; i < ctx.stmt().size(); i++)
+	{
+	    GraphValue v = (GraphValue) visit(ctx.stmt(i));
+	    sb.append(v.getValue());
+	    if (ctx.SCOL(i) != null)
+	    {
+		sb.append(ctx.SCOL(i).getText());
+		sb.append("\n");
+	    }
+	}
+	return new GraphValue(sb.toString());
     }
-    
-    
 
     @Override
     public BaseTypedValue<?> visitPort(PortContext ctx)
     {
+
 	// TODO Auto-generated method stub
 	return super.visitPort(ctx);
     }
@@ -527,15 +545,31 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitAttr_stmt(Attr_stmtContext ctx)
     {
-	// TODO Auto-generated method stub
-	return super.visitAttr_stmt(ctx);
+	StringBuilder sb = new StringBuilder();
+	sb.append(ctx.t.getText());
+	sb.append(((GraphValue) visit(ctx.attr_list())).getValue());
+
+	return new GraphValue(sb.toString());
     }
 
     @Override
     public BaseTypedValue<?> visitEdgeRHS(EdgeRHSContext ctx)
     {
-	// TODO Auto-generated method stub
-	return super.visitEdgeRHS(ctx);
+	StringBuilder sb = new StringBuilder();
+	sb.append(((GraphValue)visit(ctx.edgeop())).getValue());
+	
+	if(ctx.node_id() != null)
+		sb.append(((GraphValue)visit(ctx.node_id())).getValue());
+	else if(ctx.subgraph() != null)
+		sb.append(((GraphValue)visit(ctx.subgraph())).getValue());
+	
+	for(int i = 0; i < ctx.edgeRHS().size(); i++)
+	{
+	    sb.append(((GraphValue)visit(ctx.edgeRHS(i))).getValue());
+	}
+	    
+	
+	return new GraphValue(sb.toString());
     }
 
     @Override
@@ -562,15 +596,76 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitId(IdContext ctx)
     {
-	// TODO Auto-generated method stub
-	return super.visitId(ctx);
+	if (ctx.IDENTIFIER() != null
+		&& memory.containsKey(ctx.IDENTIFIER().getText()))
+	{
+	    return memory.get(ctx.IDENTIFIER().getText());
+
+	}
+	else
+	{
+	    return new GraphValue(ctx.i.getText());
+	}
     }
 
     @Override
     public BaseTypedValue<?> visitA_list(A_listContext ctx)
     {
-	// TODO Auto-generated method stub
-	return super.visitA_list(ctx);
+	StringBuilder sb = new StringBuilder();
+	for (int i = 0; i < ctx.id().size(); i++)
+	{
+	    switch (visit(ctx.id(i)).getType())
+	    {
+		case INT:
+		    IntValue intV = (IntValue) visit(ctx.id(i));
+		    sb.append(intV.getValue());
+		    break;
+		case DOUBLE:
+		    DoubleValue doubleV = (DoubleValue) visit(ctx.id(i));
+		    sb.append(doubleV.getValue());
+		    break;
+		case STRING:
+		    StringValue stringV = (StringValue) visit(ctx.id(i));
+		    sb.append(stringV.getValue());
+		    break;
+		case GRAPH:
+		    GraphValue graphV = (GraphValue) visit(ctx.id(i));
+		    sb.append(graphV.getValue());
+		    break;
+		default:
+		    break;
+	    }
+	    if (i % 2 == 0)
+		sb.append(" = ");
+	}
+	
+	for(int i = 0; i < ctx.a_list().size(); i++)
+	{
+	    sb.append(", ");
+	    switch (visit(ctx.id(i)).getType())
+	    {
+		case INT:
+		    IntValue intV = (IntValue) visit(ctx.a_list(i));
+		    sb.append(intV.getValue());
+		    break;
+		case DOUBLE:
+		    DoubleValue doubleV = (DoubleValue) visit(ctx.a_list(i));
+		    sb.append(doubleV.getValue());
+		    break;
+		case STRING:
+		    StringValue stringV = (StringValue) visit(ctx.a_list(i));
+		    sb.append(stringV.getValue());
+		    break;
+		case GRAPH:
+		    GraphValue graphV = (GraphValue) visit(ctx.a_list(i));
+		    sb.append(graphV.getValue());
+		    break;
+		default:
+		    break;
+	    }
+	}
+	
+	return new GraphValue(sb.toString());
     }
 
     @Override
@@ -583,8 +678,19 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitEdge_stmt(Edge_stmtContext ctx)
     {
-	// TODO Auto-generated method stub
-	return super.visitEdge_stmt(ctx);
+	StringBuilder sb = new StringBuilder();
+
+	if (ctx.node_id() != null)
+	    sb.append(((GraphValue) visit(ctx.node_id())).getValue());
+	else if (ctx.subgraph() != null)
+	    sb.append(((GraphValue) visit(ctx.subgraph())).getValue());
+
+	sb.append(((GraphValue) visit(ctx.edgeRHS())).getValue());
+
+	if (ctx.attr_list() != null)
+	    sb.append(((GraphValue) visit(ctx.attr_list())).getValue());
+
+	return new GraphValue(sb.toString());
     }
 
     @Override
@@ -604,15 +710,15 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitEdgeop(EdgeopContext ctx)
     {
-	// TODO Auto-generated method stub
-	return super.visitEdgeop(ctx);
+	return new GraphValue(ctx.op.getText());
     }
-//
-//    @Override
-//    public BaseTypedValue<?> visitStmt(StmtContext ctx)
-//    {
-//	return ctx.;
-//    }
+
+    // @Override
+    // public BaseTypedValue<?> visitStmt(StmtContext ctx)
+    // {
+    // ctx.
+    // return ctx.;
+    // }
 
     @Override
     public BaseTypedValue<?> visitStatement(StatementContext ctx)
@@ -624,8 +730,17 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitSubgraph(SubgraphContext ctx)
     {
-	// TODO Auto-generated method stub
-	return super.visitSubgraph(ctx);
+	StringBuilder sb = new StringBuilder();
+	if (ctx.SUBGRAPH() != null)
+	{
+	    sb.append(ctx.SUBGRAPH().getText());
+	    if (ctx.id() != null)
+		sb.append(((GraphValue) visit(ctx.id())).getValue());
+	}
+
+	sb.append(((GraphValue) visit(ctx.stmt_list())).getValue());
+
+	return new GraphValue(sb.toString());
     }
 
     @Override
@@ -638,15 +753,48 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitAttr_list(Attr_listContext ctx)
     {
-	// TODO Auto-generated method stub
-	return super.visitAttr_list(ctx);
+	StringBuilder sb = new StringBuilder();
+//	for (int i = 0; i < ctx.a_list().size(); i++)
+//	{
+	    sb.append("[");
+	    switch (visit(ctx.a_list()).getType())
+	    {
+		case INT:
+		    IntValue intV = (IntValue) visit(ctx.a_list());
+		    sb.append(intV.getValue());
+		    break;
+		case DOUBLE:
+		    DoubleValue doubleV = (DoubleValue) visit(ctx.a_list());
+		    sb.append(doubleV.getValue());
+		    break;
+		case STRING:
+		    StringValue stringV = (StringValue) visit(ctx.a_list());
+		    sb.append(stringV.getValue());
+		    break;
+		case GRAPH:
+		    GraphValue graphV = (GraphValue) visit(ctx.a_list());
+		    sb.append(graphV.getValue());
+		    break;
+		default:
+		    break;
+	    }
+	    // if(i%2==0)
+	    // sb.append(" , ");
+	    sb.append("]");
+//	}
+
+	return new GraphValue(sb.toString());
     }
 
     @Override
     public BaseTypedValue<?> visitNode_stmt(Node_stmtContext ctx)
     {
-	// TODO Auto-generated method stub
-	return super.visitNode_stmt(ctx);
+	StringBuilder sb = new StringBuilder();
+	sb.append(((GraphValue) visit(ctx.node_id())).getValue());
+	if (ctx.attr_list() != null)
+	    sb.append(((GraphValue)visit(ctx.attr_list())).getValue());
+
+	return new GraphValue(sb.toString());
     }
 
     private BaseTypedValue<?> createNewWithValue(Type type, Object value)
@@ -685,7 +833,6 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 
     private BaseTypedValue<?> createNewWithValue(int type, Object value)
     {
-	System.out.println(type);
 	switch (type)
 	{
 	    case DOTParser.INT:
@@ -746,11 +893,13 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 
     private void printMem(String a)
     {
-        System.out.println(a);
-        for (String s : memory.keySet())
-        {
-            System.out.println("key: " + s + " value: " + memory.get(s).getValue() + " type: " + memory.get(s).getType());
-        }
+	System.out.println(a);
+	for (String s : memory.keySet())
+	{
+	    System.out.println("key: " + s + " value: "
+		    + memory.get(s).getValue() + " type: "
+		    + memory.get(s).getType());
+	}
     }
 
 }

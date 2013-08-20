@@ -1,9 +1,9 @@
-int i = 360;
+String i = "asd";
 
 digraph g {
 	graph [	size = "10,10",
 		label = "Cluster Graph Example",
-		rotate = i ];
+		rotate = 360 ];
 	node [	label = "\N" ];
 	graph [lp= "1625,0"];
 	graph [bb= "0,0,3250,226"];

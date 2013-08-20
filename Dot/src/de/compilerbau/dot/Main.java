@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import de.compilerbau.dot.DOTParser.SContext;
 import de.compilerbau.dot.gui.Gui;
 import de.compilerbau.dot.gui.JFrameShower;
 
@@ -47,8 +48,7 @@ public class Main implements GrappaConstants
 	    parser.removeErrorListeners();
 	    parser.addErrorListener(new DOTErrorListener());
 	    parser.setErrorHandler(new DOTErrorStrategy());
-	    ParseTree tree = parser.s();
-	    // System.out.println(tree.toStringTree(parser));
+	    SContext tree = parser.s();
 	    MyVisitor visitor = new MyVisitor(parser);
 	    visitor.visit(tree);
 	}
