@@ -452,7 +452,9 @@ public class DOTParser extends Parser {
 	public static class PrintContext extends ParserRuleContext {
 		public TerminalNode PRINT() { return getToken(DOTParser.PRINT, 0); }
 		public TerminalNode CPAR() { return getToken(DOTParser.CPAR, 0); }
-		public TerminalNode IDENTIFIER() { return getToken(DOTParser.IDENTIFIER, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
 		public TerminalNode SCOL() { return getToken(DOTParser.SCOL, 0); }
 		public TerminalNode OPAR() { return getToken(DOTParser.OPAR, 0); }
 		public PrintContext(ParserRuleContext parent, int invokingState) {
@@ -474,7 +476,7 @@ public class DOTParser extends Parser {
 			{
 			setState(118); match(PRINT);
 			setState(119); match(OPAR);
-			setState(120); match(IDENTIFIER);
+			setState(120); expression(0);
 			setState(121); match(CPAR);
 			setState(122); match(SCOL);
 			}
@@ -2391,7 +2393,7 @@ public class DOTParser extends Parser {
 		"ec\3\2\2\2ef\3\2\2\2fg\3\2\2\2gh\7\27\2\2h\t\3\2\2\2ij\5 \21\2jk\7\3\2"+
 		"\2kl\7\64\2\2lm\7\32\2\2mn\7\35\2\2nq\5\36\20\2op\7\31\2\2pr\5\36\20\2"+
 		"qo\3\2\2\2rs\3\2\2\2sq\3\2\2\2st\3\2\2\2tu\3\2\2\2uv\7\36\2\2vw\7\27\2"+
-		"\2w\13\3\2\2\2xy\7\63\2\2yz\7\33\2\2z{\7\64\2\2{|\7\34\2\2|}\7\27\2\2"+
+		"\2w\13\3\2\2\2xy\7\63\2\2yz\7\33\2\2z{\5\32\16\2{|\7\34\2\2|}\7\27\2\2"+
 		"}\r\3\2\2\2~\177\7\64\2\2\177\u0080\7\32\2\2\u0080\u0081\5\32\16\2\u0081"+
 		"\u0082\7\27\2\2\u0082\17\3\2\2\2\u0083\u0084\7%\2\2\u0084\u0085\5\30\r"+
 		"\2\u0085\u0086\5\4\3\2\u0086\21\3\2\2\2\u0087\u0088\7&\2\2\u0088\u0089"+

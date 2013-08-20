@@ -114,7 +114,7 @@ public class IOManager
          String path = files.get(i).getPath();
          int index = files.get(i).getName().indexOf(".");
          String imgPath = IMAGE_PATH + files.get(i).getName().substring(0, index) + IMAGE_FILE_EXTENSION;
-         pb = new ProcessBuilder("dot/bin/dot.exe", "-Tpng", path,
+         pb = new ProcessBuilder("Graphviz/bin/dot.exe", "-Tpng", path,
                "-o", imgPath);
          try
          {

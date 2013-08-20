@@ -29,7 +29,7 @@ declaration	:	type IDENTIFIER ( ASSIGN expression )? SCOL ;
 
 arraydecl	:	type '[]' IDENTIFIER ASSIGN OBRACE values (COMMA values)+ CBRACE SCOL	;
 
-print		:	PRINT OPAR IDENTIFIER CPAR SCOL	;
+print		:	PRINT OPAR expression CPAR SCOL	;
 			
 assignment	:	IDENTIFIER ASSIGN expression SCOL ;
 

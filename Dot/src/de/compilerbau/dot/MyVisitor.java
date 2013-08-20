@@ -67,7 +67,7 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitIntAtom(IntAtomContext ctx)
     {
-	return new BaseTypedValue.IntValue(Integer.valueOf(ctx.getText()));
+	return new IntValue(Integer.valueOf(ctx.getText()));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     {
 	String str = ctx.getText();
 	str = str.substring(1, str.length() - 1).replace("\"\"", "\"");
-	return new BaseTypedValue.StringValue(str);
+	return new StringValue(str);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	}
 	buf.append("}");
 	memory.put(id, new GraphValue(buf.toString()));
-	return new BaseTypedValue.VoidValue();
+	return new VoidValue();
     }
 
     @Override
@@ -241,7 +241,7 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	    }
 	    arrayList.add(v);
 	}
-	return memory.put(id, new BaseTypedValue.ArrayValue(arrayList));
+	return memory.put(id, new ArrayValue(arrayList, setType(ctx.start.getType())));
     }
 
     @Override
@@ -310,13 +310,8 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitPrint(PrintContext ctx)
     {
-	 String id = ctx.IDENTIFIER().getText();
-	 BaseTypedValue<?> value = memory.get(id);
-	 if (value == null)
-	 {
-	     parser.notifyErrorListeners("Variable '" + id + "' unbekannt!");
-	 }
-
+	 BaseTypedValue<?> value = visit(ctx.expression());
+System.out.println(value.getType());
 	switch (value.getType())
 	{
 	    case INT:
@@ -331,6 +326,8 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	    case GRAPH:
 		System.out.println(((GraphValue)value).getValue());
 		break;
+//	    case ARRAY:
+//		System.out.println(((ArrayValue)visit(ctx.expression())).getValue());
 	    default:
 		break;
 	}
@@ -367,14 +364,15 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 		    + l.getValue().size() + " Index: " + index);
 
 	// TODO ausgabe entfernen?
-	System.out.println(l.getValue().get(index));
-
-	return createNewWithValue(l.getType(), l.getValue().get(index));
+	System.out.println(l.getArrayType());
+	
+	return createNewWithValue(l.getArrayType(), l.getValue().get(index));
     }
 
     @Override
     public BaseTypedValue<?> visitAddSubExpr(AddSubExprContext ctx)
     {
+	// TODO prüfen auf String -> fehler
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
@@ -712,11 +710,19 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	switch (type)
 	{
 	    case INT:
-		return new IntValue(((Number) value).intValue());
+		if (value instanceof IntValue)
+		    return (IntValue)value;
+		else
+		    return new IntValue(((Number)value).intValue());
 	    case DOUBLE:
-		return new DoubleValue((Double) value);
+		if (value instanceof DoubleValue)
+		    return (DoubleValue)value;
+		else
+		    return new DoubleValue(((Number)value).doubleValue());
 	    case STRING:
-		return new StringValue((String) value);
+		return new StringValue(((StringValue)value).getValue());
+//	    case ARRAY:
+//		return new ArrayValue((ArrayList)value, type);
 	    default:
 		return new InvalidValue();
 	}

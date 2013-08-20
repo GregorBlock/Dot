@@ -113,9 +113,17 @@ public class BaseTypedValue<T> implements TypedValue<T>
     
     public static class ArrayValue extends BaseTypedValue<ArrayList<?>>
     {
-	public ArrayValue(ArrayList<?> value)
+	private Type arrayType;
+	public ArrayValue(ArrayList<?> value, Type type)
 	{
 	    super(value);
+	    this.type = Type.ARRAY;
+	    arrayType = type;
+	}
+	
+	public Type getArrayType()
+	{
+	    return arrayType;
 	}
     }
     
