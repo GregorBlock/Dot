@@ -22,13 +22,11 @@ import de.compilerbau.dot.DOTParser.ArraydeclContext;
 import de.compilerbau.dot.DOTParser.AssignmentContext;
 import de.compilerbau.dot.DOTParser.Attr_listContext;
 import de.compilerbau.dot.DOTParser.Attr_stmtContext;
-import de.compilerbau.dot.DOTParser.BlockContext;
 import de.compilerbau.dot.DOTParser.DeclarationContext;
 import de.compilerbau.dot.DOTParser.DoubleAtomContext;
 import de.compilerbau.dot.DOTParser.EdgeRHSContext;
 import de.compilerbau.dot.DOTParser.Edge_stmtContext;
 import de.compilerbau.dot.DOTParser.EdgeopContext;
-import de.compilerbau.dot.DOTParser.EqExprContext;
 import de.compilerbau.dot.DOTParser.ForControlContext;
 import de.compilerbau.dot.DOTParser.ForStatContext;
 import de.compilerbau.dot.DOTParser.GraphContext;
@@ -44,20 +42,13 @@ import de.compilerbau.dot.DOTParser.LtExprContext;
 import de.compilerbau.dot.DOTParser.MergeContext;
 import de.compilerbau.dot.DOTParser.MulDivExprContext;
 import de.compilerbau.dot.DOTParser.NeqExprContext;
-import de.compilerbau.dot.DOTParser.Node_idContext;
 import de.compilerbau.dot.DOTParser.Node_stmtContext;
 import de.compilerbau.dot.DOTParser.OrExprContext;
 import de.compilerbau.dot.DOTParser.ParStatContext;
-import de.compilerbau.dot.DOTParser.PortContext;
-import de.compilerbau.dot.DOTParser.PrimaryContext;
-import de.compilerbau.dot.DOTParser.PrimaryExprContext;
 import de.compilerbau.dot.DOTParser.PrintContext;
-import de.compilerbau.dot.DOTParser.SContext;
-import de.compilerbau.dot.DOTParser.StatementContext;
 import de.compilerbau.dot.DOTParser.Stmt_listContext;
 import de.compilerbau.dot.DOTParser.StringAtomContext;
 import de.compilerbau.dot.DOTParser.SubgraphContext;
-import de.compilerbau.dot.DOTParser.TypeContext;
 import de.compilerbau.dot.DOTParser.UncoverContext;
 import de.compilerbau.dot.DOTParser.WhileStatContext;
 import de.compilerbau.dot.TypedValue.Type;
@@ -129,7 +120,6 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	if (ctx.id() != null)
 	    memory.put(ctx.id().getText(), new GraphValue(buf.toString()));
 
-	System.out.println(buf.toString());
 	return new VoidValue();
     }
 
@@ -320,33 +310,30 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     @Override
     public BaseTypedValue<?> visitPrint(PrintContext ctx)
     {
-	// String id = ctx.IDENTIFIER().getText();
-	// BaseTypedValue<?> value = memory.get(id);
-	// if (value == null)
-	// {
-	// parser.notifyErrorListeners("Variable '" + id + "' unbekannt!");
-	// }
+	 String id = ctx.IDENTIFIER().getText();
+	 BaseTypedValue<?> value = memory.get(id);
+	 if (value == null)
+	 {
+	     parser.notifyErrorListeners("Variable '" + id + "' unbekannt!");
+	 }
 
-	// System.out.println(value.getValue());
-	printMem("asd");
-
-	// switch (value.getType())
-	// {
-	// case INT:
-	// System.out.println(value.asInt());
-	// break;
-	// case DOUBLE:
-	// System.out.println(value.asDouble());
-	// break;
-	// case STRING:
-	// System.out.println(value.asString());
-	// break;
-	// case GRAPH:
-	// System.out.println(value.asGraph());
-	// break;
-	// default:
-	// break;
-	// }
+	switch (value.getType())
+	{
+	    case INT:
+		System.out.println(((IntValue)value).getValue());
+		break;
+	    case DOUBLE:
+		System.out.println(((DoubleValue)value).getValue());
+		break;
+	    case STRING:
+		System.out.println(((StringValue)value).getValue());
+		break;
+	    case GRAPH:
+		System.out.println(((GraphValue)value).getValue());
+		break;
+	    default:
+		break;
+	}
 	return new VoidValue();
     }
 
@@ -535,14 +522,6 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     }
 
     @Override
-    public BaseTypedValue<?> visitPort(PortContext ctx)
-    {
-
-	// TODO Auto-generated method stub
-	return super.visitPort(ctx);
-    }
-
-    @Override
     public BaseTypedValue<?> visitAttr_stmt(Attr_stmtContext ctx)
     {
 	StringBuilder sb = new StringBuilder();
@@ -556,41 +535,19 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     public BaseTypedValue<?> visitEdgeRHS(EdgeRHSContext ctx)
     {
 	StringBuilder sb = new StringBuilder();
-	sb.append(((GraphValue)visit(ctx.edgeop())).getValue());
-	
-	if(ctx.node_id() != null)
-		sb.append(((GraphValue)visit(ctx.node_id())).getValue());
-	else if(ctx.subgraph() != null)
-		sb.append(((GraphValue)visit(ctx.subgraph())).getValue());
-	
-	for(int i = 0; i < ctx.edgeRHS().size(); i++)
+	sb.append(((GraphValue) visit(ctx.edgeop())).getValue());
+
+	if (ctx.node_id() != null)
+	    sb.append(((GraphValue) visit(ctx.node_id())).getValue());
+	else if (ctx.subgraph() != null)
+	    sb.append(((GraphValue) visit(ctx.subgraph())).getValue());
+
+	for (int i = 0; i < ctx.edgeRHS().size(); i++)
 	{
-	    sb.append(((GraphValue)visit(ctx.edgeRHS(i))).getValue());
+	    sb.append(((GraphValue) visit(ctx.edgeRHS(i))).getValue());
 	}
-	    
-	
+
 	return new GraphValue(sb.toString());
-    }
-
-    @Override
-    public BaseTypedValue<?> visitBlock(BlockContext ctx)
-    {
-	// TODO Auto-generated method stub
-	return super.visitBlock(ctx);
-    }
-
-    @Override
-    public BaseTypedValue<?> visitType(TypeContext ctx)
-    {
-	// TODO Auto-generated method stub
-	return super.visitType(ctx);
-    }
-
-    @Override
-    public BaseTypedValue<?> visitNode_id(Node_idContext ctx)
-    {
-	// TODO Auto-generated method stub
-	return super.visitNode_id(ctx);
     }
 
     @Override
@@ -638,8 +595,8 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	    if (i % 2 == 0)
 		sb.append(" = ");
 	}
-	
-	for(int i = 0; i < ctx.a_list().size(); i++)
+
+	for (int i = 0; i < ctx.a_list().size(); i++)
 	{
 	    sb.append(", ");
 	    switch (visit(ctx.id(i)).getType())
@@ -664,15 +621,8 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 		    break;
 	    }
 	}
-	
-	return new GraphValue(sb.toString());
-    }
 
-    @Override
-    public BaseTypedValue<?> visitPrimary(PrimaryContext ctx)
-    {
-	// TODO Auto-generated method stub
-	return super.visitPrimary(ctx);
+	return new GraphValue(sb.toString());
     }
 
     @Override
@@ -694,37 +644,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     }
 
     @Override
-    public BaseTypedValue<?> visitPrimaryExpr(PrimaryExprContext ctx)
-    {
-	// TODO Auto-generated method stub
-	return super.visitPrimaryExpr(ctx);
-    }
-
-    @Override
-    public BaseTypedValue<?> visitEqExpr(EqExprContext ctx)
-    {
-	// TODO Auto-generated method stub
-	return super.visitEqExpr(ctx);
-    }
-
-    @Override
     public BaseTypedValue<?> visitEdgeop(EdgeopContext ctx)
     {
 	return new GraphValue(ctx.op.getText());
-    }
-
-    // @Override
-    // public BaseTypedValue<?> visitStmt(StmtContext ctx)
-    // {
-    // ctx.
-    // return ctx.;
-    // }
-
-    @Override
-    public BaseTypedValue<?> visitStatement(StatementContext ctx)
-    {
-	// TODO Auto-generated method stub
-	return super.visitStatement(ctx);
     }
 
     @Override
@@ -744,44 +666,32 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
     }
 
     @Override
-    public BaseTypedValue<?> visitS(SContext ctx)
-    {
-	// TODO Auto-generated method stub
-	return super.visitS(ctx);
-    }
-
-    @Override
     public BaseTypedValue<?> visitAttr_list(Attr_listContext ctx)
     {
 	StringBuilder sb = new StringBuilder();
-//	for (int i = 0; i < ctx.a_list().size(); i++)
-//	{
-	    sb.append("[");
-	    switch (visit(ctx.a_list()).getType())
-	    {
-		case INT:
-		    IntValue intV = (IntValue) visit(ctx.a_list());
-		    sb.append(intV.getValue());
-		    break;
-		case DOUBLE:
-		    DoubleValue doubleV = (DoubleValue) visit(ctx.a_list());
-		    sb.append(doubleV.getValue());
-		    break;
-		case STRING:
-		    StringValue stringV = (StringValue) visit(ctx.a_list());
-		    sb.append(stringV.getValue());
-		    break;
-		case GRAPH:
-		    GraphValue graphV = (GraphValue) visit(ctx.a_list());
-		    sb.append(graphV.getValue());
-		    break;
-		default:
-		    break;
-	    }
-	    // if(i%2==0)
-	    // sb.append(" , ");
-	    sb.append("]");
-//	}
+	sb.append("[");
+	switch (visit(ctx.a_list()).getType())
+	{
+	    case INT:
+		IntValue intV = (IntValue) visit(ctx.a_list());
+		sb.append(intV.getValue());
+		break;
+	    case DOUBLE:
+		DoubleValue doubleV = (DoubleValue) visit(ctx.a_list());
+		sb.append(doubleV.getValue());
+		break;
+	    case STRING:
+		StringValue stringV = (StringValue) visit(ctx.a_list());
+		sb.append(stringV.getValue());
+		break;
+	    case GRAPH:
+		GraphValue graphV = (GraphValue) visit(ctx.a_list());
+		sb.append(graphV.getValue());
+		break;
+	    default:
+		break;
+	}
+	sb.append("]");
 
 	return new GraphValue(sb.toString());
     }
@@ -792,7 +702,7 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	StringBuilder sb = new StringBuilder();
 	sb.append(((GraphValue) visit(ctx.node_id())).getValue());
 	if (ctx.attr_list() != null)
-	    sb.append(((GraphValue)visit(ctx.attr_list())).getValue());
+	    sb.append(((GraphValue) visit(ctx.attr_list())).getValue());
 
 	return new GraphValue(sb.toString());
     }
@@ -804,8 +714,6 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	    case INT:
 		return new IntValue(((Number) value).intValue());
 	    case DOUBLE:
-		// if (value == Value.Type.INT)
-		// return true;
 		return new DoubleValue((Double) value);
 	    case STRING:
 		return new StringValue((String) value);
@@ -821,8 +729,6 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	    case DOTParser.INT:
 		return new IntValue();
 	    case DOTParser.DOUBLE:
-		// if (value == Value.Type.INT)
-		// return true;
 		return new DoubleValue();
 	    case DOTParser.STRING:
 		return new StringValue();
@@ -856,21 +762,6 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 		return value == Type.DOUBLE;
 	    case DOTParser.STRINGTYPE:
 		return value == Type.STRING;
-	    default:
-		return false;
-	}
-    }
-
-    private boolean check(int type, Value.Type value)
-    {
-	switch (value)
-	{
-	    case INT:
-		return type == DOTParser.INT;
-	    case DOUBLE:
-		return type == DOTParser.DOUBLE;
-	    case STRING:
-		return type == DOTParser.STRING;
 	    default:
 		return false;
 	}

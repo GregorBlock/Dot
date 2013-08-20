@@ -4,13 +4,11 @@ import java.io.IOException;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 
+import att.grappa.GrappaConstants;
 import de.compilerbau.dot.DOTParser.SContext;
 import de.compilerbau.dot.gui.Gui;
 import de.compilerbau.dot.gui.JFrameShower;
-
-import att.grappa.GrappaConstants;
 
 /**
  * TODO Add comment here

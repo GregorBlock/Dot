@@ -38,11 +38,6 @@ public class IOManager
       }
    }
 
-   private static boolean checkPath(String path)
-   {
-      return new File(path).exists();
-   }
-
    /**
     * Saves a graph in a file.
     * 

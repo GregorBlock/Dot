@@ -5,6 +5,7 @@ package de.compilerbau.dot.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,14 +19,10 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -33,7 +30,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import de.compilerbau.dot.DOTLexer;
 import de.compilerbau.dot.DOTParser;
-import de.compilerbau.dot.MyVisitor_orig;
+import de.compilerbau.dot.MyVisitor;
 import de.compilerbau.dot.gui.console.MessageConsole;
 import de.compilerbau.dot.util.IOManager;
 
@@ -62,6 +59,7 @@ public class Gui extends JFrame
       setSize(1224, 800);
       
       editor = new JTextPane();
+      editor.setFont(new Font(null, Font.PLAIN, 16));
       editor.setText("digraph g { A->B; } uncover(g);");
       console = new JTextPane();
       console.setEditable(false);
@@ -84,11 +82,12 @@ public class Gui extends JFrame
          {
             IOManager.deleteFiles();
             String code = editor.getText();
+            console.setText(" ");
             DOTLexer lexer;
             lexer = new DOTLexer(new ANTLRInputStream(code));
             DOTParser parser = new DOTParser(new CommonTokenStream(lexer));
             ParseTree tree = parser.s();
-            MyVisitor_orig visitor = new MyVisitor_orig(parser);
+            MyVisitor visitor = new MyVisitor(parser);
             visitor.visit(tree);
             createTabs(IOManager.load(IOManager.IMAGE_PATH));
          }

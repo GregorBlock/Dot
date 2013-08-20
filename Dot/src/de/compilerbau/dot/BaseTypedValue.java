@@ -2,8 +2,6 @@ package de.compilerbau.dot;
 
 import java.util.ArrayList;
 
-import de.compilerbau.dot.TypedValue.Type;
-
 public class BaseTypedValue<T> implements TypedValue<T>
 {
     public static final Object VOID = new Object();
