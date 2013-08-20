@@ -56,7 +56,7 @@ expression	:   primary										#primaryExpr
 			|	expression NEQ expression					#neqExpr
 			|   expression AND expression					#andExpr
 			|   expression OR expression					#orExpr
-			|   expression ASSIGN<assoc=right> expression	#assignExpr
+//			|   expression ASSIGN<assoc=right> expression	#assignExpr
 			;
 	
 primary		:	parStat										
@@ -86,13 +86,13 @@ stmt_list   :   ( stmt SCOL? )* ;
 stmt        :   node_stmt
             |   edge_stmt
             |   attr_stmt
-            |   id ASSIGN id
+            |   id ASSIGN values
             |   subgraph 
             ;
 			
 attr_stmt   :   (GRAPH | NODE | EDGE) attr_list ;
 attr_list   :   ('[' a_list? ']')+ ;
-a_list      :   (id ('=' id)? ','?)+ ;
+a_list      :   (id ('=' values)? ','?)+ ;
 edge_stmt   :   (node_id | subgraph) edgeRHS attr_list? ;
 edgeRHS     :   ( edgeop (node_id | subgraph) )+ ;
 edgeop      :   '->' | DEC ;
@@ -162,7 +162,7 @@ PRINT		:	[Pp][Rr][Ii][Nn][Tt] ;
 
 IDENTIFIER	: 	[a-zA-Z_] [a-zA-Z_0-9]* ;
 INT			: 	MINUS? DIGIT+ ;
-DOUBLE		:	MINUS? DIGIT+ ('.' DIGIT*)? 
+DOUBLE		:	MINUS? DIGIT+ '.' DIGIT*
 			| 	MINUS? '.' DIGIT+ ;
 			
  /** "a numeral [-]?(.[0-9]+ | [0-9]+(.[0-9]*)? )" 
@@ -192,4 +192,4 @@ TAG         :   LT .*? GT ;
 
 COMMENT     :   '/*' .*? '*/'       -> channel(HIDDEN) ; 
 LINE_COMMENT:   '//' .*? '\r'? '\n' -> channel(HIDDEN) ;
-WS			:   [ \t\n\r]+ -> skip ;
+WS			:   [ \t\n\r]+ -> channel(HIDDEN) ;

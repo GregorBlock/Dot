@@ -18,7 +18,7 @@
 			<arg value="-visitor" />
 			<arg value="-no-listener" />
 
-			<arg value="${src}/${package}/DOT.g4" />
+			<arg value="${src}/${package}/grammar/DOT.g4" />
 		</java>
 	</target>
 

@@ -31,7 +31,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import de.compilerbau.dot.DOTLexer;
 import de.compilerbau.dot.DOTParser;
-import de.compilerbau.dot.MyVisitor;
+import de.compilerbau.dot.MyVisitor_orig;
 import de.compilerbau.dot.gui.console.MessageConsole;
 import de.compilerbau.dot.util.IOManager;
 
@@ -87,7 +87,7 @@ public class Gui extends JFrame
             lexer = new DOTLexer(new ANTLRInputStream(code));
             DOTParser parser = new DOTParser(new CommonTokenStream(lexer));
             ParseTree tree = parser.s();
-            MyVisitor visitor = new MyVisitor();
+            MyVisitor_orig visitor = new MyVisitor_orig(parser);
             visitor.visit(tree);
             
             createTabs(IOManager.load(IOManager.IMAGE_PATH));
