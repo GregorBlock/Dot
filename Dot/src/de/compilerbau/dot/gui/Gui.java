@@ -24,6 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -54,13 +56,11 @@ public class Gui extends JFrame
 
    private JTabbedPane tabbedPane;
 
-   private JMenuBar menuBar;
-
-   private JMenu menu;
-
    public Gui()
    {
-      menuBar = new JMenuBar();
+      setTitle("Dot Compiler");
+      setSize(1224, 800);
+      
       editor = new JTextPane();
       editor.setText("digraph g { A->B; } uncover(g);");
       console = new JTextPane();
@@ -82,6 +82,7 @@ public class Gui extends JFrame
          @Override
          public void actionPerformed(ActionEvent arg0)
          {
+            IOManager.deleteFiles();
             String code = editor.getText();
             DOTLexer lexer;
             lexer = new DOTLexer(new ANTLRInputStream(code));
@@ -89,19 +90,11 @@ public class Gui extends JFrame
             ParseTree tree = parser.s();
             MyVisitor_orig visitor = new MyVisitor_orig(parser);
             visitor.visit(tree);
-            
             createTabs(IOManager.load(IOManager.IMAGE_PATH));
          }
 
       });
 
-      setSize(1024, 800);
-      setTitle("Dot Compiler");
-
-      menu = new JMenu("Menu");
-
-      menuBar.add(menu);
-      setJMenuBar(menuBar);
 
       JScrollPane jspEditor = new JScrollPane(editor);
       JScrollPane jspConsole = new JScrollPane(console);
@@ -130,11 +123,11 @@ public class Gui extends JFrame
 
    private void createTabs(ArrayList<File> files)
    {
+      tabbedPane.removeAll();
       for(int i = 0; i < files.size(); i++)
       {
          Icon icon = new ImageIcon(files.get(i).getPath());
          JLabel lbl = new JLabel(icon);
-         
          
          tabbedPane.addTab(files.get(i).getName(), lbl);
       }
