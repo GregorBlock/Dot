@@ -476,23 +476,28 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	    parser.notifyErrorListeners("Variable " + ctx.start.getText()
 		    + " unbekannt!");
 
+	// Variable nicht deklariert
 	if (r == null)
 	    parser.notifyErrorListeners("Variable "
 		    + ctx.expression(1).getText() + " unbekannt!");
-	
+
+	// Variable ist kein Integer
 	if (!(r instanceof IntValue))
 	{
-	    parser.notifyErrorListeners("Indexvariable " + ctx.expression(1).getText()
+	    parser.notifyErrorListeners("Indexvariable "
+		    + ctx.expression(1).getText()
 		    + " darf nur ein Integer sein!");
-	    
+
 	    return new InvalidValue();
 	}
 
 	int index = ((IntValue) r).getValue();
 
+	// IndexOutOfBounds -> Index negativ
 	if (index < 0)
 	    parser.notifyErrorListeners("Arrayindex ist negativ!");
 
+	// IndexOutOfBounds -> Index zu groß
 	if (index > l.getValue().size())
 	    parser.notifyErrorListeners("Arrayindex ist zu groß! Arraygroeße: "
 		    + l.getValue().size() + " Index: " + index);
@@ -500,66 +505,84 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return createNewWithValue(l.getArrayType(), l.getValue().get(index));
     }
 
+    /**
+     * Führt Plus/Minus-Rechnungen aus.
+     */
     @Override
     public BaseTypedValue<?> visitAddSubExpr(AddSubExprContext ctx)
     {
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
+	// Linke Variable ist ein String, Fehler werfen
 	if (l.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Strings können nicht addiert/subtrahiert werden!", null);
+	// Rechte Variable ist ein String, Fehler werfen
 	if (r.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Strings können nicht addiert/subtrahiert werden!", null);
 
+	// Linke Variable ist ein Boolean, Fehler werfen
 	if (l.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Boolean können nicht addiert/subtrahiert werden!", null);
+	// Rechte Variable ist ein Boolean, Fehler werfen
 	if (r.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Boolean können nicht addiert/subtrahiert werden!", null);
 
+	// Linke Variable hat nicht den selben Typ wie die rechte, Fehler werfen
 	if (l.getType() != r.getType())
 	    parser.notifyErrorListeners("Werte nicht vom selbem Typ! " + "("
 		    + l.getType() + " und " + r.getType() + ")");
 
+	// Addition
 	if (ctx.op.getType() == DOTParser.PLUS)
 	    return createNewWithValue(
 		    visit(ctx.expression(0)).getType(),
 		    ((Number) l.getValue()).doubleValue()
 			    + ((Number) r.getValue()).doubleValue());
 
+	// Subtraktion
 	return createNewWithValue(
 		visit(ctx.expression(0)).getType(),
 		((Number) l.getValue()).doubleValue()
 			- ((Number) r.getValue()).doubleValue());
     }
 
+    /**
+     * Führt Multiplikation/Division-Rechnungen aus.
+     */
     @Override
     public BaseTypedValue<?> visitMulDivExpr(MulDivExprContext ctx)
     {
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
+	// Linke Variable ist ein String, Fehler werfen
 	if (l.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Strings können nicht multipliziert/dividiert werden!",
 		    null);
+	// Rechte Variable ist ein String, Fehler werfen
 	if (r.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Strings können nicht multipliziert/dividiert werden!",
 		    null);
 
+	// Linke Variable ist ein Boolean, Fehler werfen
 	if (l.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Boolean können nicht multipliziert/dividiert werden!",
 		    null);
+	// Rechte Variable ist ein Boolean, Fehler werfen
 	if (r.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Boolean können nicht multipliziert/dividiert werden!",
 		    null);
 
+	// Multiplikation
 	if (ctx.op.getType() == DOTParser.MULT)
 	{
 	    return createNewWithValue(
@@ -568,16 +591,21 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 			    * ((Number) r.getValue()).doubleValue());
 	}
 
+	// Division durch 0, Fehler werfen
 	Number rVal = (Number) r.getValue();
 	if (rVal.doubleValue() == 0.0 || rVal.intValue() == 0)
 	    parser.notifyErrorListeners("Division durch 0!");
 
+	// Division
 	return createNewWithValue(
 		ctx.expression(0).start.getType(),
 		((Number) l.getValue()).doubleValue()
 			/ ((Number) r.getValue()).doubleValue());
     }
 
+    /**
+     * Ausführung von logischen Und-Operationen.
+     */
     @Override
     public BaseTypedValue<?> visitAndExpr(AndExprContext ctx)
     {
@@ -591,9 +619,13 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 
 	BooleanValue l = (BooleanValue) visit(ctx.expression(0));
 	BooleanValue r = (BooleanValue) visit(ctx.expression(1));
+
 	return new BooleanValue(l.getValue() && r.getValue());
     }
 
+    /**
+     * Ausführung von logischen Oder-Operationen.
+     */
     @Override
     public BaseTypedValue<?> visitOrExpr(OrExprContext ctx)
     {
@@ -610,22 +642,29 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new BooleanValue(l.getValue() || r.getValue());
     }
 
+    /**
+     * Ausführung von ">"-Operationen.
+     */
     @Override
     public BaseTypedValue<?> visitGtExpr(GtExprContext ctx)
     {
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
+	// Linke Variable ist ein String, Fehler werfen
 	if (l.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Strings können nicht verglichen werden!", null);
+	// Rechte Variable ist ein String, Fehler werfen
 	if (r.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Strings können nicht verglichen werden!", null);
 
+	// Linke Variable ist ein Boolean, Fehler werfen
 	if (l.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Boolean können nicht verglichen werden!", null);
+	// Rechte Variable ist ein Boolean, Fehler werfen
 	if (r.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Boolean können nicht verglichen werden!", null);
@@ -635,22 +674,29 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 			.doubleValue());
     }
 
+    /**
+     * Ausführung von ">="-Operationen.
+     */
     @Override
     public BaseTypedValue<?> visitGtEqExpr(GtEqExprContext ctx)
     {
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
+	// Linke Variable ist ein String, Fehler werfen
 	if (l.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Strings können nicht verglichen werden!", null);
+	// Rechte Variable ist ein String, Fehler werfen
 	if (r.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Strings können nicht verglichen werden!", null);
 
+	// Linke Variable ist ein Boolean, Fehler werfen
 	if (l.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Boolean können nicht verglichen werden!", null);
+	// Rechte Variable ist ein Boolean, Fehler werfen
 	if (r.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Boolean können nicht verglichen werden!", null);
@@ -660,17 +706,22 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 			.doubleValue());
     }
 
+    /**
+     * Ausführung von "=="-Operationen.
+     */
     @Override
     public BaseTypedValue<?> visitEqExpr(EqExprContext ctx)
     {
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
+	// Vergleich von unterschiedlichen Typen, Fehler werfen
 	if (l.getType() != r.getType())
 	    parser.notifyErrorListeners("Vergleich von unterschiedlichen Typen!");
 
 	boolean neq = false;
 
+	// Vergleich
 	switch (l.getType())
 	{
 	    case INT:
@@ -693,17 +744,22 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new BooleanValue(neq);
     }
 
+    /**
+     * Ausführung von "!="-Operationen.
+     */
     @Override
     public BaseTypedValue<?> visitNeqExpr(NeqExprContext ctx)
     {
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
+	// Vergleich von unterschiedlichen Typen, Fehler werfen
 	if (l.getType() != r.getType())
 	    parser.notifyErrorListeners("Vergleich von unterschiedlichen Typen!");
 
 	boolean neq = false;
 
+	// Vergleich
 	switch (l.getType())
 	{
 	    case INT:
@@ -725,23 +781,29 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 
 	return new BooleanValue(neq);
     }
-
+    /**
+     * Ausführung von "<"-Operationen.
+     */
     @Override
     public BaseTypedValue<?> visitLtExpr(LtExprContext ctx)
     {
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
+	// Linke Variable ist ein String, Fehler werfen
 	if (l.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Strings können nicht verglichen werden!", null);
+	// Rechte Variable ist ein String, Fehler werfen
 	if (r.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Strings können nicht verglichen werden!", null);
 
+	// Linke Variable ist ein Boolean, Fehler werfen
 	if (l.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Boolean können nicht verglichen werden!", null);
+	// Rechte Variable ist ein Boolean, Fehler werfen
 	if (r.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Boolean können nicht verglichen werden!", null);
@@ -751,22 +813,29 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 			.doubleValue());
     }
 
+    /**
+     * Ausführung von "<="-Operationen.
+     */
     @Override
     public BaseTypedValue<?> visitLtEqExpr(LtEqExprContext ctx)
     {
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
+	// Linke Variable ist ein String, Fehler werfen
 	if (l.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Strings können nicht verglichen werden!", null);
+	// Rechte Variable ist ein String, Fehler werfen
 	if (r.getType() == Type.STRING)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Strings können nicht verglichen werden!", null);
 
+	// Linke Variable ist ein Boolean, Fehler werfen
 	if (l.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(0).start,
 		    "Boolean können nicht verglichen werden!", null);
+	// Rechte Variable ist ein Boolean, Fehler werfen
 	if (r.getType() == Type.BOOLEAN)
 	    parser.notifyErrorListeners(ctx.expression(1).start,
 		    "Boolean können nicht verglichen werden!", null);
@@ -776,23 +845,29 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 			.doubleValue());
     }
 
+    /**
+     * Ausführung von Increment/Decrement.
+     */
     @Override
     public BaseTypedValue<?> visitIncDecExpr(IncDecExprContext ctx)
     {
 	String id = ctx.IDENTIFIER().getText();
 	BaseTypedValue<?> value = memory.get(id);
 
+	// Variable nicht deklariert
 	if (value == null)
 	{
 	    parser.notifyErrorListeners(ctx.IDENTIFIER().getSymbol(),
 		    "Variable '" + id + "' unbekannt!", null);
 	}
 
+	// Increment
 	if (ctx.op.getType() == DOTParser.INC)
 	    return memory.put(
 		    id,
 		    createNewWithValue(value.getType(),
 			    ((Number) value.getValue()).doubleValue() + 1));
+	// Decrement
 	else
 	    return memory.put(
 		    id,
@@ -800,6 +875,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 			    ((Number) value.getValue()).doubleValue() - 1));
     }
 
+    /**
+     * Baut die Statements für die Graphen zusammen.
+     */
     @Override
     public BaseTypedValue<?> visitStmt_list(Stmt_listContext ctx)
     {
@@ -817,6 +895,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new GraphValue(sb.toString());
     }
 
+    /**
+     * Baut die Attribut-Statements für die Graphen zusammen.
+     */
     @Override
     public BaseTypedValue<?> visitAttr_stmt(Attr_stmtContext ctx)
     {
@@ -827,6 +908,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new GraphValue(sb.toString());
     }
 
+    /**
+     * Baut das EdgeRHS zusammen.
+     */
     @Override
     public BaseTypedValue<?> visitEdgeRHS(EdgeRHSContext ctx)
     {
@@ -846,6 +930,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new GraphValue(sb.toString());
     }
 
+    /**
+     * Gibt die ID zurück. Ist die Variable im Speicher enthalten, wird der Wert zurückgegeben.
+     */
     @Override
     public BaseTypedValue<?> visitId(IdContext ctx)
     {
@@ -861,6 +948,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	}
     }
 
+    /**
+     * Baut die Attribute zusammen.
+     */
     @Override
     public BaseTypedValue<?> visitA_list(A_listContext ctx)
     {
@@ -921,6 +1011,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new GraphValue(sb.toString());
     }
 
+    /**
+     * Baut die Edge-Statement zusammen.
+     */
     @Override
     public BaseTypedValue<?> visitEdge_stmt(Edge_stmtContext ctx)
     {
@@ -939,12 +1032,18 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new GraphValue(sb.toString());
     }
 
+    /**
+     * Gibt den Operator zurück(gerichtet/ungerichtet);
+     */
     @Override
     public BaseTypedValue<?> visitEdgeop(EdgeopContext ctx)
     {
 	return new GraphValue(ctx.op.getText());
     }
 
+    /**
+     * Baut die Subgraphen zusammen.
+     */
     @Override
     public BaseTypedValue<?> visitSubgraph(SubgraphContext ctx)
     {
@@ -961,6 +1060,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new GraphValue(sb.toString());
     }
 
+    /**
+     * Baut die Attribut-Liste der Graphen zusammen.
+     */
     @Override
     public BaseTypedValue<?> visitAttr_list(Attr_listContext ctx)
     {
@@ -992,6 +1094,9 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new GraphValue(sb.toString());
     }
 
+    /**
+     * Baut den Node-Statement zusammen.
+     */
     @Override
     public BaseTypedValue<?> visitNode_stmt(Node_stmtContext ctx)
     {
@@ -1003,6 +1108,12 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new GraphValue(sb.toString());
     }
 
+    /**
+     * Erstellt ein neues Objekt mit passendem Typ und deren Inhalt.
+     * @param type Typ des neuen Objektes
+     * @param value Wert des Objektes
+     * @return Neues Objekt
+     */
     private BaseTypedValue<?> createNewWithValue(Type type, Object value)
     {
 	switch (type)
@@ -1024,6 +1135,11 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	}
     }
 
+    /**
+     * Erstellt neues Objekt passendem Typ und Standartwerten.
+     * @param type
+     * @return
+     */
     private BaseTypedValue<?> createNew(Type type)
     {
 	switch (type)
@@ -1039,6 +1155,12 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	}
     }
 
+    /**
+     * Erstellt ein neues Objekt mit passendem Typ und deren Inhalt.
+     * @param type Typ des neuen Objektes
+     * @param value Wert des Objektes
+     * @return Neues Objekt
+     */
     private BaseTypedValue<?> createNewWithValue(int type, Object value)
     {
 	switch (type)
@@ -1054,6 +1176,13 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	}
     }
 
+    /**
+     * Prüft die Typen des Compilers und der Objekttypen.
+     * 
+     * @param type Compilertyp
+     * @param value Objekttyp
+     * @return Ob die gleich sind.
+     */
     private boolean checkType(int type, Type value)
     {
 	switch (type)
@@ -1069,6 +1198,11 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	}
     }
 
+    /**
+     * Setzt den Objekttyp zu dem entsprechenden Compilertyp.
+     * @param type Comilertyp.
+     * @return Objekttyp.
+     */
     private Type setType(int type)
     {
 	switch (type)
