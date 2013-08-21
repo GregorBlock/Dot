@@ -92,6 +92,14 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitFalseAtom(@NotNull DOTParser.FalseAtomContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitGtEqExpr(@NotNull DOTParser.GtEqExprContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -341,6 +349,14 @@ public class DOTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DO
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitS(@NotNull DOTParser.SContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitTrueAtom(@NotNull DOTParser.TrueAtomContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

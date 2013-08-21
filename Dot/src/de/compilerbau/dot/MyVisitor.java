@@ -1,19 +1,10 @@
 package de.compilerbau.dot;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.compilerbau.dot.BaseTypedValue.ArrayValue;
-import de.compilerbau.dot.BaseTypedValue.BooleanValue;
-import de.compilerbau.dot.BaseTypedValue.DoubleValue;
-import de.compilerbau.dot.BaseTypedValue.GraphValue;
-import de.compilerbau.dot.BaseTypedValue.IntValue;
-import de.compilerbau.dot.BaseTypedValue.InvalidValue;
-import de.compilerbau.dot.BaseTypedValue.StringValue;
-import de.compilerbau.dot.BaseTypedValue.VoidValue;
 import de.compilerbau.dot.DOTParser.A_listContext;
 import de.compilerbau.dot.DOTParser.AddSubExprContext;
 import de.compilerbau.dot.DOTParser.AndExprContext;
@@ -27,6 +18,8 @@ import de.compilerbau.dot.DOTParser.DoubleAtomContext;
 import de.compilerbau.dot.DOTParser.EdgeRHSContext;
 import de.compilerbau.dot.DOTParser.Edge_stmtContext;
 import de.compilerbau.dot.DOTParser.EdgeopContext;
+import de.compilerbau.dot.DOTParser.EqExprContext;
+import de.compilerbau.dot.DOTParser.FalseAtomContext;
 import de.compilerbau.dot.DOTParser.ForControlContext;
 import de.compilerbau.dot.DOTParser.ForStatContext;
 import de.compilerbau.dot.DOTParser.GraphContext;
@@ -49,14 +42,31 @@ import de.compilerbau.dot.DOTParser.PrintContext;
 import de.compilerbau.dot.DOTParser.Stmt_listContext;
 import de.compilerbau.dot.DOTParser.StringAtomContext;
 import de.compilerbau.dot.DOTParser.SubgraphContext;
+import de.compilerbau.dot.DOTParser.TrueAtomContext;
 import de.compilerbau.dot.DOTParser.UncoverContext;
 import de.compilerbau.dot.DOTParser.WhileStatContext;
-import de.compilerbau.dot.TypedValue.Type;
 import de.compilerbau.dot.util.IOManager;
+import de.compilerbau.dot.value.BaseTypedValue;
+import de.compilerbau.dot.value.BaseTypedValue.ArrayValue;
+import de.compilerbau.dot.value.BaseTypedValue.BooleanValue;
+import de.compilerbau.dot.value.BaseTypedValue.DoubleValue;
+import de.compilerbau.dot.value.BaseTypedValue.GraphValue;
+import de.compilerbau.dot.value.BaseTypedValue.IntValue;
+import de.compilerbau.dot.value.BaseTypedValue.InvalidValue;
+import de.compilerbau.dot.value.BaseTypedValue.StringValue;
+import de.compilerbau.dot.value.BaseTypedValue.VoidValue;
+import de.compilerbau.dot.value.TypedValue.Type;
 
+/**
+ * Visitorklasse traversiert durch den Baum. Durch den Visitor wird eine höhere
+ * Kontrolle erreicht, da man selber die Aufrufe steuern kann.
+ */
 public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 {
+    // Speicher, in dem alle Identifier mit Wert gesichert werden
     private Map<String, BaseTypedValue<?>> memory = new HashMap<String, BaseTypedValue<?>>();
+
+    // Parser, wird benötigt, um die Fehlermeldungen auszugeben
     private DOTParser parser;
 
     public MyVisitor(DOTParser parser)
@@ -64,17 +74,26 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	this.parser = parser;
     }
 
+    /**
+     * Liefert ein neues Integer-Objekt.
+     */
     @Override
     public BaseTypedValue<?> visitIntAtom(IntAtomContext ctx)
     {
 	return new IntValue(Integer.valueOf(ctx.getText()));
     }
 
+    /**
+     * Liefert die Variable zum Identifier. Wirft einen Fehler, falls keine
+     * Variable vorhanden ist.
+     */
     @Override
     public BaseTypedValue<?> visitIdAtom(IdAtomContext ctx)
     {
 	String id = ctx.IDENTIFIER().getText();
 	BaseTypedValue<?> value = memory.get(id);
+
+	// Variable nicht vorhanden, Fehler werfen
 	if (value == null)
 	{
 	    parser.notifyErrorListeners(ctx.IDENTIFIER().getSymbol(),
@@ -83,31 +102,66 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return value;
     }
 
+    /**
+     * Liefert ein neues String-Objekt.
+     */
     @Override
     public BaseTypedValue<?> visitStringAtom(StringAtomContext ctx)
     {
 	String str = ctx.getText();
+	// Anführungszeichen aus dem Token entfernen
 	str = str.substring(1, str.length() - 1).replace("\"\"", "\"");
+
 	return new StringValue(str);
     }
 
+    /**
+     * Liefert ein neues Double-Objekt.
+     */
     @Override
     public BaseTypedValue<?> visitDoubleAtom(DoubleAtomContext ctx)
     {
 	return new DoubleValue(Double.valueOf(ctx.getText()));
     }
 
+    /**
+     * Liefert ein neues (false-) Boolean-Objekt
+     */
+    @Override
+    public BaseTypedValue<?> visitFalseAtom(FalseAtomContext ctx)
+    {
+	return new BooleanValue(false);
+    }
+
+    /**
+     * Liefert ein neues (true) Boolean-Objekt
+     */
+    @Override
+    public BaseTypedValue<?> visitTrueAtom(TrueAtomContext ctx)
+    {
+	return new BooleanValue(true);
+    }
+
+    /**
+     * Baut den Graphen zusammen und speichert diesen im Speicher, solange dem
+     * Graphen eine ID angegeben wurde.
+     */
     @Override
     public BaseTypedValue<?> visitGraph(GraphContext ctx)
     {
 	StringBuilder buf = new StringBuilder();
+
+	// Optionales "strict" anhängen, wenn vorhanden
 	if (ctx.strict != null)
 	{
 	    buf.append(ctx.strict.getText());
 	    buf.append(" ");
 	}
+
 	buf.append(ctx.g.getText());
 	buf.append(" ");
+
+	// Optionale ID anhängen, wenn vorhanden
 	if (ctx.id() != null)
 	{
 	    buf.append(ctx.id().getText());
@@ -117,72 +171,87 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	buf.append(((GraphValue) visit(ctx.stmt_list())).getValue());
 	buf.append("\n}");
 
+	// Speichern des Graphen nur, wenn eine ID angegeben wurde
 	if (ctx.id() != null)
 	    memory.put(ctx.id().getText(), new GraphValue(buf.toString()));
 
 	return new VoidValue();
     }
 
+    /**
+     * Erstellt .dot-Dateien und die zugehörigen Bilddateien zu den angegebenen
+     * Grapen.
+     */
     @Override
     public BaseTypedValue<?> visitUncover(UncoverContext ctx)
     {
 	for (int i = 0; i < ctx.IDENTIFIER().size(); i++)
 	{
 	    String id = ctx.IDENTIFIER(i).getText();
+	    // Graph aus dem Speicher holen
 	    GraphValue v = (GraphValue) memory.get(id);
 
+	    // Fehler werfen, wenn es den Graphen mit dem Namen nicht gibt
 	    if (v == null)
 	    {
 		parser.notifyErrorListeners("Graph '" + id + "' unbekannt!");
 	    }
 	    try
 	    {
+		// Speichern des Grapen
 		IOManager.saveGraph(v.getValue(), id);
-
-	    }
-	    catch (FileNotFoundException e1)
-	    {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
 	    }
 	    catch (IOException e)
 	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		throw new RuntimeException("Fehler beim Speichern des Graphen",
+			e);
 	    }
 	}
 	return new VoidValue();
     }
 
+    /**
+     * Fügt zwei oder mehrere Graphen zusammen. Bislang nur für gerichtete
+     * Graphen!
+     */
     @Override
     public BaseTypedValue<?> visitMerge(MergeContext ctx)
     {
 	String id = ctx.id().getText();
 	StringBuilder buf = new StringBuilder();
+
+	// Zusammen fügen der Graphen
 	buf.append("digraph " + id + " {");
 	for (int i = 0; i < ctx.IDENTIFIER().size(); i++)
 	{
 	    GraphValue v = (GraphValue) memory.get(ctx.IDENTIFIER(i).getText());
 	    buf.append(v.getValue().substring(v.getValue().indexOf("{") + 1,
-		    v.getValue().indexOf("}")));
+		    v.getValue().lastIndexOf("}")));
 	}
 	buf.append("}");
 	memory.put(id, new GraphValue(buf.toString()));
+
 	return new VoidValue();
     }
 
+    /**
+     * Weist einer Variable einen Wert zu.
+     */
     @Override
     public BaseTypedValue<?> visitAssignment(AssignmentContext ctx)
     {
 	String id = ctx.IDENTIFIER().getText();
 	BaseTypedValue<?> value = memory.get(id);
+
 	if (value == null)
 	{
+	    // Variable nicht vorhanden, Fehler werden
 	    parser.notifyErrorListeners(ctx.IDENTIFIER().getSymbol(),
 		    "Variable " + id + " unbekannt!", null);
 	}
 	else if (visit(ctx.expression()).getType() != value.getType())
 	{
+	    // Variablen haben nicht den selben Typ, Fehler werfen
 	    parser.notifyErrorListeners(
 		    ctx.expression().start,
 		    "Fehler bei Zuweisung! Typen stimmen nicht überein! Erwartet: "
@@ -193,6 +262,10 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return memory.put(id, visit(ctx.expression()));
     }
 
+    /**
+     * Deklariert eine neue Variable und speichert diese in den Speicher.
+     * Optional: Zuweisung eines Wertes.
+     */
     @Override
     public BaseTypedValue<?> visitDeclaration(DeclarationContext ctx)
     {
@@ -200,17 +273,20 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 
 	if (memory.containsKey(id))
 	{
+	    // Variable bereits vorhande, Fehler werfen
 	    parser.notifyErrorListeners("Variable " + id
 		    + " bereits deklariert!");
 	}
-	// throw new RuntimeException("Duplicate local variable " + id);
 
 	BaseTypedValue<?> value;
+	// Optionale Zuweisung
 	if (ctx.expression() != null)
 	{
 	    if (!checkType(ctx.start.getType(), visit(ctx.expression())
 		    .getType()))
 	    {
+		// Typ der Variable und Typ des zuzuweisenden Wertes stimmen
+		// nicht überein, Fehler werfen
 		parser.notifyErrorListeners(ctx.start,
 			"Deklaration: Typ stimmt nicht überein! Erwartet: "
 				+ setType(ctx.start.getType())
@@ -221,74 +297,114 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	}
 	else
 	{
-	    value = createNew(ctx.start.getType());
+	    // Neues Objekt erstellen mit Standartwerten
+	    value = createNew(setType(ctx.start.getType()));
 	}
 	return memory.put(id, value);
     }
 
+    /**
+     * Deklaration eines Arrays.
+     */
     @Override
     public BaseTypedValue<?> visitArraydecl(ArraydeclContext ctx)
     {
 	String id = ctx.IDENTIFIER().getText();
 
 	ArrayList<BaseTypedValue<?>> arrayList = new ArrayList<BaseTypedValue<?>>();
+
+	// Prüfen, ob die Typen der Werte auch den selben Typ haben, wie das
+	// Array selbst.
 	for (int i = 0; i < ctx.values().size(); i++)
 	{
 	    BaseTypedValue<?> v = visit(ctx.values(i));
 	    if (!checkType(ctx.start.getType(), v.getType()))
 	    {
+		// Fehler werfen, wenn nicht
 		parser.notifyErrorListeners("Wertetypen stimmen nicht mit dem Arraytyp überein!");
 	    }
 	    arrayList.add(v);
 	}
-	return memory.put(id, new ArrayValue(arrayList, setType(ctx.start.getType())));
+
+	return memory.put(id,
+		new ArrayValue(arrayList, setType(ctx.start.getType())));
     }
 
+    /**
+     * Führt eine While-Schleife aus
+     */
     @Override
     public BaseTypedValue<?> visitWhileStat(WhileStatContext ctx)
     {
+	// Holen der Bedingung
 	BooleanValue v = (BooleanValue) visit(ctx.parStat());
+
 	while (v.getValue())
 	{
+	    // ausführen des While-Rumpfes
 	    visit(ctx.statement());
 
+	    // Bedingung überprüfen
 	    v = (BooleanValue) visit(ctx.parStat());
 	}
 	return new BaseTypedValue.VoidValue();
     }
 
+    /**
+     * Ausführung einer For-Schleife.
+     */
     @Override
     public BaseTypedValue<?> visitForStat(ForStatContext ctx)
     {
+	// Holen der Bedingung
 	BooleanValue v = (BooleanValue) visit(ctx.forControl());
 
 	while (v.getValue())
 	{
+	    // ausführen des For-Rumpfes
 	    visit(ctx.statement());
+
+	    // Bedingung überprüfen
 	    v = (BooleanValue) visit(ctx.forControl());
 	}
 
 	return new BaseTypedValue.VoidValue();
     }
 
+    /**
+     * Berrechnet die Bedingung für eine For-Schleife
+     */
     @Override
     public BaseTypedValue<?> visitForControl(ForControlContext ctx)
     {
 	boolean condition = true;
 	String id = ctx.IDENTIFIER().getText();
+
+	// Beim ersten Durchgang einer For-Schleife, wird die Variable mit dem
+	// Wert in den Speicher geschrieben.
 	if (!memory.containsKey(id))
 	    memory.put(id, new IntValue(Integer.valueOf(ctx.INT(0).getText())));
 	else
 	{
+	    // Bei allen weiteren Durchgängen wird die Variable aus dem Speicher
+	    // gelesen
 	    IntValue n = (IntValue) memory.get(id);
 	    Integer r = Integer.valueOf(ctx.INT(1).getText());
+
+	    // Bedingung berechnen
 	    condition = n.getValue() < r;
+
+	    // Wert aktualisieren, wenn die For-Schleife weiter ausgeführt
+	    // werden muss
 	    if (condition)
 		memory.put(id, new IntValue(n.getValue() + 1));
 	}
 	return new BooleanValue(condition);
     }
 
+    /**
+     * Ausführung einer If-Abfrage mit optionalem Else-Zweig
+     */
     @Override
     public BaseTypedValue<?> visitIfElseStat(IfElseStatContext ctx)
     {
@@ -307,45 +423,55 @@ public class MyVisitor extends DOTBaseVisitor<BaseTypedValue<?>>
 	return new VoidValue();
     }
 
+    /**
+     * Ausführung einer Print-Anweisung
+     */
     @Override
     public BaseTypedValue<?> visitPrint(PrintContext ctx)
     {
-	 BaseTypedValue<?> value = visit(ctx.expression());
-System.out.println(value.getType());
+	BaseTypedValue<?> value = visit(ctx.expression());
+
 	switch (value.getType())
 	{
 	    case INT:
-		System.out.println(((IntValue)value).getValue());
+		System.out.println(((IntValue) value).getValue());
 		break;
 	    case DOUBLE:
-		System.out.println(((DoubleValue)value).getValue());
+		System.out.println(((DoubleValue) value).getValue());
 		break;
 	    case STRING:
-		System.out.println(((StringValue)value).getValue());
+		System.out.println(((StringValue) value).getValue());
 		break;
 	    case GRAPH:
-		System.out.println(((GraphValue)value).getValue());
+		System.out.println(((GraphValue) value).getValue());
 		break;
-//	    case ARRAY:
-//		System.out.println(((ArrayValue)visit(ctx.expression())).getValue());
+	    case BOOLEAN:
+		System.out.println(((BooleanValue) value).getValue());
 	    default:
 		break;
 	}
 	return new VoidValue();
     }
 
+    /**
+     * Führt eine in Klammern gesetzte Expression aus.
+     */
     @Override
     public BaseTypedValue<?> visitParStat(ParStatContext ctx)
     {
-	return visit(ctx.expression());
+	return visit(ctx.expression()); // Gibt den Wert der Kinder zurück.
     }
 
+    /**
+     * Gibt den Wert in einem Array an einer bestimmten Indexposition zurück.
+     */
     @Override
     public BaseTypedValue<?> visitArrayExpr(ArrayExprContext ctx)
     {
 	ArrayValue l = (ArrayValue) visit(ctx.expression(0));
-	IntValue r = (IntValue) visit(ctx.expression(1));
+	BaseTypedValue<?> r = visit(ctx.expression(1));
 
+	// Array nicht deklariert
 	if (l == null)
 	    parser.notifyErrorListeners("Variable " + ctx.start.getText()
 		    + " unbekannt!");
@@ -353,8 +479,16 @@ System.out.println(value.getType());
 	if (r == null)
 	    parser.notifyErrorListeners("Variable "
 		    + ctx.expression(1).getText() + " unbekannt!");
+	
+	if (!(r instanceof IntValue))
+	{
+	    parser.notifyErrorListeners("Indexvariable " + ctx.expression(1).getText()
+		    + " darf nur ein Integer sein!");
+	    
+	    return new InvalidValue();
+	}
 
-	int index = r.getValue();
+	int index = ((IntValue) r).getValue();
 
 	if (index < 0)
 	    parser.notifyErrorListeners("Arrayindex ist negativ!");
@@ -363,21 +497,29 @@ System.out.println(value.getType());
 	    parser.notifyErrorListeners("Arrayindex ist zu groß! Arraygroeße: "
 		    + l.getValue().size() + " Index: " + index);
 
-	// TODO ausgabe entfernen?
-	System.out.println(l.getArrayType());
-	
 	return createNewWithValue(l.getArrayType(), l.getValue().get(index));
     }
 
     @Override
     public BaseTypedValue<?> visitAddSubExpr(AddSubExprContext ctx)
     {
-	// TODO prüfen auf String -> fehler
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
 
-	// Value l = visit(ctx.expression(0));
-	// Value r = visit(ctx.expression(1));
+	if (l.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Strings können nicht addiert/subtrahiert werden!", null);
+	if (r.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Strings können nicht addiert/subtrahiert werden!", null);
+
+	if (l.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Boolean können nicht addiert/subtrahiert werden!", null);
+	if (r.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Boolean können nicht addiert/subtrahiert werden!", null);
+
 	if (l.getType() != r.getType())
 	    parser.notifyErrorListeners("Werte nicht vom selbem Typ! " + "("
 		    + l.getType() + " und " + r.getType() + ")");
@@ -387,28 +529,66 @@ System.out.println(value.getType());
 		    visit(ctx.expression(0)).getType(),
 		    ((Number) l.getValue()).doubleValue()
 			    + ((Number) r.getValue()).doubleValue());
-	return createNewWithValue(visit(ctx.expression(0)).getType(),
-		(Double) l.getValue() - (Double) r.getValue());
+
+	return createNewWithValue(
+		visit(ctx.expression(0)).getType(),
+		((Number) l.getValue()).doubleValue()
+			- ((Number) r.getValue()).doubleValue());
     }
 
     @Override
     public BaseTypedValue<?> visitMulDivExpr(MulDivExprContext ctx)
     {
-	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
-	// TODO prüfen auf 0 -> 1/0
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
+
+	if (l.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Strings können nicht multipliziert/dividiert werden!",
+		    null);
+	if (r.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Strings können nicht multipliziert/dividiert werden!",
+		    null);
+
+	if (l.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Boolean können nicht multipliziert/dividiert werden!",
+		    null);
+	if (r.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Boolean können nicht multipliziert/dividiert werden!",
+		    null);
+
 	if (ctx.op.getType() == DOTParser.MULT)
-	    return createNewWithValue(ctx.expression(0).start.getType(),
-		    (Double) l.getValue() * (Double) r.getValue());
-	return createNewWithValue(ctx.expression(0).start.getType(),
-		(Double) l.getValue() / (Double) r.getValue());
+	{
+	    return createNewWithValue(
+		    ctx.expression(0).start.getType(),
+		    ((Number) l.getValue()).doubleValue()
+			    * ((Number) r.getValue()).doubleValue());
+	}
+
+	Number rVal = (Number) r.getValue();
+	if (rVal.doubleValue() == 0.0 || rVal.intValue() == 0)
+	    parser.notifyErrorListeners("Division durch 0!");
+
+	return createNewWithValue(
+		ctx.expression(0).start.getType(),
+		((Number) l.getValue()).doubleValue()
+			/ ((Number) r.getValue()).doubleValue());
     }
 
     @Override
     public BaseTypedValue<?> visitAndExpr(AndExprContext ctx)
     {
-	// TODO prüfen auf typ`?
+	if (!(visit(ctx.expression(0)) instanceof BooleanValue))
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Kein boolscher Ausdruck!", null);
+
+	if (!(visit(ctx.expression(1)) instanceof BooleanValue))
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Kein boolscher Ausdruck!", null);
+
 	BooleanValue l = (BooleanValue) visit(ctx.expression(0));
 	BooleanValue r = (BooleanValue) visit(ctx.expression(1));
 	return new BooleanValue(l.getValue() && r.getValue());
@@ -417,7 +597,14 @@ System.out.println(value.getType());
     @Override
     public BaseTypedValue<?> visitOrExpr(OrExprContext ctx)
     {
-	// TODO prüfen auf typ`?
+	if (!(visit(ctx.expression(0)) instanceof BooleanValue))
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Kein boolscher Ausdruck!", null);
+
+	if (!(visit(ctx.expression(1)) instanceof BooleanValue))
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Kein boolscher Ausdruck!", null);
+
 	BooleanValue l = (BooleanValue) visit(ctx.expression(0));
 	BooleanValue r = (BooleanValue) visit(ctx.expression(1));
 	return new BooleanValue(l.getValue() || r.getValue());
@@ -426,9 +613,23 @@ System.out.println(value.getType());
     @Override
     public BaseTypedValue<?> visitGtExpr(GtExprContext ctx)
     {
-	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
+
+	if (l.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Strings können nicht verglichen werden!", null);
+	if (r.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Strings können nicht verglichen werden!", null);
+
+	if (l.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Boolean können nicht verglichen werden!", null);
+	if (r.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Boolean können nicht verglichen werden!", null);
+
 	return new BooleanValue(
 		((Number) l.getValue()).doubleValue() > ((Number) r.getValue())
 			.doubleValue());
@@ -437,31 +638,114 @@ System.out.println(value.getType());
     @Override
     public BaseTypedValue<?> visitGtEqExpr(GtEqExprContext ctx)
     {
-	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
+
+	if (l.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Strings können nicht verglichen werden!", null);
+	if (r.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Strings können nicht verglichen werden!", null);
+
+	if (l.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Boolean können nicht verglichen werden!", null);
+	if (r.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Boolean können nicht verglichen werden!", null);
+
 	return new BooleanValue(
 		((Number) l.getValue()).doubleValue() >= ((Number) r.getValue())
 			.doubleValue());
     }
 
     @Override
-    public BaseTypedValue<?> visitNeqExpr(NeqExprContext ctx)
+    public BaseTypedValue<?> visitEqExpr(EqExprContext ctx)
     {
-	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
-	return new BooleanValue(
-		((Number) l.getValue()).doubleValue() != ((Number) r.getValue())
-			.doubleValue());
+
+	if (l.getType() != r.getType())
+	    parser.notifyErrorListeners("Vergleich von unterschiedlichen Typen!");
+
+	boolean neq = false;
+
+	switch (l.getType())
+	{
+	    case INT:
+		neq = ((IntValue) l).getValue() == ((IntValue) r).getValue();
+		break;
+	    case DOUBLE:
+		neq = ((DoubleValue) l).getValue() == ((DoubleValue) r)
+			.getValue();
+		break;
+	    case STRING:
+		neq = ((StringValue) l).getValue().equals(
+			((StringValue) r).getValue());
+		break;
+	    case BOOLEAN:
+		neq = ((BooleanValue) l).getValue() == ((BooleanValue) r)
+			.getValue();
+		break;
+	}
+
+	return new BooleanValue(neq);
+    }
+
+    @Override
+    public BaseTypedValue<?> visitNeqExpr(NeqExprContext ctx)
+    {
+	BaseTypedValue<?> l = visit(ctx.expression(0));
+	BaseTypedValue<?> r = visit(ctx.expression(1));
+
+	if (l.getType() != r.getType())
+	    parser.notifyErrorListeners("Vergleich von unterschiedlichen Typen!");
+
+	boolean neq = false;
+
+	switch (l.getType())
+	{
+	    case INT:
+		neq = ((IntValue) l).getValue() != ((IntValue) r).getValue();
+		break;
+	    case DOUBLE:
+		neq = ((DoubleValue) l).getValue() != ((DoubleValue) r)
+			.getValue();
+		break;
+	    case STRING:
+		neq = !((StringValue) l).getValue().equals(
+			((StringValue) r).getValue());
+		break;
+	    case BOOLEAN:
+		neq = ((BooleanValue) l).getValue() != ((BooleanValue) r)
+			.getValue();
+		break;
+	}
+
+	return new BooleanValue(neq);
     }
 
     @Override
     public BaseTypedValue<?> visitLtExpr(LtExprContext ctx)
     {
-	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
+
+	if (l.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Strings können nicht verglichen werden!", null);
+	if (r.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Strings können nicht verglichen werden!", null);
+
+	if (l.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Boolean können nicht verglichen werden!", null);
+	if (r.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Boolean können nicht verglichen werden!", null);
+
 	return new BooleanValue(
 		((Number) l.getValue()).doubleValue() < ((Number) r.getValue())
 			.doubleValue());
@@ -470,9 +754,23 @@ System.out.println(value.getType());
     @Override
     public BaseTypedValue<?> visitLtEqExpr(LtEqExprContext ctx)
     {
-	// TODO vllt zuerst prüfen ob int|double und dann mit double rechnen
 	BaseTypedValue<?> l = visit(ctx.expression(0));
 	BaseTypedValue<?> r = visit(ctx.expression(1));
+
+	if (l.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Strings können nicht verglichen werden!", null);
+	if (r.getType() == Type.STRING)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Strings können nicht verglichen werden!", null);
+
+	if (l.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(0).start,
+		    "Boolean können nicht verglichen werden!", null);
+	if (r.getType() == Type.BOOLEAN)
+	    parser.notifyErrorListeners(ctx.expression(1).start,
+		    "Boolean können nicht verglichen werden!", null);
+
 	return new BooleanValue(
 		((Number) l.getValue()).doubleValue() <= ((Number) r.getValue())
 			.doubleValue());
@@ -711,32 +1009,30 @@ System.out.println(value.getType());
 	{
 	    case INT:
 		if (value instanceof IntValue)
-		    return (IntValue)value;
+		    return (IntValue) value;
 		else
-		    return new IntValue(((Number)value).intValue());
+		    return new IntValue(((Number) value).intValue());
 	    case DOUBLE:
 		if (value instanceof DoubleValue)
-		    return (DoubleValue)value;
+		    return (DoubleValue) value;
 		else
-		    return new DoubleValue(((Number)value).doubleValue());
+		    return new DoubleValue(((Number) value).doubleValue());
 	    case STRING:
-		return new StringValue(((StringValue)value).getValue());
-//	    case ARRAY:
-//		return new ArrayValue((ArrayList)value, type);
+		return new StringValue(((StringValue) value).getValue());
 	    default:
 		return new InvalidValue();
 	}
     }
 
-    private BaseTypedValue<?> createNew(int type)
+    private BaseTypedValue<?> createNew(Type type)
     {
 	switch (type)
 	{
-	    case DOTParser.INT:
+	    case INT:
 		return new IntValue();
-	    case DOTParser.DOUBLE:
+	    case DOUBLE:
 		return new DoubleValue();
-	    case DOTParser.STRING:
+	    case STRING:
 		return new StringValue();
 	    default:
 		return new InvalidValue();
@@ -787,16 +1083,4 @@ System.out.println(value.getType());
 		return Type.VOID;
 	}
     }
-
-    private void printMem(String a)
-    {
-	System.out.println(a);
-	for (String s : memory.keySet())
-	{
-	    System.out.println("key: " + s + " value: "
-		    + memory.get(s).getValue() + " type: "
-		    + memory.get(s).getType());
-	}
-    }
-
 }

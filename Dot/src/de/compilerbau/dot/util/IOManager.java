@@ -6,145 +6,196 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Class with methods to read and save fingerprints.
- * 
- * @author Dennis Block
+ * Hilfsklasse zum Laden und Speichern von Graphen (als .dot-Datei und
+ * .png-Datei).
  */
 public class IOManager
 {
-   /**
-    * File extension.
-    */
-   private static final String DOT_FILE_EXTENSION = ".dot";
+    /**
+     * Endung für dot-Datei.
+     */
+    private static final String DOT_FILE_EXTENSION = ".dot";
 
-   private static final String IMAGE_FILE_EXTENSION = ".png";
+    /**
+     * Endung für Bilddatei
+     */
+    private static final String IMAGE_FILE_EXTENSION = ".png";
 
-   /**
-    * Directory where the fingerprints are saved
-    */
-   public static final String DOT_PATH = "gen_graph/";
+    /**
+     * Ordner, indem die dot-Dateien gespeichert werden.
+     */
+    public static final String DOT_PATH = "gen_graph/";
 
-   public static final String IMAGE_PATH = "gen_images/";
+    /**
+     * Ordner, indem die Graphen als Bilddateien gespeichert werden.
+     */
+    public static final String IMAGE_PATH = "gen_images/";
 
-   /**
-    * Checks and creates the directory if it not exists.
-    */
-   private static void createPath(String path)
-   {
-      File file = new File(path);
-      if (!file.exists())
-      {
-         file.mkdirs();
-      }
-   }
+    /**
+     * Erstellt den Ordner, falls dieser nicht exisitiert.
+     * 
+     * @param path Pfad zum Ordner.
+     */
+    private static void createPath(String path)
+    {
+	File file = new File(path);
 
-   /**
-    * Saves a graph in a file.
-    * 
-    * @param graph
-    *           The graph which have to be saved.
-    * @throws IOException
-    */
-   public static void saveGraph(String graph, String graphName)
-         throws IOException
-   {
-      createPath(DOT_PATH);
+	if (!file.exists())
+	{
+	    file.mkdirs();
+	}
+    }
 
-      String fileName = graphName;
-      String newFileName;
-      File file = new File(DOT_PATH + fileName + DOT_FILE_EXTENSION);
+    /**
+     * Speichert den Graphen. Ermöglicht das Speichern von Graphen mit selben
+     * Namen.
+     * Existiert bereits ein Graph mit dem Namen, wird der Datei eine laufende
+     * Nummer an den Namen angehängt.
+     * 
+     * @param graph Graph als String.
+     * @param graphName Name (Identifiert) des Graphen.
+     * 
+     * @throws IOException Wird geworfen, wenn beim Speichern des Graphen etwas
+     *             schiefgelaufen ist.
+     */
+    public static void saveGraph(String graph, String graphName)
+	    throws IOException
+    {
+	// Erstellt den Ordner, falls dieser nicht bereits exisitert
+	createPath(DOT_PATH);
 
-      // if file already exists, change the filename ("filename_#", # =
-      // number)
-      if (file.exists())
-      {
-         while (file.exists())
-         {
-            fileName = file.getName().substring(0,
-                  file.getName().indexOf("."));
+	String fileName = graphName;
+	File file = new File(DOT_PATH + fileName + DOT_FILE_EXTENSION);
 
-            // if file contains a "_" there is alreay a number - increment
-            if (fileName.contains("_"))
-            {
-               newFileName = fileName.substring(0,
-                     fileName.indexOf("_"))
-                     + "_"
-                     + (Integer.parseInt(fileName.substring(fileName
-                           .indexOf("_") + 1)) + 1);
+	String newFileName;
 
-               file = new File(DOT_PATH + newFileName + DOT_FILE_EXTENSION);
-            }
-            else
-            {
-               newFileName = fileName + "_2";
-               file = new File(DOT_PATH + newFileName + DOT_FILE_EXTENSION);
-            }
-         }
-      }
+	// Graph mit selben Namen exisitert bereits
+	if (file.exists())
+	{
+	    // Solange neue Datei nicht existiert...
+	    while (file.exists())
+	    {
+		// Dateiname ohne Endung
+		fileName = file.getName().substring(0,
+			file.getName().indexOf("."));
 
-      FileOutputStream fileOut = new FileOutputStream(file);
-      fileOut.write(graph.getBytes());
-      fileOut.close();
-      createImages();
-   }
+		// Enthält der Name ein "_", ist bereits eine laufende Nummer
+		// angehängt
+		// Die Zahl wird ausgelesen und inkrementiert
+		if (fileName.contains("_"))
+		{
+		    newFileName = fileName.substring(0, fileName.indexOf("_"))
+			    + "_"
+			    + (Integer.parseInt(fileName.substring(fileName
+				    .indexOf("_") + 1)) + 1);
 
-   public static ArrayList<File> load(String path)
-   {
-      ArrayList<File> files = new ArrayList<File>();
+		    file = new File(DOT_PATH + newFileName + DOT_FILE_EXTENSION);
+		}
+		else
+		{
+		    // Dateinamen eine "_2" anhängen
+		    newFileName = fileName + "_2";
+		    file = new File(DOT_PATH + newFileName + DOT_FILE_EXTENSION);
+		}
+	    }
+	}
 
-      File root = new File(path);
+	// Graph in die Datei schreiben
+	FileOutputStream fileOut = new FileOutputStream(file);
+	fileOut.write(graph.getBytes());
+	fileOut.close();
 
-      for (File f : root.listFiles())
-      {
-         files.add(f);
-      }
+	// Bilddateien erstellen
+	createImages();
+    }
 
-      return files;
-   }
+    /**
+     * Lädt alle Dateien in einem bestimmten Pfad.
+     * 
+     * @param path Pfad aus dem die Dateien geladen werden sollen.
+     * @return Liste von Dateien.
+     */
+    public static ArrayList<File> load(String path)
+    {
+	ArrayList<File> files = new ArrayList<File>();
 
-   public static void createImages() throws IOException
-   {
-      createPath(IMAGE_PATH);
- 
-      ArrayList<File> files = load(DOT_PATH);
+	File root = new File(path);
 
-      ProcessBuilder pb;
-      for (int i = 0; i < files.size(); i++)
-      {
-         String path = files.get(i).getPath();
-         int index = files.get(i).getName().indexOf(".");
-         String imgPath = IMAGE_PATH + files.get(i).getName().substring(0, index) + IMAGE_FILE_EXTENSION;
-         pb = new ProcessBuilder("Graphviz/bin/dot.exe", "-Tpng", path,
-               "-o", imgPath);
-         try
-         {
-            int code = pb.start().waitFor();
-            if(code != 0) {
-                System.err.println("WARNING: proc exit code is: " + code);
-            }
-         }
-         catch (InterruptedException e)
-         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-         }
-      }
-   }
+	for (File f : root.listFiles())
+	{
+	    files.add(f);
+	}
 
-   public static void deleteFiles()
-   {
-      ArrayList<File> files = load(DOT_PATH);
+	return files;
+    }
 
-      for (int i = 0; i < files.size(); i++)
-      {
-         files.get(i).delete();
-      }
-      
-      files = load(IMAGE_PATH);
-      
-      for (int i = 0; i < files.size(); i++)
-      {
-         files.get(i).delete();
-      }
-   }
+    /**
+     * Erstellt Bilddateien zu vorhandenen dot-Dateien.
+     * 
+     * @throws IOException
+     */
+    public static void createImages() throws IOException
+    {
+	// Erstellt Ordner für Bilddateien, falls dieser nicht bereits
+	// existiert.
+	createPath(IMAGE_PATH);
+
+	// Laden der dot-Dateien
+	ArrayList<File> files = load(DOT_PATH);
+
+	ProcessBuilder pb;
+
+	// Für jede dot-Datei eine Bilddatei erstellen
+	for (int i = 0; i < files.size(); i++)
+	{
+	    String path = files.get(i).getPath();
+
+	    int index = files.get(i).getName().indexOf(".");
+
+	    String imgPath = IMAGE_PATH
+		    + files.get(i).getName().substring(0, index)
+		    + IMAGE_FILE_EXTENSION;
+
+	    // Erstellen der Bilddatei mit Hilfe der dot.exe
+	    pb = new ProcessBuilder("Graphviz/bin/dot.exe", "-Tpng", path,
+		    "-o", imgPath);
+	    try
+	    {
+
+		int code = pb.start().waitFor();
+		if (code != 0)
+		{
+		    System.err
+			    .println("WARNUNG: ProzessBuilder exit code ist: "
+				    + code);
+		}
+	    }
+	    catch (InterruptedException e)
+	    {
+		System.err.println(e);
+	    }
+	}
+    }
+
+    /**
+     * Löscht sowhol alle dot-Dateien, als auch alle Bilddateien in den Ordnern.
+     */
+    public static void deleteFiles()
+    {
+	// Löschen der dot-Dateien
+	ArrayList<File> files = load(DOT_PATH);
+
+	for (int i = 0; i < files.size(); i++)
+	{
+	    files.get(i).delete();
+	}
+
+	// Löschen der Bilddateien
+	files = load(IMAGE_PATH);
+
+	for (int i = 0; i < files.size(); i++)
+	{
+	    files.get(i).delete();
+	}
+    }
 }

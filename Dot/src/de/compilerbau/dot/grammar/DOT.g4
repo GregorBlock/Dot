@@ -1,6 +1,3 @@
-/** Derived from http://www.graphviz.org/doc/info/lang.html.
-    Comments pulled from spec.
- */
 grammar DOT;
 
 @header{    
@@ -56,7 +53,6 @@ expression	:   primary										#primaryExpr
 			|	expression NEQ expression					#neqExpr
 			|   expression AND expression					#andExpr
 			|   expression OR expression					#orExpr
-//			|   expression ASSIGN<assoc=right> expression	#assignExpr
 			;
 	
 primary		:	parStat										
@@ -67,6 +63,8 @@ values		:	IDENTIFIER									#idAtom
 			|	INT 										#intAtom
 			| 	DOUBLE										#doubleAtom
 			|	STRING										#stringAtom
+			|	TRUE										#trueAtom
+			|	FALSE										#falseAtom
 			;
 			
 type		:	INTTYPE	
@@ -127,9 +125,6 @@ PLUS 		: 	'+' ;
 MINUS 		: 	'-' ;
 MULT 		: 	'*' ;
 DIV 		: 	'/' ;
-MOD 		: 	'%' ;
-POW 		: 	'^' ;
-NOT 		: 	'!' ;
 
 SCOL 		: 	';' ;
 COLON		:	':' ;
@@ -153,7 +148,6 @@ FOR			:	'for' ;
 INTTYPE		:	'int' ;
 DOUBLETYPE	:	'double' ;
 STRINGTYPE	:	'String' ;
-GRAPHTYPE	:	'Graph';
   
 STRICT      :   [Ss][Tt][Rr][Ii][Cc][Tt] ;
 GRAPH       :   [Gg][Rr][Aa][Pp][Hh] ;
@@ -170,31 +164,11 @@ INT			: 	MINUS? DIGIT+ ;
 DOUBLE		:	MINUS? DIGIT+ '.' DIGIT*
 			| 	MINUS? '.' DIGIT+ ;
 			
- /** "a numeral [-]?(.[0-9]+ | [0-9]+(.[0-9]*)? )" 
-NUMBER      :   '-'? ('.' DIGIT+ | DIGIT+ ('.' DIGIT*)? ) ;
-*/
 fragment
 DIGIT       :   [0-9] ;
 
-/** "any double-quoted string ("...") possibly containing escaped quotes" */
 STRING      :   '"' ('\\"'|.)*? '"' ;
-
-/** "Any string of alphabetic ([a-zA-Z\200-\377]) characters, underscores
- *  ('_') or digits ([0-9]), not beginning with a digit"
- */
-//ID          :   LETTER (LETTER|DIGIT)*;
-fragment
-LETTER      :   [a-zA-Z\u0080-\u00FF_] ;
-
-/** "HTML strings, angle brackets must occur in matched pairs, and
- *  unescaped newlines are allowed."
- HTML_STRING :   LT (TAG|~[<>])* GT ;
-fragment
-TAG         :   LT .*? GT ;
- */
-
-
 
 COMMENT     :   '/*' .*? '*/'       -> channel(HIDDEN) ; 
 LINE_COMMENT:   '//' .*? '\r'? '\n' -> channel(HIDDEN) ;
-WS			:   [ \t\n\r]+ -> channel(HIDDEN) ;
+WS			:   [ \t\n\r]+ 			-> channel(HIDDEN) ;

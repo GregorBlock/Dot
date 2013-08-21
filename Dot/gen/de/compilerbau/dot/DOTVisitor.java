@@ -77,6 +77,13 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	T visitEdgeRHS(@NotNull DOTParser.EdgeRHSContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link DOTParser#falseAtom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFalseAtom(@NotNull DOTParser.FalseAtomContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link DOTParser#gtEqExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -299,6 +306,13 @@ public interface DOTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitS(@NotNull DOTParser.SContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DOTParser#trueAtom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTrueAtom(@NotNull DOTParser.TrueAtomContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DOTParser#attr_list}.

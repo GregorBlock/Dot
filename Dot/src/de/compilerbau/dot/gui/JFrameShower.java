@@ -1,7 +1,5 @@
 package de.compilerbau.dot.gui;
 
-
-
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Rectangle;
@@ -10,7 +8,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 /**
- * JFrameShower.
+ * Zeigt den Frame an.
  */
 public class JFrameShower implements Runnable
 {
